@@ -1,18 +1,29 @@
 <script>
-	import Navbar from './components/Navbar.svelte';
+import Navbar from './components/Navbar.svelte';
+import SubredditPicker from './components/SubredditPicker.svelte';
 
-  $: title = 'reddit';
+// data
+let showSubredditPicker = true;
+let currentSubreddit = undefined;
+
+// methods
+const toggleSubredditPicker = () => {
+  console.log('toggleSubredditPicker()');
+  showSubredditPicker = !showSubredditPicker;
+}
+
 </script>
 
 <div class="page-container">
-  <Navbar title="{title}"/>
-  <div class="section">
-    <div class="container">
-      <div class="title has-text-centered">Bulma</div>
-    </div>
-  </div>
+  <SubredditPicker/>
+  <Navbar on:toggle-subreddit-picker="{toggleSubredditPicker}" title="reddit"/>
   <main class="content-container">
   </main>
+  <div class="debug-info-container">
+    <div class="debug-info">
+      showSubredditPicker: {showSubredditPicker}
+    </div>
+  </div>
 </div>
 
 
@@ -27,6 +38,15 @@
 
 .content-container {
   flex-grow: 1;
+}
+
+.debug-info-container {
+  background-color: #ddd;
+  width: 100%;
+}
+
+.debug-info {
+  margin: 1rem;
 }
 
 </style>

@@ -1,15 +1,25 @@
 <script>
 
 import { createEventDispatcher, onMount, onDestroy } from 'svelte';
+import { fade } from 'svelte/transition';
 
-export let title;
-export let navbarIsActive = false;
+// data
+export let title = 'reddit';
+let navbarIsActive = true;
 
-export const navbarToggle = () => navbarIsActive = !navbarIsActive;
+// methods
+const navbarToggle = () => navbarIsActive = !navbarIsActive;
+
+// events
+const dispatch = createEventDispatcher();
+const emitToggleSubredditPicker = () => {
+  console.log('emitToggleSubredditPicker()');
+  dispatch('toggle-subreddit-picker');
+}
 
 </script>
 
-<nav class="navbar">
+<nav class="navbar" transition:fade>
   <div class="navbar-brand">
     <div class="navbar-item brand-text has-text-weight-bold">{title}</div>
     <div role="button"
@@ -27,7 +37,7 @@ export const navbarToggle = () => navbarIsActive = !navbarIsActive;
   <div id="navMenu" class="navbar-menu" class:is-active="{navbarIsActive}">
     <div class="navbar-end">
       <div class="navbar-item has-text-centered">
-        Go to subreddit
+        <span on:click="{emitToggleSubredditPicker}">Go to subreddit</span>
       </div>
     </div>
   </div>
