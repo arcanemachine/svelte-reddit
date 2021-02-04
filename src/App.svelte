@@ -1,25 +1,32 @@
 <script>
-	export let name;
+	import Navbar from './components/Navbar.svelte';
+
+  $: title = 'reddit';
 </script>
 
-<main>
+<div class="page-container">
+  <Navbar title="{title}"/>
   <div class="section">
     <div class="container">
       <div class="title has-text-centered">Bulma</div>
     </div>
   </div>
-	<h1>Hello {name}!</h1>
-</main>
+  <main class="content-container">
+  </main>
+</div>
+
 
 <style>
 
-body {
-  overflow-y: auto; /* bulma compatibility */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
 }
 
-.page-container {
-  width: 100vw;
-  min-height: 100vh;
+.content-container {
+  flex-grow: 1;
 }
 
 </style>

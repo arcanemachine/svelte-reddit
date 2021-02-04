@@ -1,6 +1,7 @@
 /node_modules/
 /public/build/
 
+
 .DS_Store
 
 # local env files
@@ -20,10 +21,10 @@ pnpm-debug.log*
 *.ntvs*
 *.njsproj
 *.sln
+*.swp
 *.sw?
-*.sw*
 
-#custom
+# custom
 todo
 Session.vim
 *.un~
