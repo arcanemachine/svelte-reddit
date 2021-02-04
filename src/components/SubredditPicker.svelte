@@ -17,7 +17,7 @@
     submitButton.classList.add('is-loading');
     setTimeout(() => {
       dispatch('subreddit-picker-toggle');
-      dispatch('subreddit-pick', (subreddit));
+      dispatch('subreddit-pick', ({subreddit}));
     }, 300)
   }
 </script>
@@ -41,6 +41,10 @@
             Search
           </button>
         </div>
+      </div>
+      <div>
+        <p class="mb-2">Debug:</p>
+        <p>subreddit: {subreddit}</p>
       </div>
     </div>
 </div>

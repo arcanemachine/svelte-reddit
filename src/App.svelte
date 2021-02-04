@@ -7,6 +7,7 @@
 
   // data
   let subredditPickerShow = false;
+  let content = undefined;
 
   // methods
   const subredditPickerToggle = () => {
@@ -14,8 +15,10 @@
     subredditPickerShow = !subredditPickerShow;
   }
 
-  const subredditPick = (event) => {
-    console.log(`subredditPick(), ${event}`);
+  const subredditPick = async (event) => {
+    let subreddit = event.detail.subreddit;
+    console.log(`subredditPick(), ${subreddit}`);
+    content = await fetch(`https://old.reddit.com/r/${subreddit}/hot.json`).then(res => res.json())
   }
 </script>
 
@@ -27,10 +30,12 @@
   <Navbar title="reddit"
           on:subreddit-picker-toggle="{subredditPickerToggle}"/>
   <main class="content-container">
+    Content: {JSON.stringify(content)}
   </main>
   <div class="debug-info-container">
     <div class="debug-info">
-      subredditPickerShow: {subredditPickerShow}
+      <p class="mb-2">Debug:</p>
+      <p>subredditPickerShow: {subredditPickerShow}</p>
     </div>
   </div>
 </div>
