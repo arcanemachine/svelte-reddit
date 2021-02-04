@@ -1,27 +1,36 @@
 <script>
-import Navbar from './components/Navbar.svelte';
-import SubredditPicker from './components/SubredditPicker.svelte';
+  import { currentSubreddit } from './stores/'
 
-// data
-let showSubredditPicker = true;
-let currentSubreddit = undefined;
+  // components
+  import Navbar from './components/Navbar.svelte';
+  import SubredditPicker from './components/SubredditPicker.svelte';
 
-// methods
-const toggleSubredditPicker = () => {
-  console.log('toggleSubredditPicker()');
-  showSubredditPicker = !showSubredditPicker;
-}
+  // data
+  let subredditPickerShow = false;
 
+  // methods
+  const subredditPickerToggle = () => {
+    console.log('toggleSubredditPicker()');
+    subredditPickerShow = !subredditPickerShow;
+  }
+
+  const subredditPick = (event) => {
+    console.log(`subredditPick(), ${event}`);
+  }
 </script>
 
 <div class="page-container">
-  <SubredditPicker/>
-  <Navbar on:toggle-subreddit-picker="{toggleSubredditPicker}" title="reddit"/>
+  {#if subredditPickerShow}
+  <SubredditPicker on:subreddit-picker-toggle="{subredditPickerToggle}"
+                   on:subreddit-pick="{subredditPick}"/>
+  {/if}
+  <Navbar title="reddit"
+          on:subreddit-picker-toggle="{subredditPickerToggle}"/>
   <main class="content-container">
   </main>
   <div class="debug-info-container">
     <div class="debug-info">
-      showSubredditPicker: {showSubredditPicker}
+      subredditPickerShow: {subredditPickerShow}
     </div>
   </div>
 </div>
