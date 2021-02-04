@@ -3,30 +3,23 @@
 </script>
 
 <main>
+  <div class="section">
+    <div class="container">
+      <div class="title has-text-centered">Bulma</div>
+    </div>
+  </div>
 	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-  <p>Hello!</p>
-  <iframe src="https://i.reddit.com/r/hardware/">
 </main>
 
 <style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
 
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
+body {
+  overflow-y: auto; /* bulma compatibility */
+}
 
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
+.page-container {
+  width: 100vw;
+  min-height: 100vh;
+}
+
 </style>
