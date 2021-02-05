@@ -2,12 +2,13 @@
   import { createEventDispatcher } from 'svelte';
   import { fade } from 'svelte/transition';
 
+  const dispatch = createEventDispatcher();
+
   // data
   let submitButton;
   let subreddit = '';
 
   // events
-  const dispatch = createEventDispatcher();
   function subredditPickerClosed() {
     console.log('emitSubredditPickerToggle()');
     dispatch('subreddit-picker-toggle');

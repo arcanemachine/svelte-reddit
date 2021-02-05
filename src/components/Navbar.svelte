@@ -26,7 +26,7 @@
 
 <nav class="navbar is-size-5" transition:fade>
   <div class="navbar-brand">
-    <div class="navbar-item brand-text has-text-weight-bold">{title}</div>
+    <div class="ml-2 p-2 navbar-item brand-text has-text-weight-bold">{title}</div>
     <div role="button"
        data-target="navMenu"
        on:click="{navbarToggle}"
@@ -34,9 +34,9 @@
        class:is-active="{navbarIsActive}"
        aria-label="menu"
        aria-expanded="false">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
+      <span class="burger-line" aria-hidden="true"></span>
+      <span class="burger-line" aria-hidden="true"></span>
+      <span class="burger-line" aria-hidden="true"></span>
     </div>
   </div>
   <div id="navMenu" class="navbar-menu" class:is-active="{navbarIsActive}">
@@ -49,6 +49,19 @@
 </nav>
 
 <style>
+
+.navbar {
+  border-bottom: 1px solid black;
+}
+
+.navbar-burger {
+  height: 4rem;
+  width: 4rem;
+}
+
+.burger-line {
+  height: 2px;
+}
 
 .navbar-item {
   cursor: pointer;
