@@ -1,10 +1,10 @@
 <script>
-  import { createEventDispatcher, onMount, onDestroy } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
   import { fade } from 'svelte/transition';
 
   // data
   export let title = 'reddit';
-  let navbarIsActive = true;
+  let navbarIsActive = false;
 
   // methods
   const navbarToggle = () => navbarIsActive = !navbarIsActive;
@@ -24,7 +24,7 @@
   }
 </script>
 
-<nav class="navbar" transition:fade>
+<nav class="navbar is-size-5" transition:fade>
   <div class="navbar-brand">
     <div class="navbar-item brand-text has-text-weight-bold">{title}</div>
     <div role="button"

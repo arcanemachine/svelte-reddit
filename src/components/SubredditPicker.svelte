@@ -27,7 +27,7 @@
   <div class="modal-content"></div>
     <div class="card">
       <div class="card-content">
-        <button class="delete"
+        <button class="p-4 delete"
                 on:click="{subredditPickerClosed}"
                 aria-label="close"></button>
         <div class="has-text-centered">
@@ -41,10 +41,6 @@
             Search
           </button>
         </div>
-      </div>
-      <div>
-        <p class="mb-2">Debug:</p>
-        <p>subreddit: {subreddit}</p>
       </div>
     </div>
 </div>
