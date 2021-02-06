@@ -1,17 +1,14 @@
 <script>
   import { createEventDispatcher } from 'svelte';
+
+  import { htmlUnescape } from '../utils.js';
+
   const dispatch = createEventDispatcher();
 
   // props
   export let content;
 
   // methods
-  const htmlUnescape = (input) => {
-    var e = document.createElement('div');
-    e.innerHTML = input;
-    return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
-  }
-
   const getFormattedDate = (date) => {
     date = new Date(date*1000);
     return `${date.getFullYear()}/${date.getMonth()+1}/${date.getDay()}`;

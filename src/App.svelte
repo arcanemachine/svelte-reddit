@@ -1,8 +1,8 @@
 <script>
   import { currentSubreddit } from './stores/';
 
-  import { mockedSubredditData } from './deleteme.js';
-  import { mockedPostData } from './deleteme2.js';
+  import { mockedSubredditData } from './mockedSubredditData.js';
+  import { mockedPostData } from './mockedPostData.js';
 
   // components
   import Navbar from './components/Navbar.svelte';
