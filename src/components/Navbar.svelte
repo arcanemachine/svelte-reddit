@@ -1,32 +1,40 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { fade } from 'svelte/transition';
+  const dispatch = createEventDispatcher();
 
   // data
   export let title = 'reddit';
+  export let currentContent;
   let navbarIsActive = false;
 
   // methods
   const navbarToggle = () => navbarIsActive = !navbarIsActive;
-  const itemClicked = () => navbarToggle();
+  const titleClicked = () => dispatch('title-clicked');
 
-  const goToSubredditClicked = () => {
-    itemClicked();
-    emitSubredditPickerToggle();
+  const navbarItemClicked = (itemName) => {
+    navbarToggle();
+    if (itemName === 'go-to-subreddit') {
+      emitSubredditPickerToggle();
+    }
   }
 
   // events
-  const dispatch = createEventDispatcher();
-
   const emitSubredditPickerToggle = () => {
     console.log('emitSubredditPickerToggle()');
     dispatch('subreddit-picker-toggle');
   }
 </script>
 
-<nav class="navbar is-size-5" transition:fade>
+<nav class="navbar is-fixed-top is-size-5" transition:fade>
   <div class="navbar-brand">
-    <div class="ml-2 p-2 navbar-item brand-text has-text-weight-bold">{title}</div>
+    <div class="ml-2 p-2 navbar-item brand-text has-text-weight-bold"
+         on:click="{titleClicked}">
+      {#if currentContent === 'post'}
+      <span class="navbar-title">&larr; &nbsp;&nbsp;</span>
+      {/if }
+      <span class="navbar-title">{title}</span>
+    </div>
     <div role="button"
        data-target="navMenu"
        on:click="{navbarToggle}"
@@ -42,7 +50,7 @@
   <div id="navMenu" class="navbar-menu" class:is-active="{navbarIsActive}">
     <div class="navbar-end">
       <div class="navbar-item has-text-centered">
-        <span on:click="{goToSubredditClicked}">Go to subreddit</span>
+        <span on:click="{() => navbarItemClicked('go-to-subreddit')}">Go to subreddit</span>
       </div>
     </div>
   </div>
@@ -51,7 +59,8 @@
 <style>
 
 .navbar {
-  border-bottom: 1px solid black;
+  height: 4rem;
+  border-bottom: 2px solid black;
 }
 
 .navbar-burger {

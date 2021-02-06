@@ -6,7 +6,7 @@
 
   // data
   let submitButton;
-  let subreddit = '';
+  let subreddit = 'AskReddit';
 
   // events
   function subredditPickerClosed() {
@@ -19,7 +19,7 @@
     setTimeout(() => {
       dispatch('subreddit-picker-toggle');
       dispatch('subreddit-pick', ({subreddit}));
-    }, 300)
+    }, 200)
   }
 </script>
 
@@ -28,7 +28,7 @@
   <div class="modal-content"></div>
     <div class="card">
       <div class="card-content">
-        <button class="p-4 delete"
+        <button class="p-3 delete"
                 on:click="{subredditPickerClosed}"
                 aria-label="close"></button>
         <div class="has-text-centered">
