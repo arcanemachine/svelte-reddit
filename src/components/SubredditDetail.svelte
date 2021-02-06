@@ -6,7 +6,7 @@
   const dispatch = createEventDispatcher();
 
   // props
-  export let content;
+  export let subredditContent;
 
   // methods
   const getFormattedDate = (date) => {
@@ -36,9 +36,9 @@
 </script>
 
 <div class="columns">
-  {#if Object.keys(content).length}
+  {#if Object.keys(subredditContent).length}
     <div class="column">
-      {#each content.data.children as post}
+      {#each subredditContent.data.children as post}
         <div class="px-2 my-0 media post-item"
              style="background-color: {post.data.stickied ? '#e7e7e7' : '#f5f5f5'}">
           <div class="post-image-container">

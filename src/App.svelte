@@ -19,7 +19,7 @@
   let subredditContent = mockedSubredditData;
   let postContent = mockedPostData;
   let postAuthor = 'XXXXXXXX';
-  let currentContent = 'subreddit';
+  let currentContent = 'post';
 
   function titleClicked() {
     console.log('outer: titleClicked()');
@@ -109,10 +109,10 @@
   <main class="content-container">
     <div class="container">
         {#if currentContent === 'subreddit'}
-          <SubredditDetail content="{subredditContent}"
+          <SubredditDetail subredditContent="{subredditContent}"
                             on:post-pick="{postPick}"/>
         {:else if currentContent === 'post'}
-          <PostDetail content="{postContent}" postAuthor="{postAuthor}"/>
+          <PostDetail postContent="{postContent}" postAuthor="{postAuthor}"/>
         {/if}
     </div>
   </main>

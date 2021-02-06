@@ -1,6 +1,8 @@
 <script>
+  import { htmlUnescape } from '../utils.js';
+
   // props
-  export let post;
+  export let post, index, indent;
 
   // methods
   const getFormattedTimeSince = (timestamp) => {
@@ -42,7 +44,8 @@
 
 <div class="card large"
      class:has-background-light="{index % 2}"
-     class:has-background-grey-lighter="{!(index % 2)}">
+     class:has-background-grey-lighter="{!(index % 2)}"
+     style="margin-left: {indent / 2}rem;">
   <div class="post-child-author">
     <!-- span class="cursor-url">[-]</span -->
     <span class="has-text-weight-bold is-italic">/u/{post.data.author}/</span>
@@ -54,6 +57,10 @@
 </div>
 
 <style>
+.cursor-url {
+  cursor: pointer;
+}
+
 .post-child-author {
   padding-top: 0.75rem;
   margin-left: 0.75rem;
