@@ -1,6 +1,8 @@
 {
-    "name": "Reddit Micro Client",
-    "short_name": "",
+    "name": "Reddit Micro",
+    "lang": "en",
+    "description": "A minimalist Reddit client",
+    "short_name": "Reddit Micro",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
@@ -8,7 +10,7 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#000000",
-    "background_color": "#000000",
-    "display": "standalone"
+    "display": "standalone",
+    "theme_color": "black",
+    "background_color": "black"
 }

@@ -64,7 +64,7 @@
               <div class="mb-4 p-2 post-link-name"
                    style="color: {post.data.stickied === true ? '#009900' : 'default'}"
                    on:click="{postTitleClicked(post)}">
-                {post.data.title} <em>[{post.data.domain}]</em>
+                {@html htmlUnescape(post.data.title)} <em>[{post.data.domain}]</em>
               </div>
               <div class="ml-2 post-description">
                 {@html htmlUnescape(post.data.selftext)}

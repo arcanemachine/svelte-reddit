@@ -29,7 +29,7 @@
   // let subredditContent;
   // let postContent;
   let postAuthor = '';
-  let currentContent = 'subreddit';
+  let currentContent = 'post';
 
   function titleClicked() {
     console.log('outer: titleClicked()');
