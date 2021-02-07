@@ -22,7 +22,7 @@
 </script>
 
 <div class="modal is-active" transition:fade>
-  <div class="modal-background"></div>
+  <div class="modal-background" on:click="{settingsClosed}"></div>
   <div class="modal-content"></div>
     <div class="card">
       <div class="card-content">
