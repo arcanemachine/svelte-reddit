@@ -15,16 +15,13 @@
 
   const postTitleClicked = (post) => {
     if (post.data.url.match(/(https:\/\/i.reddit.com\/)/)) {
-      // console.log('reddit post');
       emitPostPick(post);
     } else {
-      // console.log('non-reddit link');
       window.open(post.data.url, '_blank');
     }
   }
 
   const postCommentsClicked = (post) => {
-    // console.log('postCommentsClicked()');
     emitPostPick(post);
   }
 

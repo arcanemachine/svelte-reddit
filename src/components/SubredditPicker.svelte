@@ -31,15 +31,12 @@
 
   // events
   function emitSubredditPick(event) {
-    console.log('emitSubredditPick()');
     dispatch('subreddit-pick', event);
   }
   function emitSubredditPickerClose(event) {
-    console.log('emitSubredditPickerClose()');
     dispatch('subreddit-picker-close', {});
   }
   function emitSubredditPickerToggle(event) {
-    console.log('emitSubredditPickerToggle()');
     dispatch('subreddit-picker-toggle', {});
   }
 

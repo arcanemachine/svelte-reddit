@@ -66,7 +66,6 @@
     if (event && Object.keys(event).length) {
       subreddit = event.detail.subreddit;
     }
-    console.log(`subredditPick(), ${subreddit}`);
     try {
       isLoading = true;
       await fetch(`https://i.reddit.com/r/${subreddit}/${sort}.json`)
@@ -89,7 +88,6 @@
   const postPick = async (event) => {
     let post = event.detail.post;
     let url = post.data.permalink;
-    console.log(`postPick(), ${url}`);
     isLoading = true;
     try {
       await fetch(`https://i.reddit.com${url}.json`)
