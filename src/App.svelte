@@ -128,7 +128,6 @@
   {/if}
 
   <main class="content-container">
-  {subredditPickerShow}
     <div class="container">
         {#if currentContent === 'subreddit'}
           <SubredditDetail subredditContent="{subredditContent}"
