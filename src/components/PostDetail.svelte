@@ -1,6 +1,5 @@
 <script>
   import { createEventDispatcher, onMount } from 'svelte';
-
   import { htmlUnescape } from '../utils.js';
   import PostItem from './PostItem.svelte';
 
@@ -30,7 +29,7 @@
   }
   /* end: override bulma styling for dynamically generated html */
   </style>
-  <div class="pt-5 px-3 section">
+  <div class="pt-5 section">
     <div class="columns">
       <div class="column">
         <div class="card large">

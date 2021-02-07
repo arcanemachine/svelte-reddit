@@ -52,7 +52,7 @@
 
 <div>
   <div class="card large post-item-card"
-       style="margin-left: {depth / 4}rem; background-color: {getBackgroundColor()};">
+       style="margin-left: {depth / 5}rem; background-color: {getBackgroundColor()};">
     <div class="post-child-author">
       <!-- span class="cursor-url">[-]</span -->
       <span class="has-text-weight-bold is-italic">/u/{post.data.author}/</span>

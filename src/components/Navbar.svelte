@@ -9,9 +9,8 @@
   let navbarIsActive = false;
 
   // methods
-  function navbarToggle() {navbarIsActive = !navbarIsActive;}
-
-  function navbarItemClicked(itemName, showNavbar=undefined) {
+  const navbarToggle = () => {navbarIsActive = !navbarIsActive;}
+  const navbarItemClicked = (itemName, showNavbar=undefined) => {
     navbarToggle();
     if (itemName === 'go-to-subreddit') {
       emitSubredditPickerToggle();
@@ -22,8 +21,8 @@
   }
 
   // events
-  const titleClicked = () => dispatch('title-clicked');
-  const emitSubredditPickerToggle = () => dispatch('subreddit-picker-toggle');
+  function titleClicked() {dispatch('title-clicked')}
+  function emitSubredditPickerToggle() {dispatch('subreddit-picker-toggle')}
 </script>
 
 <nav class="navbar is-fixed-top is-size-5" transition:fade>
@@ -35,7 +34,7 @@
       {/if }
       <span class="navbar-title">{title}</span>
     </div>
-    <div class="navbar-end-touch-icon-container">
+    <div class="navbar-end-touch-icon-container is-hidden-desktop">
       <svg on:click="{() => navbarItemClicked('go-to-subreddit', false)}"
            xmlns="http://www.w3.org/2000/svg"
            width="40" height="40"
@@ -58,7 +57,7 @@
   </div>
   <div id="navMenu" class="navbar-menu" class:is-active="{navbarIsActive}">
     <div class="navbar-end">
-      <div class="navbar-item has-text-centered"
+      <div class="navbar-item has-text-centered is-hidden-touch"
            on:click="{() => navbarItemClicked('go-to-subreddit')}">
         Go to subreddit
       </div>

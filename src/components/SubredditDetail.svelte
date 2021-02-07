@@ -1,6 +1,5 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-
   import { htmlUnescape } from '../utils.js';
 
   const dispatch = createEventDispatcher();
