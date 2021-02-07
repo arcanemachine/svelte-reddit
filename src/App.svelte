@@ -48,11 +48,19 @@
     }, 200)
   }
 
-  const subredditPickerToggle = () => {
-    console.log('toggleSubredditPicker()');
-    subredditPickerShow = !subredditPickerShow;
+  const settingsToggle = () => {
+    ;
   }
-
+  const subredditPickerClose = () => {
+    console.log('subredditPickerClose()');
+    subredditPickerShow = false;
+    document.querySelector('html').style.overflowY = 'auto';
+  }
+  const subredditPickerToggle = () => {
+    console.log('subredditPickerToggle()');
+    subredditPickerShow = !subredditPickerShow;
+    document.querySelector('html').style.overflowY = subredditPickerShow ? 'hidden' : 'default';
+  }
   const subredditPick = async (event, subreddit=undefined, sort='hot') => {
     if (event && Object.keys(event).length) {
       subreddit = event.detail.subreddit;
@@ -63,6 +71,7 @@
       await fetch(`https://i.reddit.com/r/${subreddit}/${sort}.json`)
       .then(res => res.json())
       .then(data => {
+        subredditPickerToggle(false);
         subredditContent = data;
         title = subredditContent.data.children[0].data.subreddit_name_prefixed;
         window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
@@ -107,16 +116,19 @@
   <Navbar title="{title}"
           currentContent="{currentContent}"
           on:subreddit-picker-toggle="{subredditPickerToggle}"
+          on:settings-toggle="{settingsToggle}"
           on:title-clicked="{titleClicked}"/>
 
   {#if isLoading}<LoadingScreen/>{/if}
 
   {#if subredditPickerShow}
-    <SubredditPicker on:subreddit-picker-toggle="{subredditPickerToggle}"
+    <SubredditPicker on:subreddit-picker-close="{subredditPickerClose}"
+                     on:subreddit-picker-toggle="{subredditPickerToggle}"
                      on:subreddit-pick="{subredditPick}"/>
   {/if}
 
   <main class="content-container">
+  {subredditPickerShow}
     <div class="container">
         {#if currentContent === 'subreddit'}
           <SubredditDetail subredditContent="{subredditContent}"

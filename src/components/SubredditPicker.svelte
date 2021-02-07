@@ -11,15 +11,19 @@
   let submitButton;
 
   // methods
-  const subredditPickerClosed = () => {
-    console.log('subredditPickerClosed()');
+  const subredditPickerToggle = () => {
+    console.log('subredditPickerToggle()');
     emitSubredditPickerToggle();
+  }
+  const subredditPickerClose = () => {
+    console.log('subredditPickerClose()');
+    emitSubredditPickerClose();
   }
   const submitButtonClicked = async () => {
     console.log('submitButtonClicked()');
     submitButton.classList.add('is-loading');
     setTimeout(() => {
-      dispatch('subreddit-picker-toggle');
+      dispatch('subreddit-picker-close');
       dispatch('subreddit-pick', ({subreddit}));
     }, 200)
   }
@@ -33,20 +37,25 @@
     console.log('emitSubredditPick()');
     dispatch('subreddit-pick', event);
   }
+  function emitSubredditPickerClose(event) {
+    console.log('emitSubredditPickerClose()');
+    dispatch('subreddit-picker-close', {});
+  }
   function emitSubredditPickerToggle(event) {
     console.log('emitSubredditPickerToggle()');
-    dispatch('subreddit-picker-toggle');
+    dispatch('subreddit-picker-toggle', {});
   }
 
 </script>
 
-<div class="modal is-active" transition:fade>
-  <div class="modal-background"></div>
-  <div class="modal-content"></div>
+<div class="">
+  <div class="modal is-active" transition:fade>
+    <div class="modal-background" on:click="{subredditPickerClose}"></div>
+    <div class="modal-content"></div>
     <div class="card">
       <div class="card-content">
         <button class="p-3 delete"
-                on:click="{subredditPickerClosed}"
+                on:click="{subredditPickerClose}"
                 aria-label="close"></button>
         <div class="has-text-centered">
           <h4 class="is-size-5 card-text">Subreddit name:</h4>
@@ -81,12 +90,15 @@
         </div>
       </div>
     </div>
+  </div>
 </div>
 
 <style>
 .card {
-  margin: 2rem;
+  max-height: 80vh;
   width: 20rem;
+  margin: 2rem;
+  overflow-y: scroll;
 }
 
 .delete {
