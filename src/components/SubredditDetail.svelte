@@ -43,13 +43,15 @@
              style="background-color: {post.data.stickied ? '#e7e7e7' : '#f5f5f5'}">
           <div class="post-image-container">
             {#if post.data.thumbnail.match(/(http)/)}
-              <img src="{post.data.thumbnail}"
+              <img on:click="{postTitleClicked(post)}"
+                   src="{post.data.thumbnail}"
                    alt="Post thumbnail"
-                   class="post-image">
+                   class="post-image cursor-url">
             {:else}
-              <svg xmlns="http://www.w3.org/2000/svg"
+              <svg on:click="{postTitleClicked(post)}"
+                   xmlns="http://www.w3.org/2000/svg"
                    fill="currentColor"
-                   class="bi bi-camera-fill post-image"
+                   class="bi bi-camera-fill post-image cursor-url"
                    viewBox="0 0 16 16">
                 <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
                 <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/>
@@ -67,7 +69,7 @@
               <div class="ml-2 post-description">
                 {@html htmlUnescape(post.data.selftext)}
               </div>
-              <div class="mt-3 ml-5 mb-1 p-1 post-link-comments"
+              <div class="mt-3 ml-5 mb-1 p-1 has-text-weight-bold is-italic post-link-comments"
                    on:click="{postCommentsClicked(post)}">
                 {post.data.num_comments} comments
               </div>
@@ -92,7 +94,6 @@
 
 .post-image-container {
   align-self: center;
-  cursor: pointer;
 }
 
 .post-image {

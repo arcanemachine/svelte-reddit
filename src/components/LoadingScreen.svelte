@@ -9,9 +9,14 @@
 
 <style>
 .button {
-  width: 20vw;
-  height: 20vw;
+  width: 6rem;
+  height: 6rem;
   font-size: 3rem;
   border-radius: 0.75rem;
+}
+
+.button.is-loading:after {
+-webkit-animation: spinAround 750ms infinite linear;
+        animation: spinAround 750ms infinite linear;
 }
 </style>

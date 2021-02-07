@@ -2,9 +2,17 @@
   import { htmlUnescape } from '../utils.js';
 
   // props
-  export let post, index, indent;
+  export let post, index, depth=0;
+
+  // data
+  let maxDepth = 8;
 
   // methods
+  const getBackgroundColor = () => {
+    let result = ((14 * 16) - (depth * 7)).toString(16);
+    return `#${result}${result}${result}`;
+  }
+
   const getFormattedTimeSince = (timestamp) => {
     let now = new Date();
     let date = new Date(timestamp*1000);
@@ -42,23 +50,35 @@
 
 </script>
 
-<div class="card large"
-     class:has-background-light="{index % 2}"
-     class:has-background-grey-lighter="{!(index % 2)}"
-     style="margin-left: {indent / 2}rem;">
-  <div class="post-child-author">
-    <!-- span class="cursor-url">[-]</span -->
-    <span class="has-text-weight-bold is-italic">/u/{post.data.author}/</span>
+<div>
+  <div class="card large post-item-card"
+       style="margin-left: {depth / 4}rem; background-color: {getBackgroundColor()};">
+    <div class="post-child-author">
+      <!-- span class="cursor-url">[-]</span -->
+      <span class="has-text-weight-bold is-italic">/u/{post.data.author}/</span>
+    </div>
+    <div class="py-2 card-content">
+      <div>{@html htmlUnescape(post.data.body_html)}</div>
+    </div>
+    <div class="post-child-time is-italic">{getFormattedTimeSince(post.data.created)}</div>
+    {#if post.data.hasOwnProperty('replies') && Object.keys(post.data.replies).length}
+      {#if depth < maxDepth}
+        {#each post.data.replies.data.children as reply, index}
+          <svelte:self post="{reply}" index="{index}" depth="{depth + 1}"/>
+        {/each}
+      {:else}
+        <div class="get-more-posts">Dive deeper...</div>
+      {/if}
+    {/if}
   </div>
-  <div class="py-2 card-content">
-    <div>{@html htmlUnescape(post.data.body_html)}</div>
-  </div>
-  <div class="post-child-time is-italic">{getFormattedTimeSince(post.data.created)}</div>
 </div>
 
 <style>
-.cursor-url {
-  cursor: pointer;
+.post-item-card {
+  border: 1px solid black;
+  box-shadow: none;
+  margin-bottom: -1px;
+  margin-right: -1px;
 }
 
 .post-child-author {

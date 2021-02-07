@@ -12,10 +12,13 @@
   const navbarToggle = () => navbarIsActive = !navbarIsActive;
   const titleClicked = () => dispatch('title-clicked');
 
-  const navbarItemClicked = (itemName) => {
+  const navbarItemClicked = (itemName, showNavbar=undefined) => {
     navbarToggle();
     if (itemName === 'go-to-subreddit') {
       emitSubredditPickerToggle();
+      if (showNavbar !== undefined) {
+        navbarIsActive = showNavbar;
+      }
     }
   }
 
@@ -35,6 +38,15 @@
       {/if }
       <span class="navbar-title">{title}</span>
     </div>
+    <div class="navbar-end-touch-icon-container">
+      <svg on:click="{() => navbarItemClicked('go-to-subreddit', false)}"
+           xmlns="http://www.w3.org/2000/svg"
+           width="50" height="50"
+           fill="currentColor" viewBox="0 0 16 16"
+           class="p-3 bi bi-search cursor-url">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+      </svg>
+    </div>
     <div role="button"
        data-target="navMenu"
        on:click="{navbarToggle}"
@@ -49,18 +61,30 @@
   </div>
   <div id="navMenu" class="navbar-menu" class:is-active="{navbarIsActive}">
     <div class="navbar-end">
-      <div class="navbar-item has-text-centered">
-        <span on:click="{() => navbarItemClicked('go-to-subreddit')}">Go to subreddit</span>
+      <div class="navbar-item has-text-centered"
+           on:click="{() => navbarItemClicked('go-to-subreddit')}">
+        Go to subreddit
+      </div>
+      <div class="navbar-item has-text-centered"
+           on:click="{() => navbarItemClicked('settings')}">
+        Settings
       </div>
     </div>
   </div>
 </nav>
 
 <style>
-
 .navbar {
   height: 4rem;
   border-bottom: 2px solid black;
+}
+
+.navbar-end-touch-icon-container {
+  display: flex;
+  margin-right: 1rem;
+  flex-grow: 1;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .navbar-burger {

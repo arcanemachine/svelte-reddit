@@ -1,25 +1,35 @@
 <script>
-  import { currentSubreddit } from './stores/';
+  import { onMount } from 'svelte';
 
+  import { currentSubreddit } from './stores/';
   import { mockedSubredditData } from './mockedSubredditData.js';
   import { mockedPostData } from './mockedPostData.js';
 
   // components
   import Navbar from './components/Navbar.svelte';
+  import Settings from './components/Settings.svelte';
   import LoadingScreen from './components/LoadingScreen.svelte';
   import SubredditPicker from './components/SubredditPicker.svelte';
   import SubredditDetail from './components/SubredditDetail.svelte';
   import PostDetail from './components/PostDetail.svelte';
 
+  // onMount
+  onMount(() => {
+    // subredditPick(undefined, 'Pine64Official');
+  })
+
   // data
   let title = 'Micro Reddit Client';
   let isLoading = false;
+  let settingsShow = true;
   let subredditPickerShow = false;
 
   let subredditContent = mockedSubredditData;
   let postContent = mockedPostData;
-  let postAuthor = 'XXXXXXXX';
-  let currentContent = 'post';
+  // let subredditContent;
+  // let postContent;
+  let postAuthor = '';
+  let currentContent = 'subreddit';
 
   function titleClicked() {
     console.log('outer: titleClicked()');
@@ -44,7 +54,7 @@
   }
 
   const subredditPick = async (event, subreddit=undefined, sort='hot') => {
-    if (event) {
+    if (event && Object.keys(event).length) {
       subreddit = event.detail.subreddit;
     }
     console.log(`subredditPick(), ${subreddit}`);
