@@ -25,7 +25,7 @@
   }
 
   const postCommentsClicked = (post) => {
-    console.log('postCommentsClicked()');
+    // console.log('postCommentsClicked()');
     emitPostPick(post);
   }
 

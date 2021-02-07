@@ -12,15 +12,12 @@
 
   // methods
   const subredditPickerToggle = () => {
-    console.log('subredditPickerToggle()');
     emitSubredditPickerToggle();
   }
   const subredditPickerClose = () => {
-    console.log('subredditPickerClose()');
     emitSubredditPickerClose();
   }
   const submitButtonClicked = async () => {
-    console.log('submitButtonClicked()');
     submitButton.classList.add('is-loading');
     setTimeout(() => {
       dispatch('subreddit-picker-close');
@@ -96,7 +93,7 @@
   max-height: 80vh;
   width: 20rem;
   margin: 2rem;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .delete {

@@ -9,10 +9,9 @@
   let navbarIsActive = false;
 
   // methods
-  const navbarToggle = () => navbarIsActive = !navbarIsActive;
-  const titleClicked = () => dispatch('title-clicked');
+  function navbarToggle() {navbarIsActive = !navbarIsActive;}
 
-  const navbarItemClicked = (itemName, showNavbar=undefined) => {
+  function navbarItemClicked(itemName, showNavbar=undefined) {
     navbarToggle();
     if (itemName === 'go-to-subreddit') {
       emitSubredditPickerToggle();
@@ -23,10 +22,8 @@
   }
 
   // events
-  const emitSubredditPickerToggle = () => {
-    console.log('emitSubredditPickerToggle()');
-    dispatch('subreddit-picker-toggle');
-  }
+  const titleClicked = () => dispatch('title-clicked');
+  const emitSubredditPickerToggle = () => dispatch('subreddit-picker-toggle');
 </script>
 
 <nav class="navbar is-fixed-top is-size-5" transition:fade>

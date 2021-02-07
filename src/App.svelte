@@ -31,14 +31,14 @@
   let postAuthor = '';
   let currentContent = 'post';
 
-  function titleClicked() {
+  const titleClicked = () => {
     console.log('outer: titleClicked()');
     if (currentContent === 'post') {
       currentContentIs('subreddit');
     }
   }
 
-  function currentContentIs(x) {
+  const currentContentIs = (x) => {
     isLoading = true;
     window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
     setTimeout(() => {currentContent = undefined}, 200);
