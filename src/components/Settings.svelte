@@ -17,8 +17,7 @@
   }
 
   // events
-  function emitSettingsClose(event) {dispatch('subreddit-pick', event)}
-  function emitSubredditPickerToggle(event) {dispatch('subreddit-picker-toggle')}
+  function emitSettingsClose(event) {dispatch('settings-close', event)}
 
 </script>
 
@@ -28,6 +27,7 @@
     <div class="card">
       <div class="card-content">
         <button class="p-3 delete"
+                on:click="{settingsClosed}"
                 aria-label="close"></button>
         <div class="has-text-centered">
           <h3 class="is-size-3 card-text">Settings</h3>

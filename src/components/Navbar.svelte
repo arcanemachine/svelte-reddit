@@ -14,15 +14,18 @@
     navbarToggle();
     if (itemName === 'go-to-subreddit') {
       emitSubredditPickerToggle();
-      if (showNavbar !== undefined) {
-        navbarIsActive = showNavbar;
-      }
+      navbarIsActive = false;
+    }
+    if (itemName === 'settings') {
+      emitSettingsToggle();
+      navbarIsActive = false;
     }
   }
 
   // events
   function titleClicked() {dispatch('title-clicked')}
   function emitSubredditPickerToggle() {dispatch('subreddit-picker-toggle')}
+  function emitSettingsToggle() {dispatch('settings-toggle')}
 </script>
 
 <nav class="navbar is-fixed-top is-size-5" transition:fade>

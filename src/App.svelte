@@ -44,8 +44,14 @@
   }
 
   // Settings
-  const settingsClose = () => settingsShow = false;
-  const settingsToggle = () => settingsShow = !settingsShow;
+  const settingsClose = () => {
+    settingsShow = false;
+    document.querySelector('html').style.overflowY = 'auto';
+  }
+  const settingsToggle = () => {
+    settingsShow = !settingsShow;
+    document.querySelector('html').style.overflowY = subredditPickerShow ? 'hidden' : 'default';
+  }
 
   // SubredditPicker
   const subredditPickerClose = () => {
