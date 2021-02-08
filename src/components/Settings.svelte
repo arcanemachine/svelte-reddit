@@ -91,6 +91,12 @@
 </div>
 
 <style>
+
+/* override bulma defaults */
+.button {
+  border: 1px solid black !important;
+}
+
 .card {
   margin: 2rem;
   width: 25rem;
@@ -171,11 +177,13 @@
 .toggle-widget-backplate {
   width: 4rem;
   transition: background-color 0.5s;
+  border: 1px solid black;
 }
 
 .toggle-widget-slider {
   width: 2.5rem;
-  transition: margin 0.5s;
+  transition: margin 0.3s;
+  border: 1px solid black;
 }
 
 .slider-is-off {
@@ -188,6 +196,17 @@
 
 .close-button-bottom {
   margin-top: 2.5rem;
+}
+
+/* a11y */
+@media (prefers-reduced-motion: reduce) {
+  .toggle-widget-backplate {
+    transition: non;
+  }
+
+  .toggle-widget-slider {
+    transition: non;
+  }
 }
 
 </style>
