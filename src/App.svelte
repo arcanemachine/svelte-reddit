@@ -18,6 +18,7 @@
     // if font size saved in localStorage, retir
     if (localStorage.getItem('fontSize')) {
       document.querySelector('html').style.fontSize = `${localStorage.getItem('fontSize')}px`;
+      console.log(localStorage.getItem('fontSize'));
     }
     // subredditPick(undefined, 'Pine64Official');
   })

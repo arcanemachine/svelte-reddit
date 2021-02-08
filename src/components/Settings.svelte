@@ -6,25 +6,34 @@
 
   // data
   let htmlRootEl = document.querySelector('html');
-  let fontSizeRoot = htmlRootEl.style.fontSize ? Number(htmlRootEl.style.fontSize.match(/(\d*\.)?\d+/)[0]) : 16;
+  let fontSizeRootDefault = 16;
+  let fontSizeRoot = htmlRootEl.style.fontSize ? Number(htmlRootEl.style.fontSize.match(/(\d*\.)?\d+/)[0]) : fontSizeRootDefault;
 
   // declarations
-  $: fontSizeDisplay = (fontSizeRoot - 16) * 2;
-  $: lsFontSize = localStorage.getItem('fontSize');
+  $: fontSizeDisplay = (fontSizeRoot - fontSizeRootDefault) * 2;
 
   // refs
 
   // methods
+  const closeSettings = () => emitSettingsClose();
   const fontSizeUpdate = (index) => {
     if (Math.abs(index + fontSizeDisplay) <= 16) {
       fontSizeRoot += index;
       htmlRootEl.style.fontSize = `${fontSizeRoot}px`;
-      localStorage.setItem('fontSize', fontSizeRoot);
+      if (fontSizeRoot !== fontSizeRootDefault) {
+        localStorage.setItem('fontSize', fontSizeRoot);
+      }
+      else if (fontSizeRoot === fontSizeRootDefault) {
+        localStorage.removeItem('fontSize');
+      }
     }
-    console.log(`amount: ${index}, actual: ${fontSizeRoot}, display: ${fontSizeDisplay}`);
+    // console.log(localStorage.getItem('fontSize'));
+    // console.log(`amount: ${index}, actual: ${fontSizeRoot}, display: ${fontSizeDisplay}`);
   }
-  const closeButtonClicked = () => {
-    emitSettingsClose();
+  const fontSizeReset = () => {
+    fontSizeRoot = fontSizeRootDefault;
+    htmlRootEl.style.fontSize = `${fontSizeRoot}px`;
+    localStorage.removeItem('fontSize');
   }
 
   // events
@@ -33,27 +42,25 @@
 </script>
 
 <div class="modal is-active" transition:fade>
-  <div class="modal-background" on:click="{closeButtonClicked}"></div>
+  <div class="modal-background" on:click="{closeSettings}"></div>
   <div class="modal-content"></div>
   <div class="card">
     <div class="card-content">
-      <div class="button-close-container" on:click="{closeButtonClicked}">
+      <div class="button-close-container" on:click="{closeSettings}">
         <button class="delete button-close" aria-label="close"></button>
       </div>
       <div class="has-text-centered">
-        <h3 class="is-size-3 card-text card-name">Settings</h3>
+        <h3 class="is-size-3 card-text card-name has-text-decoration-underline">Settings</h3>
       </div>
       <div class="mt-6 has-text-centered settings-item-container">
         <div class="is-size-5 settings-item-name">Font Size</div>
         <div class="settings-item-value font-size-container">
           <button on:click="{() => fontSizeUpdate(-0.5)}" class="button font-size-button">-</button>
-          <input type="font" class="input font-size-input-text" bind:value="{fontSizeDisplay}" disabled>
+          <button on:click="{fontSizeReset}" class="button font-size-button-display">{fontSizeDisplay}</button>
           <button on:click="{() => fontSizeUpdate(+0.5)}" class="button font-size-button">+</button>
         </div>
       </div>
-      <div class="settings-item-container">
-        Font Size: {lsFontSize}
-      </div>
+        <button on:click="{closeSettings}" class="mt-6 button is-info is-large is-fullwidth">Close</button>
     </div>
   </div>
 </div>
@@ -81,16 +88,15 @@
 
 .font-size-button {
   background-color: #ddd;
-  width: 2rem;
+  width: 2.5rem;
   border: 1px solid black;
 }
 
-.font-size-input-text {
+.font-size-button-display {
   background-color: #eee;
   width: 3.5rem;
   margin: auto 0.5rem;
   text-align: center;
-  pointer-events: none;
   border: 1px solid black;
 }
 
@@ -103,8 +109,7 @@
   align-items: center;
   cursor: pointer;
 }
-element {
-}
+
 .button-close {
   padding: 0.5rem;
 }

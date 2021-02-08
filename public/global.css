@@ -1,3 +1,7 @@
 .cursor-url {
   cursor: pointer;
 }
+
+.has-text-decoration-underline {
+  text-decoration: underline;
+}
