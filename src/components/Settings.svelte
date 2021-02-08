@@ -6,10 +6,11 @@
 
   // data
   let htmlRootEl = document.querySelector('html');
-  let fontSizeRoot = htmlRootEl.style.fontSize ? Number(htmlRootEl.style.fontSize.match(/(\d*\.)?\d+/)[0]) : 18;
+  let fontSizeRoot = htmlRootEl.style.fontSize ? Number(htmlRootEl.style.fontSize.match(/(\d*\.)?\d+/)[0]) : 16;
 
   // declarations
-  $: fontSizeDisplay = (fontSizeRoot - 18) * 2;
+  $: fontSizeDisplay = (fontSizeRoot - 16) * 2;
+  $: lsFontSize = localStorage.getItem('fontSize');
 
   // refs
 
@@ -18,6 +19,7 @@
     if (Math.abs(index + fontSizeDisplay) <= 16) {
       fontSizeRoot += index;
       htmlRootEl.style.fontSize = `${fontSizeRoot}px`;
+      localStorage.setItem('fontSize', fontSizeRoot);
     }
     console.log(`amount: ${index}, actual: ${fontSizeRoot}, display: ${fontSizeDisplay}`);
   }
@@ -45,9 +47,12 @@
         <div class="is-size-5 settings-item-name">Font Size</div>
         <div class="settings-item-value font-size-container">
           <button on:click="{() => fontSizeUpdate(-0.5)}" class="button font-size-button">-</button>
-            <input type="font" class="input font-size-input-text" bind:value="{fontSizeDisplay}" disabled>
+          <input type="font" class="input font-size-input-text" bind:value="{fontSizeDisplay}" disabled>
           <button on:click="{() => fontSizeUpdate(+0.5)}" class="button font-size-button">+</button>
         </div>
+      </div>
+      <div class="settings-item-container">
+        Font Size: {lsFontSize}
       </div>
     </div>
   </div>

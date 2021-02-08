@@ -15,13 +15,17 @@
 
   // onMount
   onMount(() => {
+    // if font size saved in localStorage, retir
+    if (localStorage.getItem('fontSize')) {
+      document.querySelector('html').style.fontSize = `${localStorage.getItem('fontSize')}px`;
+    }
     // subredditPick(undefined, 'Pine64Official');
   })
 
   // data
   let title = 'Reddit Micro';
   let isLoading = false;
-  let settingsShow = true;
+  let settingsShow = false;
   let subredditPickerShow = false;
 
   let subredditContent = mockedSubredditData;
