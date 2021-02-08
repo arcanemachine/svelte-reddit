@@ -60,7 +60,8 @@
               -
             </button>
             <button class="button font-size-button-display"
-                    on:dblclick="{fontSizeReset}">
+                    on:dblclick="{fontSizeReset}"
+                    transition:fade>
               {fontSizeDisplay}
             </button>
             <button class="button font-size-button"
@@ -95,6 +96,7 @@
 /* override bulma defaults */
 .button {
   border: 1px solid black !important;
+  border-radius: 0.5rem;
 }
 
 .card {
@@ -175,7 +177,8 @@
 }
 
 .toggle-widget-backplate {
-  width: 4rem;
+  background-color: #eee;
+  width: 4.5rem;
   transition: background-color 0.5s;
   border: 1px solid black;
 }
@@ -187,11 +190,11 @@
 }
 
 .slider-is-off {
-  margin-left: calc(-1.5em - 1px);
+  margin-left: calc(-2em - 1px);
 }
 
 .slider-is-on {
-  margin-right: calc(-1.5em - 1px);
+  margin-right: calc(-2em - 1px);
 }
 
 .close-button-bottom {
