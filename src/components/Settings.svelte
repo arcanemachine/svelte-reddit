@@ -32,8 +32,17 @@
   }
 
   // dark mode
-  let darkModeActive = false;
-  const darkModeToggle = () => {darkModeActive = !darkModeActive;}
+  const isDarkModeActive = () => localStorage.getItem('darkModeActive');
+  let darkModeActive = isDarkModeActive();
+  const darkModeToggle = () => {
+    if (!localStorage.getItem('darkModeActive')) {
+      localStorage.setItem('darkModeActive', true);
+      darkModeActive = isDarkModeActive();
+    } else {
+      localStorage.removeItem('darkModeActive');
+      darkModeActive = isDarkModeActive();
+    }
+  }
 
 
 </script>
@@ -74,6 +83,7 @@
       <div class="settings-item-container-parent">
         <div class="settings-item-container-name">
           <div class="settings-item-name">Dark Mode</div>
+          <div class="settings-item-name-secondary">{darkModeActive}</div>
         </div>
         <div class="settings-item-container-widget">
           <div on:click="{darkModeToggle}"
@@ -137,9 +147,13 @@
   display: flex;
   width: 50%;
   align-self: flex-start;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.settings-item-name {
+
 }
 
 .settings-item-container-widget {
@@ -153,6 +167,10 @@
 
 .settings-item-name {
   font-size: 1.3rem;
+}
+
+.settings-item-name-secondary {
+  font-size: 0.8rem;
 }
 
 .font-size-container {
