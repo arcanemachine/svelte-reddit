@@ -199,6 +199,8 @@
 
 .close-button-bottom {
   margin-top: 2.5rem;
+  border: none !important;
+  border-radius: 0.25rem;
 }
 
 /* a11y */
