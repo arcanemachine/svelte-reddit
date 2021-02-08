@@ -15,8 +15,10 @@
 
   // methods
   const fontSizeUpdate = (index) => {
-    fontSizeRoot += index;
-    htmlRootEl.style.fontSize = `${fontSizeRoot}px`;
+    if (Math.abs(index + fontSizeDisplay) <= 16) {
+      fontSizeRoot += index;
+      htmlRootEl.style.fontSize = `${fontSizeRoot}px`;
+    }
     console.log(`amount: ${index}, actual: ${fontSizeRoot}, display: ${fontSizeDisplay}`);
   }
   const closeButtonClicked = () => {
@@ -37,7 +39,7 @@
         <button class="delete button-close" aria-label="close"></button>
       </div>
       <div class="has-text-centered">
-        <h3 class="mt-4 is-size-4 card-text card-name">Settings</h3>
+        <h3 class="is-size-3 card-text card-name">Settings</h3>
       </div>
       <div class="mt-6 has-text-centered settings-item-container">
         <div class="is-size-5 settings-item-name">Font Size</div>
@@ -55,6 +57,7 @@
 .card {
   margin: 2rem;
   width: 20rem;
+  max-width: 90vw;
 }
 
 .settings-item-container {
@@ -78,7 +81,7 @@
 }
 
 .font-size-input-text {
-  background-color: #ccc;
+  background-color: #eee;
   width: 3.5rem;
   margin: auto 0.5rem;
   text-align: center;
@@ -88,8 +91,8 @@
 
 .button-close-container {
   display: flex;
-  margin: -0.75rem;
-  padding: 0.75rem;
+  margin: -1rem;
+  padding: 1rem;
   float: right;
   justify-content: center;
   align-items: center;
