@@ -20,13 +20,13 @@
       document.querySelector('html').style.fontSize = `${localStorage.getItem('fontSize')}px`;
       console.log(localStorage.getItem('fontSize'));
     }
-    // subredditPick(undefined, 'Pine64Official');
+    // subredditPick(undefined, 'AskReddit');
   })
 
   // data
   let title = 'Reddit Micro';
   let isLoading = false;
-  let settingsShow = false;
+  let settingsShow = true;
   let subredditPickerShow = false;
 
   let subredditContent = mockedSubredditData;
@@ -37,7 +37,6 @@
   let currentContent = 'post';
 
   const titleClicked = () => {currentContentIs('subreddit')}
-
   const currentContentIs = (x) => {
     isLoading = true;
     window.scrollTo({top: 0, left: 0, behavior: 'smooth'});

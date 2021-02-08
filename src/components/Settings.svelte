@@ -4,18 +4,15 @@
 
   const dispatch = createEventDispatcher();
 
-  // data
+  // close menu
+  const closeSettings = () => emitSettingsClose();
+  function emitSettingsClose(event) {dispatch('settings-close', event)}
+
+  // font size
   let htmlRootEl = document.querySelector('html');
   let fontSizeRootDefault = 16;
-  let fontSizeRoot = htmlRootEl.style.fontSize ? Number(htmlRootEl.style.fontSize.match(/(\d*\.)?\d+/)[0]) : fontSizeRootDefault;
-
-  // declarations
+  let fontSizeRoot = htmlRootEl.style.fontSize ? Number(htmlRootEl.style.fontSize.match(/(\d*\.)?\d+/)[0]) : fontSizeRootDefault
   $: fontSizeDisplay = (fontSizeRoot - fontSizeRootDefault) * 2;
-
-  // refs
-
-  // methods
-  const closeSettings = () => emitSettingsClose();
   const fontSizeUpdate = (index) => {
     if (Math.abs(index + fontSizeDisplay) <= 16) {
       fontSizeRoot += index;
@@ -27,8 +24,6 @@
         localStorage.removeItem('fontSize');
       }
     }
-    // console.log(localStorage.getItem('fontSize'));
-    // console.log(`amount: ${index}, actual: ${fontSizeRoot}, display: ${fontSizeDisplay}`);
   }
   const fontSizeReset = () => {
     fontSizeRoot = fontSizeRootDefault;
@@ -36,8 +31,10 @@
     localStorage.removeItem('fontSize');
   }
 
-  // events
-  function emitSettingsClose(event) {dispatch('settings-close', event)}
+  // dark mode
+  let darkModeActive = false;
+  const darkModeToggle = () => {darkModeActive = !darkModeActive;}
+
 
 </script>
 
@@ -46,21 +43,49 @@
   <div class="modal-content"></div>
   <div class="card">
     <div class="card-content">
-      <div class="button-close-container" on:click="{closeSettings}">
-        <button class="delete button-close" aria-label="close"></button>
+      <div class="close-button-top-container" on:click="{closeSettings}">
+        <button class="delete close-button-top" aria-label="close"></button>
       </div>
-      <div class="has-text-centered">
-        <h3 class="is-size-3 card-text card-name has-text-decoration-underline">Settings</h3>
+      <div class="has-text-centered card-title">
+        <h3 class="card-text">Settings</h3>
       </div>
-      <div class="mt-6 has-text-centered settings-item-container">
-        <div class="is-size-5 settings-item-name">Font Size</div>
-        <div class="settings-item-value font-size-container">
-          <button on:click="{() => fontSizeUpdate(-0.5)}" class="button font-size-button">-</button>
-          <button on:click="{fontSizeReset}" class="button font-size-button-display">{fontSizeDisplay}</button>
-          <button on:click="{() => fontSizeUpdate(+0.5)}" class="button font-size-button">+</button>
+      <div class="has-text-centered settings-item-container-parent">
+        <div class="settings-item-container-name">
+          <div class="settings-item-name">Font Size</div>
+        </div>
+        <div class="settings-item-container-widget">
+          <div class="settings-item-value font-size-container">
+            <button class="button font-size-button"
+                    on:click="{() => fontSizeUpdate(-0.5)}">
+              -
+            </button>
+            <button class="button font-size-button-display"
+                    on:dblclick="{fontSizeReset}">
+              {fontSizeDisplay}
+            </button>
+            <button class="button font-size-button"
+                    on:click="{() => fontSizeUpdate(+0.5)}">
+              +
+            </button>
+          </div>
         </div>
       </div>
-        <button on:click="{closeSettings}" class="mt-6 button is-info is-large is-fullwidth">Close</button>
+      <div class="settings-item-container-parent">
+        <div class="settings-item-container-name">
+          <div class="settings-item-name">Dark Mode</div>
+        </div>
+        <div class="settings-item-container-widget">
+          <div on:click="{darkModeToggle}"
+               class="button toggle-widget-backplate"
+               class:is-info="{darkModeActive}">
+            <div class="button toggle-widget-slider"
+                 class:slider-is-off="{!darkModeActive}"
+                 class:slider-is-on="{darkModeActive}">
+            </div>
+          </div>
+        </div>
+      </div>
+        <button on:click="{closeSettings}" class="button is-info is-large is-fullwidth close-button-bottom">Close</button>
     </div>
   </div>
 </div>
@@ -68,15 +93,58 @@
 <style>
 .card {
   margin: 2rem;
-  width: 20rem;
+  width: 25rem;
   max-width: 90vw;
 }
 
-.settings-item-container {
+.card-title {
+  font-size: 2rem;
+  margin: 0.5rem auto 2rem;
+  padding-left: 1rem;
+}
+
+.close-button-top-container {
   display: flex;
+  margin: -1.25rem;
+  padding: 1rem;
+  float: right;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.close-button-top {
+  padding: 0.75rem;
+}
+
+.settings-item-container-parent {
+  display: flex;
+  margin-bottom: 1.25rem;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
+  justify-content: stretch;
+}
+
+.settings-item-container-name {
+  display: flex;
+  width: 50%;
+  align-self: flex-start;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-item-container-widget {
+  display: flex;
+  width: 50%;
+  align-self: flex-end;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-item-name {
+  font-size: 1.3rem;
 }
 
 .font-size-container {
@@ -100,22 +168,26 @@
   border: 1px solid black;
 }
 
-.button-close-container {
-  display: flex;
-  margin: -1rem;
-  padding: 1rem;
-  float: right;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
+.toggle-widget-backplate {
+  width: 4rem;
+  transition: background-color 0.5s;
 }
 
-.button-close {
-  padding: 0.5rem;
+.toggle-widget-slider {
+  width: 2.5rem;
+  transition: margin 0.5s;
 }
 
-.card-name {
-  margin-top: 0.5rem;
-  padding-left: 1rem;
+.slider-is-off {
+  margin-left: calc(-1.5em - 1px);
 }
+
+.slider-is-on {
+  margin-right: calc(-1.5em - 1px);
+}
+
+.close-button-bottom {
+  margin-top: 2.5rem;
+}
+
 </style>
