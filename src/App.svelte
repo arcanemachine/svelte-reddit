@@ -30,20 +30,18 @@
   })
 
   // data
-  let title = 'Reddit Micro';
-  let isLoading = false;
-  let settingsShow = false;
-  let subredditPickerShow = false;
-
-  // settings
-  // let sLeanMode = false;
-
+  let title = 'Reddit μReader';
   let subredditContent = mockedSubredditData;
   let postContent = mockedPostData;
   // let subredditContent;
   // let postContent;
   let postAuthor = '';
   let currentContent = 'subreddit';
+
+  // data - modals
+  let isLoading = false;
+  let settingsShow = false;
+  let subredditPickerShow = false;
 
   const titleClicked = () => {currentContentIs('subreddit')}
   const currentContentIs = (x) => {
@@ -73,10 +71,7 @@
   }
   const settingsToggle = () => {
     settingsShow = !settingsShow;
-    // if (settingsShow) {  // && sLeanMode) {
-    //   currentContent = 'subreddit';
-    // }
-    document.querySelector('html').style.overflowY = subredditPickerShow ? 'hidden' : 'default';
+    document.querySelector('html').style.overflowY = settingsShow ? 'hidden' : 'default';
   }
 
   // SubredditPicker
