@@ -1,37 +1,44 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onDestroy } from 'svelte';
   import { fade } from 'svelte/transition';
-  import { darkModeActive } from '../stores/';
+  import { darkModeActive, fontSize } from '../stores/';
 
   const dispatch = createEventDispatcher();
 
-  // close menu
-  const closeSettings = () => emitSettingsClose();
-  function emitSettingsClose(event) {dispatch('settings-close', event)}
-
   // font size
   let htmlRootEl = document.querySelector('html');
-  let fontSizeRootDefault = 16;
-  let fontSizeRoot = htmlRootEl.style.fontSize ? Number(htmlRootEl.style.fontSize.match(/(\d*\.)?\d+/)[0]) : fontSizeRootDefault
-  let fontSizeDisplay = (fontSizeRoot - fontSizeRootDefault) * 2;
+  let fontSizeDefault = 16;
+  let fontSizeMin = 8;
+  let fontSizeMax = 24;
+  // check for modified font size, or use 16px if the font size has not been adjusted
+  $: fontSizeDisplay = ($fontSize - fontSizeDefault) * 2;
 
-  const fontSizeUpdate = (index) => {
-    if (Math.abs(index + fontSizeDisplay) <= 16) {
-      fontSizeRoot += index;
-      htmlRootEl.style.fontSize = `${fontSizeRoot}px`;
-      if (fontSizeRoot !== fontSizeRootDefault) {
-        localStorage.setItem('fontSize', fontSizeRoot);
+  const fontSizeUpdate = (crement) => {
+    let fontSizeCurrent = $fontSize;
+    if (crement === 0) {
+      return false;
+    }
+    if (crement < 0 && $fontSize + crement >= fontSizeMin || crement > 0 && $fontSize + crement <= fontSizeMax) {
+      fontSizeCurrent += crement;
+      htmlRootEl.style.fontSize = `${fontSizeCurrent}px`;
+      if (fontSizeCurrent !== fontSizeDefault) {
+        localStorage.setItem('fontSize', fontSizeCurrent);
+        fontSize.set(fontSizeCurrent);
       }
-      else if (fontSizeRoot === fontSizeRootDefault) {
+      else if (fontSizeCurrent === fontSizeDefault) {
         localStorage.removeItem('fontSize');
+        fontSize.set(fontSizeCurrent, fontSizeDefault);
       }
     }
-    fontSizeDisplay = (fontSizeRoot - fontSizeRootDefault) * 2;
+    fontSizeDisplay = ($fontSize - fontSizeDefault) * 2;
   }
   const fontSizeReset = () => {
-    fontSizeRoot = fontSizeRootDefault;
-    htmlRootEl.style.fontSize = `${fontSizeRoot}px`;
-    localStorage.removeItem('fontSize');
+    if ($fontSize !== fontSizeDefault) {
+      fontSize.set(fontSizeDefault);
+      htmlRootEl.style.fontSize = `${$fontSize}px`;
+      localStorage.removeItem('fontSize');
+      dispatch('status-message-display', "Font size reset");
+    }
   }
 
   // dark mode
@@ -43,19 +50,18 @@
       localStorage.removeItem('darkModeActive');
       darkModeActive.set(false);
     }
-      dispatch('dark-mode-toggled');
+    dispatch('dark-mode-toggled');
   }
-
 
 </script>
 
 <div class="modal is-active" transition:fade>
-  <div class="modal-background" on:click="{closeSettings}"></div>
+  <div class="modal-background" on:click="{() => dispatch('settings-close')}"></div>
   <div class="modal-content"></div>
   <div class="card"
        class:is-dark="{$darkModeActive}">
     <div class="card-content">
-      <div class="close-button-top-container" on:click="{closeSettings}">
+      <div class="close-button-top-container" on:click="{() => dispatch('settings-close')}">
         <button class="delete close-button-top" aria-label="close"></button>
       </div>
       <div class="has-text-centered card-title"
@@ -66,11 +72,12 @@
         <div class="settings-item-container-name"
              class:is-dark="{$darkModeActive}">
           <div class="settings-item-name">Font Size</div>
-          <div class="settings-item-name-secondary">{localStorage.getItem('fontSize')}</div>
+          <div class="settings-item-name-secondary"><!-- {$fontSize} --></div>
         </div>
         <div class="settings-item-container-widget">
           <div class="settings-item-value font-size-container">
             <button class="button font-size-button font-size-button-left"
+                    class:is-disabled="{$fontSize <= fontSizeMin ? true : false}"
                     on:click="{() => fontSizeUpdate(-0.5)}">
               -
             </button>
@@ -81,6 +88,7 @@
               {fontSizeDisplay}
             </button>
             <button class="button font-size-button font-size-button-right"
+                    class:is-disabled="{$fontSize >= fontSizeMax ? true : false}"
                     on:click="{() => fontSizeUpdate(+0.5)}">
               +
             </button>
@@ -105,7 +113,7 @@
           </div>
         </div>
       </div>
-        <button on:click="{closeSettings}" class="button is-info is-large is-fullwidth close-button-bottom">Close</button>
+      <button on:click="{() => dispatch('settings-close')}" class="button is-info is-large is-fullwidth close-button-bottom">Close</button>
     </div>
   </div>
 </div>

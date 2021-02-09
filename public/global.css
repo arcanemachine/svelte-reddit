@@ -13,3 +13,8 @@ body {
 .hidden {
   display: none;
 }
+
+.button.is-disabled {
+  background-color: #ddd;
+  pointer-events: none;
+}
