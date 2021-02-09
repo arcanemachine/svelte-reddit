@@ -13,7 +13,8 @@
   let htmlRootEl = document.querySelector('html');
   let fontSizeRootDefault = 16;
   let fontSizeRoot = htmlRootEl.style.fontSize ? Number(htmlRootEl.style.fontSize.match(/(\d*\.)?\d+/)[0]) : fontSizeRootDefault
-  $: fontSizeDisplay = (fontSizeRoot - fontSizeRootDefault) * 2;
+  let fontSizeDisplay = (fontSizeRoot - fontSizeRootDefault) * 2;
+
   const fontSizeUpdate = (index) => {
     if (Math.abs(index + fontSizeDisplay) <= 16) {
       fontSizeRoot += index;
@@ -25,6 +26,7 @@
         localStorage.removeItem('fontSize');
       }
     }
+    fontSizeDisplay = (fontSizeRoot - fontSizeRootDefault) * 2;
   }
   const fontSizeReset = () => {
     fontSizeRoot = fontSizeRootDefault;
@@ -64,6 +66,7 @@
         <div class="settings-item-container-name"
              class:is-dark="{$darkModeActive}">
           <div class="settings-item-name">Font Size</div>
+          <div class="settings-item-name-secondary">{localStorage.getItem('fontSize')}</div>
         </div>
         <div class="settings-item-container-widget">
           <div class="settings-item-value font-size-container">
@@ -72,8 +75,9 @@
               -
             </button>
             <button class="button font-size-button-display"
-                    on:dblclick="{fontSizeReset}"
-                    transition:fade>
+                    class:is-light="{fontSizeDisplay === 0}"
+                    class:is-info="{fontSizeDisplay !== 0}"
+                    on:dblclick="{fontSizeReset}">
               {fontSizeDisplay}
             </button>
             <button class="button font-size-button font-size-button-right"
@@ -193,7 +197,6 @@
 }
 
 .font-size-button {
-  background-color: #ddd;
   width: 2.5rem;
   border: 1px solid black;
 }
@@ -204,12 +207,13 @@
 }
 
 .font-size-button-display {
-  background-color: #eee;
   width: 3.5rem;
   margin: auto -1px;
   text-align: center;
   border: 1px solid black;
   border-radius: 0;
+  transition: background 0.3s !important;
+  transition: color 0.3s;
 }
 
 .font-size-button-right {
