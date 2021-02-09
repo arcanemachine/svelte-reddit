@@ -7,9 +7,9 @@
 </script>
 
 <div class="status-message-container">
-  <button class="button is-info status-message"
+  <div class="has-background-info has-text-white status-message"
           on:click="{() => dispatch('status-message-clear')}"
-          transition:fade>{message}</button>
+          transition:fade>{message}</div>
 </div>
 
 <style>
@@ -24,11 +24,12 @@
 }
 
 .status-message {
+  max-width: 20rem;
   margin-top: 5rem;
-  padding: 1.5rem;
+  padding: 1rem;
   font-size: 1.2rem;
-  align-self: flex-start;
-  overflow: break-word;
+  cursor: pointer;
+  text-align: center;
   border-radius: 0.5rem;
 }
 </style>
