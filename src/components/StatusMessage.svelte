@@ -28,6 +28,7 @@
   padding: 1.5rem;
   font-size: 1.2rem;
   align-self: flex-start;
+  overflow: break-word;
   border-radius: 0.5rem;
 }
 </style>

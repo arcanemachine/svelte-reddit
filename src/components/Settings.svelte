@@ -10,7 +10,7 @@
   let fontSizeDefault = 16;
   let fontSizeMin = 8;
   let fontSizeMax = 24;
-  // check for modified font size, or use 16px if the font size has not been adjusted
+  let fontSizeResetTimeout = undefined;
   $: fontSizeDisplay = ($fontSize - fontSizeDefault) * 2;
 
   const fontSizeUpdate = (crement) => {
@@ -18,6 +18,7 @@
     if (crement === 0) {
       return false;
     }
+    // if the font is within the allowable range, adjust it accordingly
     if (crement < 0 && $fontSize + crement >= fontSizeMin || crement > 0 && $fontSize + crement <= fontSizeMax) {
       fontSizeCurrent += crement;
       htmlRootEl.style.fontSize = `${fontSizeCurrent}px`;
@@ -32,7 +33,15 @@
     }
     fontSizeDisplay = ($fontSize - fontSizeDefault) * 2;
   }
+
+  const fontSizeResetMessage = () => {
+    clearTimeout(fontSizeResetTimeout);
+    fontSizeResetTimeout = setTimeout(() => {
+      dispatch('status-message-display', "Double tap/click this area to reset the font size.")
+    }, 1000)
+  }
   const fontSizeReset = () => {
+    clearTimeout(fontSizeResetTimeout);
     if ($fontSize !== fontSizeDefault) {
       fontSize.set(fontSizeDefault);
       htmlRootEl.style.fontSize = `${$fontSize}px`;
@@ -46,9 +55,11 @@
     if (!localStorage.getItem('darkModeActive')) {
       localStorage.setItem('darkModeActive', true);
       darkModeActive.set(true);
+      dispatch('status-message-display', "Dark mode enabled");
     } else {
       localStorage.removeItem('darkModeActive');
       darkModeActive.set(false);
+      dispatch('status-message-display', "Dark mode disabled");
     }
     dispatch('dark-mode-toggled');
   }
@@ -84,6 +95,7 @@
             <button class="button font-size-button-display"
                     class:is-light="{fontSizeDisplay === 0}"
                     class:is-info="{fontSizeDisplay !== 0}"
+                    on:click="{fontSizeResetMessage}"
                     on:dblclick="{fontSizeReset}">
               {fontSizeDisplay}
             </button>

@@ -52,7 +52,7 @@
   }
 
   // Settings
-  let settingsShow = false;
+  let settingsShow = true;
   const settingsClose = () => {
     settingsShow = false;
     document.querySelector('html').style.overflowY = 'auto';
@@ -133,12 +133,26 @@
   let statusMessage = '';
   let statusMessageTimeout;
   const statusMessageDisplay = (message, timeout=undefined) => {
+
+    // if a status message is already present, clear it
+    if (statusMessage) {
+      statusMessage = '';
+      setTimeout(() => {
+        clearTimeout(statusMessageTimeout);
+        setTimeout(() => {
+          statusMessageDisplay(message, timeout);
+        }, 500);
+      })
+      return false;
+    }
+
+    clearTimeout(statusMessageTimeout);
     if (timeout === undefined) {
       timeout = 4000;
     } else if (timeout === -1) {
       timeout = 1000000;
     }
-    clearTimeout(statusMessageDisplay);
+
     statusMessage = message
     statusMessageTimeout = setTimeout(() => statusMessage = '', timeout);
   }
