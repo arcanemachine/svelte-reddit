@@ -134,7 +134,7 @@
 }
 
 .post-link-name.is-stickied {
-  color: #4e4;
+  color: #0b0;
 }
 
 .post-description {
