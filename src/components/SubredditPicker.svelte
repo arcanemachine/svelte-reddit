@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { fade } from 'svelte/transition';
+  import { darkModeActive } from '../stores/';
 
   const dispatch = createEventDispatcher();
 
@@ -45,13 +46,14 @@
 <div class="modal is-active" transition:fade>
   <div class="modal-background" on:click="{subredditPickerClose}"></div>
   <div class="modal-content"></div>
-  <div class="card">
+  <div class="card"
+       class:is-dark="{$darkModeActive}">
     <div class="card-content">
       <button class="p-3 delete"
               on:click="{subredditPickerClose}"
               aria-label="close"></button>
       <div class="has-text-centered">
-        <h4 class="is-size-5 card-text">Subreddit name:</h4>
+        <h4 class="mt-5 is-size-4">Subreddit name:</h4>
         <input class="mt-4 input" type="search"
                bind:value="{subreddit}"
                on:keyup="{e => e.key === 'Enter' && submitButtonClicked()}">
@@ -93,11 +95,18 @@
   overflow-y: auto;
 }
 
+.card.is-dark {
+  background: black;
+  color: whitesmoke;
+  border: 1px solid whitesmoke;
+}
+
 .delete {
   float: right;
 }
 
-.card-text {
+.card-title {
   margin-top: 1.5rem;
 }
+
 </style>

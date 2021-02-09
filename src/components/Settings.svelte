@@ -1,8 +1,9 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { fade } from 'svelte/transition';
+  import { darkModeActive } from '../stores/';
 
-  let sDarkMode = true;
+  // let sDarkMode = true;
 
   const dispatch = createEventDispatcher();
 
@@ -34,17 +35,13 @@
   }
 
   // dark mode
-  const isDarkModeActive = () => localStorage.getItem('darkModeActive');
-  let darkModeActive = isDarkModeActive();
   const darkModeToggle = () => {
     if (!localStorage.getItem('darkModeActive')) {
       localStorage.setItem('darkModeActive', true);
-      dispatch('dark-mode-toggle');
-      darkModeActive = isDarkModeActive();
+      darkModeActive.set(true);
     } else {
       localStorage.removeItem('darkModeActive');
-      dispatch('dark-mode-toggle');
-      darkModeActive = isDarkModeActive();
+      darkModeActive.set(false);
     }
   }
 
@@ -54,16 +51,19 @@
 <div class="modal is-active" transition:fade>
   <div class="modal-background" on:click="{closeSettings}"></div>
   <div class="modal-content"></div>
-  <div class="card">
+  <div class="card"
+       class:is-dark="{$darkModeActive}">
     <div class="card-content">
       <div class="close-button-top-container" on:click="{closeSettings}">
         <button class="delete close-button-top" aria-label="close"></button>
       </div>
-      <div class="has-text-centered card-title">
+      <div class="has-text-centered card-title"
+             class:is-dark="{$darkModeActive}">
         <h3 class="card-text">Settings</h3>
       </div>
       <div class="has-text-centered settings-item-container-parent">
-        <div class="settings-item-container-name">
+        <div class="settings-item-container-name"
+             class:is-dark="{$darkModeActive}">
           <div class="settings-item-name">Font Size</div>
         </div>
         <div class="settings-item-container-widget">
@@ -85,17 +85,19 @@
         </div>
       </div>
       <div class="settings-item-container-parent">
-        <div class="settings-item-container-name">
+        <div class="settings-item-container-name"
+             class:is-dark="{$darkModeActive}">
           <div class="settings-item-name">Dark Mode</div>
-          <div class="settings-item-name-secondary">{darkModeActive}</div>
+          <div class="settings-item-name-secondary">{$darkModeActive}</div>
         </div>
         <div class="settings-item-container-widget">
           <div on:click="{darkModeToggle}"
                class="button toggle-widget-backplate"
-               class:is-info="{darkModeActive}">
+               class:is-light="{!$darkModeActive}"
+               class:is-info="{$darkModeActive}">
             <div class="button toggle-widget-slider"
-                 class:slider-is-off="{!darkModeActive}"
-                 class:slider-is-on="{darkModeActive}">
+                 class:slider-is-off="{!$darkModeActive}"
+                 class:slider-is-on="{$darkModeActive}">
             </div>
           </div>
         </div>
@@ -119,10 +121,18 @@
   max-width: 90vw;
 }
 
+.card.is-dark {
+  background: #111;
+}
+
 .card-title {
   font-size: 2rem;
   margin: 0.5rem auto 2rem;
   padding-left: 1rem;
+}
+
+.card-title.is-dark {
+  color: whitesmoke;
 }
 
 .close-button-top-container {
@@ -156,8 +166,8 @@
   justify-content: center;
 }
 
-.settings-item-name {
-
+.settings-item-container-name.is-dark {
+  color: whitesmoke;
 }
 
 .settings-item-container-widget {
@@ -199,10 +209,19 @@
 }
 
 .toggle-widget-backplate {
-  background-color: #eee;
   width: 4.5rem;
   transition: background-color 0.5s;
   border: 1px solid black;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle-widget-backplate {
+    transition: none;
+  }
+
+  .toggle-widget-slider {
+    transition: none;
+  }
 }
 
 .toggle-widget-slider {
@@ -224,16 +243,4 @@
   border: none !important;
   border-radius: 0.25rem;
 }
-
-/* a11y */
-@media (prefers-reduced-motion: reduce) {
-  .toggle-widget-backplate {
-    transition: non;
-  }
-
-  .toggle-widget-slider {
-    transition: non;
-  }
-}
-
 </style>

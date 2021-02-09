@@ -1,8 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { fade } from 'svelte/transition';
-
-  let sDarkMode = true;
+  import { darkModeActive } from '../stores/';
 
   // data
   export let title = 'reddit';
@@ -29,19 +28,36 @@
   function emitSubredditPickerToggle() {dispatch('subreddit-picker-toggle')}
   function emitSettingsToggle() {dispatch('settings-toggle')}
 
+
+  // DELETEME
+  // dark mode
+  const deleteme = () => {
+    if (!localStorage.getItem('darkModeActive')) {
+      localStorage.setItem('darkModeActive', true);
+      darkModeActive.set(true);
+    } else {
+      localStorage.removeItem('darkModeActive');
+      darkModeActive.set(false);
+    }
+  }
+
+
+
 </script>
 
 
 <nav class="navbar is-fixed-top is-size-5"
-     class:is-dark="{sDarkMode}"
+     class:is-dark="{$darkModeActive}"
      transition:fade>
   <div class="navbar-brand">
-    <div class="ml-2 p-2 navbar-item brand-text has-text-weight-bold"
-         on:click="{titleClicked}">
-      {#if currentContent === 'post'}
-      <span class="navbar-title">&larr; &nbsp;&nbsp;</span>
-      {/if }
-      <span class="navbar-title">{title}</span>
+    <div class="ml-2 p-2 navbar-item brand-text has-text-weight-bold">
+      <span on:click="{titleClicked}">
+        {#if currentContent === 'post'}
+        <span class="navbar-title">&larr; &nbsp;&nbsp;</span>
+        {/if }
+        <span class="navbar-title">{title}</span>
+      </span>
+      <span class="ml-2 navbar-title" on:click="{deleteme}"><!-- ({$darkModeActive ? 'Dark' : 'Light'}) --></span>
     </div>
     <div class="navbar-end-touch-icon-container is-hidden-desktop">
       <svg on:click="{() => navbarItemClicked('go-to-subreddit', false)}"
@@ -67,15 +83,15 @@
   <div id="navMenu"
        class="navbar-menu"
        class:is-active="{navbarIsActive}"
-       class:is-dark="{sDarkMode}">
+       class:is-dark="{$darkModeActive}">
     <div class="navbar-end">
       <div class="navbar-item has-text-centered is-hidden-touch"
-           class:is-dark="{sDarkMode}"
+           class:is-dark="{$darkModeActive}"
            on:click="{() => navbarItemClicked('go-to-subreddit')}">
         Go to subreddit
       </div>
       <div class="navbar-item has-text-centered"
-           class:is-dark="{sDarkMode}"
+           class:is-dark="{$darkModeActive}"
            on:click="{() => navbarItemClicked('settings')}">
         Settings
       </div>

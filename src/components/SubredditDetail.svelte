@@ -1,8 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
+  import { darkModeActive } from '../stores/';
   import { htmlUnescape } from '../utils.js';
-
-  let sDarkMode = true;
 
   // props
   export let subredditContent;
@@ -38,7 +37,8 @@
       <div class="column">
         {#each subredditContent.data.children as post}
           <div class="px-2 my-0 media post-item"
-               class:is-dark="{sDarkMode}">
+               class:is-stickied="{post.data.stickied}"
+               class:is-dark="{$darkModeActive}">
             <div class="post-image-container">
               {#if post.data.thumbnail.match(/(http)/)}
                 <img on:click="{postTitleClicked(post)}"
@@ -61,7 +61,6 @@
               <div class="post-body-container">
                 <div class="mb-4 p-2 post-link-name"
                      class:is-stickied="{post.data.stickied}"
-                     
                      on:click="{postTitleClicked(post)}">
                   {@html htmlUnescape(post.data.title)} <em>[{post.data.domain}]</em>
                 </div>
@@ -99,11 +98,11 @@
 }
 
 .post-item.is-stickied {
-  background: #090;
+  background: #9a9a9a;
 }
 
 .post-item.is-stickied.is-dark {
-  background: #010;
+  background: #111;
 }
 
 @media screen and (min-width: 50rem) {
@@ -132,6 +131,10 @@
 .post-link-name {
   cursor: pointer;
   font-weight: bold;
+}
+
+.post-link-name.is-stickied {
+  color: #4e4;
 }
 
 .post-description {

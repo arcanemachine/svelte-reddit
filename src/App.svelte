@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';
-  import { sDarkMode } from './stores/';
+  import { readable } from 'svelte/store';
+  import { darkModeActive } from './stores/';
   import { mockedSubredditData } from './mockedSubredditData.js';
   import { mockedPostData } from './mockedPostData2.js';
 
@@ -21,6 +22,9 @@
       console.log(localStorage.getItem('fontSize'));
     }
     // if dark mode enabled, then turn it on
+    if (localStorage.getItem('darkModeActive')) {
+      darkModeActive.set(true);
+    }
 
     // subredditPick(undefined, 'AskReddit');
   })
@@ -32,14 +36,14 @@
   let subredditPickerShow = false;
 
   // settings
-  let sLeanMode = false;
+  // let sLeanMode = false;
 
   let subredditContent = mockedSubredditData;
   let postContent = mockedPostData;
   // let subredditContent;
   // let postContent;
   let postAuthor = '';
-  let currentContent = undefined;
+  let currentContent = 'subreddit';
 
   const titleClicked = () => {currentContentIs('subreddit')}
   const currentContentIs = (x) => {
@@ -52,6 +56,15 @@
     }, 200)
   }
 
+  // this is a hack to refresh PostDetail cards if dark mode is turned off in PostDetail
+  const reloadPostData = () => {
+    if (currentContent === 'post') {
+      currentContent = undefined;
+      currentContent = x;
+    }
+  }
+
+
   // Settings
   const settingsClose = () => {
     settingsShow = false;
@@ -59,9 +72,9 @@
   }
   const settingsToggle = () => {
     settingsShow = !settingsShow;
-    if (settingsShow && sLeanMode) {
-      currentContent = 'subreddit';
-    }
+    // if (settingsShow) {  // && sLeanMode) {
+    //   currentContent = 'subreddit';
+    // }
     document.querySelector('html').style.overflowY = subredditPickerShow ? 'hidden' : 'default';
   }
 
@@ -127,7 +140,7 @@
 </script>
 
 <div class="page-container"
-     class:is-dark="{sDarkMode}">
+     class:is-dark="{$darkModeActive}">
   <Navbar title="{title}"
           currentContent="{currentContent}"
           on:subreddit-picker-toggle="{subredditPickerToggle}"
