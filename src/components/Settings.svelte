@@ -67,7 +67,7 @@
         </div>
         <div class="settings-item-container-widget">
           <div class="settings-item-value font-size-container">
-            <button class="button font-size-button"
+            <button class="button font-size-button font-size-button-left"
                     on:click="{() => fontSizeUpdate(-0.5)}">
               -
             </button>
@@ -76,7 +76,7 @@
                     transition:fade>
               {fontSizeDisplay}
             </button>
-            <button class="button font-size-button"
+            <button class="button font-size-button font-size-button-right"
                     on:click="{() => fontSizeUpdate(+0.5)}">
               +
             </button>
@@ -198,12 +198,23 @@
   border: 1px solid black;
 }
 
+.font-size-button-left {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
 .font-size-button-display {
   background-color: #eee;
   width: 3.5rem;
-  margin: auto 0.5rem;
+  margin: auto -1px;
   text-align: center;
   border: 1px solid black;
+  border-radius: 0;
+}
+
+.font-size-button-right {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .toggle-widget-backplate {
