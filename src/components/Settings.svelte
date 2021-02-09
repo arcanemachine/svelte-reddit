@@ -2,6 +2,8 @@
   import { createEventDispatcher } from 'svelte';
   import { fade } from 'svelte/transition';
 
+  let sDarkMode = true;
+
   const dispatch = createEventDispatcher();
 
   // close menu
@@ -37,9 +39,11 @@
   const darkModeToggle = () => {
     if (!localStorage.getItem('darkModeActive')) {
       localStorage.setItem('darkModeActive', true);
+      dispatch('dark-mode-toggle');
       darkModeActive = isDarkModeActive();
     } else {
       localStorage.removeItem('darkModeActive');
+      dispatch('dark-mode-toggle');
       darkModeActive = isDarkModeActive();
     }
   }

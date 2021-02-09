@@ -1,3 +1,3 @@
 import { writable } from 'svelte/store';
 
-export const currentSubreddit = writable(undefined);
+export const sDarkMode = writable(false);

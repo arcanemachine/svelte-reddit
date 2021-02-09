@@ -3,6 +3,8 @@
   import { htmlUnescape } from '../utils.js';
   import PostItem from './PostItem.svelte';
 
+  let sDarkMode = true;
+
   const dispatch = createEventDispatcher();
 
   // props
@@ -16,7 +18,7 @@
 
 </script>
 
-<div class="container">
+<div class="container" class:is-dark="{sDarkMode}">
   <style>
   /* start: override bulma styling for dynamically generated html */
   ul {
@@ -32,12 +34,21 @@
   <div class="pt-5 section">
     <div class="columns">
       <div class="column">
-        <div class="card large">
-          <div class="card-header post-header has-background-grey-lighter">
-            <div class="pb-0 card-header-title post-title">{postContent[0].data.children[0].data.title}</div>
-            <div class="mt-0 mb-2 ml-5 is-italic post-author">- /u/{postAuthor}/</div>
+        <div class="card large"
+             class:is-dark="{sDarkMode}">
+          <div class="card-header post-header"
+               class:has-background-grey-lighter="{!sDarkMode}"
+               class:is-dark="{sDarkMode}">
+            <div class="pb-0 card-header-title post-title"
+                 class:is-dark="{sDarkMode}">
+              {postContent[0].data.children[0].data.title}
+            </div>
+            <div class="mt-0 mb-2 ml-5 is-italic post-author"
+                 class:is-dark="{sDarkMode}">
+              - /u/{postAuthor}/
+            </div>
           </div>
-          <div class="card-content has-background-light" class:hidden="{!postContent[0].data.children[0].data.selftext_html}">
+          <div class="card-content" class:hidden="{!postContent[0].data.children[0].data.selftext_html}">
             {@html htmlUnescape(postContent[0].data.children[0].data.selftext_html)}
           </div>
         </div>
@@ -50,8 +61,13 @@
 </div>
 
 <style>
-.hidden {
-  display: none;
+.card-header {
+  border-radius: 0.5rem;
+}
+
+.is-dark {
+  background: #111;
+  color: whitesmoke;
 }
 
 .post-header {

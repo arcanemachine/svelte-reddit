@@ -1,8 +1,8 @@
 <script>
   import { onMount } from 'svelte';
-  import { currentSubreddit } from './stores/';
+  import { sDarkMode } from './stores/';
   import { mockedSubredditData } from './mockedSubredditData.js';
-  import { mockedPostData } from './mockedPostData.js';
+  import { mockedPostData } from './mockedPostData2.js';
 
   // components
   import Navbar from './components/Navbar.svelte';
@@ -15,26 +15,31 @@
 
   // onMount
   onMount(() => {
-    // if font size saved in localStorage, retir
+    // if font size saved in localStorage, retire
     if (localStorage.getItem('fontSize')) {
       document.querySelector('html').style.fontSize = `${localStorage.getItem('fontSize')}px`;
       console.log(localStorage.getItem('fontSize'));
     }
+    // if dark mode enabled, then turn it on
+
     // subredditPick(undefined, 'AskReddit');
   })
 
   // data
   let title = 'Reddit Micro';
   let isLoading = false;
-  let settingsShow = true;
+  let settingsShow = false;
   let subredditPickerShow = false;
+
+  // settings
+  let sLeanMode = false;
 
   let subredditContent = mockedSubredditData;
   let postContent = mockedPostData;
   // let subredditContent;
   // let postContent;
   let postAuthor = '';
-  let currentContent = 'post';
+  let currentContent = undefined;
 
   const titleClicked = () => {currentContentIs('subreddit')}
   const currentContentIs = (x) => {
@@ -54,6 +59,9 @@
   }
   const settingsToggle = () => {
     settingsShow = !settingsShow;
+    if (settingsShow && sLeanMode) {
+      currentContent = 'subreddit';
+    }
     document.querySelector('html').style.overflowY = subredditPickerShow ? 'hidden' : 'default';
   }
 
@@ -66,6 +74,8 @@
     subredditPickerShow = !subredditPickerShow;
     document.querySelector('html').style.overflowY = subredditPickerShow ? 'hidden' : 'default';
   }
+
+  // SubredditDetail
   const subredditPick = async (event, subreddit=undefined, sort='hot') => {
     if (event && Object.keys(event).length) {
       subreddit = event.detail.subreddit;
@@ -89,6 +99,7 @@
     }
   }
 
+  // PostDetail
   const postPick = async (event) => {
     let post = event.detail.post;
     let url = post.data.permalink;
@@ -115,7 +126,8 @@
 
 </script>
 
-<div class="page-container">
+<div class="page-container"
+     class:is-dark="{sDarkMode}">
   <Navbar title="{title}"
           currentContent="{currentContent}"
           on:subreddit-picker-toggle="{subredditPickerToggle}"
@@ -135,14 +147,12 @@
   {/if}
 
   <main class="content-container">
-    <div class="container">
-        {#if currentContent === 'subreddit'}
-          <SubredditDetail subredditContent="{subredditContent}"
-                           on:post-pick="{postPick}"/>
-        {:else if currentContent === 'post'}
-          <PostDetail postContent="{postContent}" postAuthor="{postAuthor}"/>
-        {/if}
-    </div>
+    {#if currentContent === 'subreddit'}
+      <SubredditDetail subredditContent="{subredditContent}"
+                       on:post-pick="{postPick}"/>
+    {:else if currentContent === 'post'}
+      <PostDetail postContent="{postContent}" postAuthor="{postAuthor}"/>
+    {/if}
   </main>
   <AppFooter/>
 </div>
@@ -161,5 +171,10 @@
   max-width: 100vw;
   margin-top: 4rem;
   flex-grow: 1;
+}
+
+.is-dark {
+  background: black;
+  color: whitesmoke;
 }
 </style>

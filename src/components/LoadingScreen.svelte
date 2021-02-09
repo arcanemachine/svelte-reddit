@@ -1,10 +1,15 @@
 <script>
   import { fade } from 'svelte/transition';
+
+  let sDarkMode = true;
+
 </script>
 
 <div class="modal is-active" transition:fade>
   <div class="modal-background"></div>
-  <div class="button is-light is-loading"></div>
+  <div class="button is-loading"
+       class:is-light="{!sDarkMode}"
+       class:is-dark="{sDarkMode}"></div>
 </div>
 
 <style>

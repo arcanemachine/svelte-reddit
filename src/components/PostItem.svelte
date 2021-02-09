@@ -1,6 +1,8 @@
 <script>
   import { htmlUnescape } from '../utils.js';
 
+  let sDarkMode = true;
+
   // props
   export let post, index, depth=0;
 
@@ -9,7 +11,9 @@
 
   // methods
   const getBackgroundColor = () => {
-    let result = ((14 * 16) - (depth * 7)).toString(16);
+    let magicNumber = ((14 * 16) - (depth * 7));  // get offset color for child posts
+    magicNumber = Math.abs((255 * sDarkMode) - magicNumber);  // invert color for dark mode
+    let result = magicNumber.toString(16);
     return `#${result}${result}${result}`;
   }
 
@@ -52,28 +56,38 @@
 
 <div>
   <div class="card large post-item-card"
+       class:is-dark="{sDarkMode}"
        style="margin-left: {depth / 5}rem; background-color: {getBackgroundColor()};">
     <div class="post-child-author">
       <!-- span class="cursor-url">[-]</span -->
-      <span class="has-text-weight-bold is-italic">/u/{post.data.author}/</span>
+      <span class="has-text-weight-bold is-italic" class:is-dark="{sDarkMode}">/u/{post.data.author}/</span>
     </div>
     <div class="py-2 card-content">
-      <div>{@html htmlUnescape(post.data.body_html)}</div>
+      <div class:is-dark="{sDarkMode}">{@html htmlUnescape(post.data.body_html)}</div>
     </div>
-    <div class="post-child-time is-italic">{getFormattedTimeSince(post.data.created)}</div>
+    <div class="post-child-time is-italic" class:is-dark="{sDarkMode}">{getFormattedTimeSince(post.data.created)}</div>
     {#if post.data.hasOwnProperty('replies') && Object.keys(post.data.replies).length}
       {#if depth < maxDepth}
         {#each post.data.replies.data.children as reply, index}
           <svelte:self post="{reply}" index="{index}" depth="{depth + 1}"/>
         {/each}
       {:else}
-        <div class="get-more-posts">Dive deeper...</div>
+        <div class="get-more-posts" class:is-dark="{sDarkMode}">Dive deeper...</div>
       {/if}
     {/if}
   </div>
 </div>
 
 <style>
+strong {
+  color: unset;
+}
+
+.is-dark {
+  background: inherit;
+  color: whitesmoke;
+}
+
 .post-item-card {
   border: 1px solid black;
   box-shadow: none;

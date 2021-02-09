@@ -1,7 +1,15 @@
+body {
+  scrollbar-color: red !important;
+}
+
 .cursor-url {
   cursor: pointer;
 }
 
 .has-text-decoration-underline {
   text-decoration: underline;
+}
+
+.hidden {
+  display: none;
 }

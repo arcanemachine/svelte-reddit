@@ -1,7 +1,8 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { fade } from 'svelte/transition';
-  const dispatch = createEventDispatcher();
+
+  let sDarkMode = true;
 
   // data
   export let title = 'reddit';
@@ -23,12 +24,17 @@
   }
 
   // events
+  const dispatch = createEventDispatcher();
   function titleClicked() {dispatch('title-clicked')}
   function emitSubredditPickerToggle() {dispatch('subreddit-picker-toggle')}
   function emitSettingsToggle() {dispatch('settings-toggle')}
+
 </script>
 
-<nav class="navbar is-fixed-top is-size-5" transition:fade>
+
+<nav class="navbar is-fixed-top is-size-5"
+     class:is-dark="{sDarkMode}"
+     transition:fade>
   <div class="navbar-brand">
     <div class="ml-2 p-2 navbar-item brand-text has-text-weight-bold"
          on:click="{titleClicked}">
@@ -58,13 +64,18 @@
       <span class="burger-line" aria-hidden="true"></span>
     </div>
   </div>
-  <div id="navMenu" class="navbar-menu" class:is-active="{navbarIsActive}">
+  <div id="navMenu"
+       class="navbar-menu"
+       class:is-active="{navbarIsActive}"
+       class:is-dark="{sDarkMode}">
     <div class="navbar-end">
       <div class="navbar-item has-text-centered is-hidden-touch"
+           class:is-dark="{sDarkMode}"
            on:click="{() => navbarItemClicked('go-to-subreddit')}">
         Go to subreddit
       </div>
       <div class="navbar-item has-text-centered"
+           class:is-dark="{sDarkMode}"
            on:click="{() => navbarItemClicked('settings')}">
         Settings
       </div>
@@ -77,6 +88,10 @@
   height: 4rem;
   max-width: 100vw;
   border-bottom: 2px solid black;
+}
+
+.is-dark {
+  background: black;
 }
 
 .navbar-end-touch-icon-container {
@@ -104,6 +119,11 @@
 .navbar-item {
   cursor: pointer;
   font-weight: bold;
+}
+
+.navbar-menu.is-dark, .navbar-item.is-dark {
+  background: black;
+  color: whitesmoke;
 }
 
 </style>

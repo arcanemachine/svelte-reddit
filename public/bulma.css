@@ -7760,3 +7760,13 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
 
 html {
   overflow-y: auto; }
+
+* {
+  transition: background 0.3s;
+  transition: color 0.3s; }
+
+strong {
+  color: unset; }
+
+.container.is-dark {
+  background: black; }
