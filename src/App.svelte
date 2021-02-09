@@ -22,7 +22,7 @@
       console.log(localStorage.getItem('fontSize'));
     }
     // if dark mode enabled, then turn it on
-    if (localStorage.getItem('darkModeActive')) {
+    if (localStorage.getItem('darkModeActive') == true) {
       darkModeActive.set(true);
     }
 
