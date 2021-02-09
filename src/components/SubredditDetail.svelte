@@ -98,7 +98,7 @@
 }
 
 .post-item.is-stickied {
-  background: #9a9a9a;
+  background: #cacaca;
 }
 
 .post-item.is-stickied.is-dark {
@@ -134,7 +134,7 @@
 }
 
 .post-link-name.is-stickied {
-  color: #0b0;
+  color: #070;
 }
 
 .post-description {
