@@ -1,8 +1,8 @@
 {
-    "name": "Reddit Micro",
+    "name": "Reddit μReader",
     "lang": "en",
     "description": "A minimalist Reddit client",
-    "short_name": "Reddit Micro",
+    "short_name": "Reddit μReader",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
