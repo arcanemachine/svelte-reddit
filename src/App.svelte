@@ -47,23 +47,24 @@
 
   const titleClicked = () => {currentContentIs('subreddit')}
   const currentContentIs = (x) => {
-    isLoading = true;
     window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
-    setTimeout(() => {currentContent = undefined}, 200);
+    isLoading = true;
+    setTimeout(() => {
+      currentContent = undefined;
+    }, 150)
     setTimeout(() => {
       currentContent = x;
       isLoading = false;
-    }, 200)
+    }, 150)
   }
 
   // this is a hack to refresh PostDetail cards if dark mode is turned off in PostDetail
-  const reloadPostData = () => {
+  const darkModeToggled = () => {
     if (currentContent === 'post') {
       currentContent = undefined;
-      currentContent = x;
+      currentContentIs('post');
     }
   }
-
 
   // Settings
   const settingsClose = () => {
@@ -150,7 +151,8 @@
   {#if isLoading}<LoadingScreen/>{/if}
 
   {#if settingsShow}
-    <Settings on:settings-close="{settingsClose}"/>
+    <Settings on:settings-close="{settingsClose}"
+              on:dark-mode-toggled="{darkModeToggled}"/>
   {/if}
 
   {#if subredditPickerShow}

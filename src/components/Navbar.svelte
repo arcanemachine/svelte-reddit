@@ -6,7 +6,7 @@
   // data
   export let title = 'reddit';
   export let currentContent;
-  let navbarIsActive = true;
+  let navbarIsActive = false;
 
   // methods
   const navbarToggle = () => {navbarIsActive = !navbarIsActive;}
@@ -29,9 +29,8 @@
   function emitSettingsToggle() {dispatch('settings-toggle')}
 
 
-  // DELETEME
   // dark mode
-  const deleteme = () => {
+  const darkModeToggle = () => {  // deleteme
     if (!localStorage.getItem('darkModeActive')) {
       localStorage.setItem('darkModeActive', true);
       darkModeActive.set(true);
@@ -40,8 +39,6 @@
       darkModeActive.set(false);
     }
   }
-
-
 
 </script>
 
@@ -57,7 +54,7 @@
         {/if }
         <span class="navbar-title">{title}</span>
       </span>
-      <span class="ml-2 navbar-title" on:click="{deleteme}"><!-- ({$darkModeActive ? 'Dark' : 'Light'}) --></span>
+      <span class="ml-2 navbar-title" on:click="{darkModeToggle}"><!-- ({$darkModeActive ? 'Dark' : 'Light'}) --></span>
     </div>
     <div class="navbar-end-touch-icon-container is-hidden-desktop">
       <svg on:click="{() => navbarItemClicked('go-to-subreddit', false)}"
