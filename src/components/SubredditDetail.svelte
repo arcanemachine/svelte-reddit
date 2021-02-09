@@ -1,6 +1,5 @@
-<script>
-  import { createEventDispatcher } from 'svelte';
-  import { darkModeActive } from '../stores/';
+<script> import { createEventDispatcher } from 'svelte';
+  import { darkModeActive, thumbnailsDisabled, voteCountDisabled } from '../stores/';
   import { htmlUnescape } from '../utils.js';
 
   const dispatch = createEventDispatcher();
@@ -11,7 +10,7 @@
   // methods
   const getFormattedDate = (date) => {
     date = new Date(date*1000);
-    return `${date.getFullYear()}/${date.getMonth()+1}/${date.getDay()}`;
+    return `${date.getFullYear()}/${date.getMonth()+1}/${date.getDay()+1}`;
   }
 
   const postTitleClicked = (post) => {
@@ -40,6 +39,7 @@
           <div class="px-2 my-0 media post-item"
                class:is-stickied="{post.data.stickied}"
                class:is-dark="{$darkModeActive}">
+            {#if thumbnailsDisabled && voteCountDisabled}
             <div class="post-image-container">
               {#if post.data.thumbnail.match(/(http)/)}
                 <img on:click="{postTitleClicked(post)}"
@@ -58,6 +58,7 @@
               {/if}
               <div class="has-text-centered">{getFormattedDate(post.data.created)}</div>
             </div>
+            {/if}
             <div class="ml-3 media-content">
               <div class="post-body-container">
                 <div class="mb-4 p-2 post-link-name"
@@ -65,7 +66,7 @@
                      on:click="{postTitleClicked(post)}">
                   {@html htmlUnescape(post.data.title)} <em>[{post.data.domain}]</em>
                 </div>
-                <div class="ml-2 post-description">
+                <div class="mx-1 post-description">
                   {@html htmlUnescape(post.data.selftext_html)}
                 </div>
               <div class="mt-3 ml-5 mb-1 p-1 post-body-bottom-container">
@@ -91,6 +92,7 @@
 .media {
   max-width: 50rem;
   padding-top: 0;
+  border-radius: 1rem;
 }
 
 .post-item {
@@ -100,7 +102,7 @@
 
 .post-item.is-dark {
   color: whitesmoke;
-  border: 1px solid whitesmoke;
+  border: 1px solid gray;
   border-width: 1px 0;
 }
 
@@ -126,6 +128,7 @@
 .post-image {
   height: 4rem;
   width: 4rem;
+  border-radius: 0.5rem;
 }
 
 .post-body-container {
@@ -160,7 +163,7 @@
 .post-body-bottom-subreddit {
   cursor: pointer;
   margin-left: auto;
-  margin-right: 1rem;
+  margin-right: 1.5rem;
 }
 
 .post-link-comments {
