@@ -108,7 +108,6 @@
 
 <style>
 
-/* override bulma defaults */
 .button {
   border: 1px solid black !important;
   border-radius: 0.5rem;

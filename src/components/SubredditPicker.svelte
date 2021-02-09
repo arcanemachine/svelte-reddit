@@ -31,15 +31,9 @@
   }
 
   // events
-  function emitSubredditPick(event) {
-    dispatch('subreddit-pick', event);
-  }
-  function emitSubredditPickerClose(event) {
-    dispatch('subreddit-picker-close', {});
-  }
-  function emitSubredditPickerToggle(event) {
-    dispatch('subreddit-picker-toggle', {});
-  }
+  function emitSubredditPick(event) {dispatch('subreddit-pick', event);}
+  function emitSubredditPickerClose(event) {dispatch('subreddit-picker-close', {});}
+  function emitSubredditPickerToggle(event) {dispatch('subreddit-picker-toggle', {});}
 
 </script>
 
