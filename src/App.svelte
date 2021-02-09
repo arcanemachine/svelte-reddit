@@ -5,7 +5,6 @@
   import { mockedSubredditData } from './mockedSubredditData.js';
   import { mockedPostData } from './mockedPostData2.js';
 
-  // components
   import Navbar from './components/Navbar.svelte';
   import Settings from './components/Settings.svelte';
   import LoadingScreen from './components/LoadingScreen.svelte';
@@ -13,13 +12,18 @@
   import SubredditDetail from './components/SubredditDetail.svelte';
   import PostDetail from './components/PostDetail.svelte';
   import AppFooter from './components/AppFooter.svelte';
+  import StatusMessage from './components/StatusMessage.svelte';
+
 
   // onMount
   onMount(() => {
-    // if font size saved in localStorage, retire
+    // if font size saved in localStorage, set the page font size to match it
+
+    // DELETEME
+    // document.querySelector('html').style.fontSize = `15px`;
+    
     if (localStorage.getItem('fontSize')) {
       document.querySelector('html').style.fontSize = `${localStorage.getItem('fontSize')}px`;
-      console.log(localStorage.getItem('fontSize'));
     }
     // if dark mode enabled, then turn it on
     if (localStorage.getItem('darkModeActive') == true) {
@@ -40,8 +44,6 @@
 
   // data - modals
   let isLoading = false;
-  let settingsShow = false;
-  let subredditPickerShow = false;
 
   const titleClicked = () => {currentContentIs('subreddit')}
   const currentContentIs = (x) => {
@@ -56,15 +58,27 @@
     }, 150)
   }
 
-  // this is a hack to refresh PostDetail cards if dark mode is turned off in PostDetail
-  const darkModeToggled = () => {
-    if (currentContent === 'post') {
-      currentContent = undefined;
-      currentContentIs('post');
+  // StatusMessage
+  let statusMessage = '';
+  let statusMessageTimeout;
+  const statusMessageDisplay = (message, timeout=undefined) => {
+    if (timeout === undefined) {
+      timeout = 4000;
+    } else if (timeout === -1) {
+      timeout = 1000000;
     }
+    clearTimeout(statusMessageDisplay);
+    statusMessage = message
+    statusMessageTimeout = setTimeout(() => statusMessage = '', timeout);
+  }
+  const statusMessageClear = () => {
+    statusMessage = '';
+    clearTimeout(statusMessageTimeout);
+    statusMessageDisplay('', 0);
   }
 
   // Settings
+  let settingsShow = false;
   const settingsClose = () => {
     settingsShow = false;
     document.querySelector('html').style.overflowY = 'auto';
@@ -75,6 +89,7 @@
   }
 
   // SubredditPicker
+  let subredditPickerShow = false;
   const subredditPickerClose = () => {
     subredditPickerShow = false;
     document.querySelector('html').style.overflowY = 'auto';
@@ -132,11 +147,23 @@
       isLoading = false;
     }
   }
+  // this is a hack to refresh PostDetail comments if dark mode is turned off while in the PostDetail view
+  const darkModeToggled = () => {
+    if (currentContent === 'post') {
+      currentContent = undefined;
+      currentContentIs('post');
+    }
+  }
+
 
 </script>
 
 <div class="page-container"
      class:is-dark="{$darkModeActive}">
+  {#if statusMessage}
+    <StatusMessage message="{statusMessage}"
+                   on:status-message-clear="{statusMessageClear}"/>
+  {/if}
   <Navbar title="{title}"
           currentContent="{currentContent}"
           on:subreddit-picker-toggle="{subredditPickerToggle}"
