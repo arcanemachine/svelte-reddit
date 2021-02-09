@@ -3,6 +3,8 @@
   import { darkModeActive } from '../stores/';
   import { htmlUnescape } from '../utils.js';
 
+  const dispatch = createEventDispatcher();
+
   // props
   export let subredditContent;
 
@@ -25,9 +27,8 @@
   }
 
   // events
-  const dispatch = createEventDispatcher();
   function emitPostPick(post) {
-    dispatch('post-pick', {post: post})
+    dispatch('post-pick', {post});
   }
 </script>
 
@@ -67,10 +68,16 @@
                 <div class="ml-2 post-description">
                   {@html htmlUnescape(post.data.selftext_html)}
                 </div>
-                <div class="mt-3 ml-5 mb-1 p-1 has-text-weight-bold is-italic post-link-comments"
+              <div class="mt-3 ml-5 mb-1 p-1 post-body-bottom-container">
+                <div class="has-text-weight-bold is-italic post-link-comments"
                      on:click="{postCommentsClicked(post)}">
                   {post.data.num_comments} comments
                 </div>
+                <div class="has-text-weight-bold is-italic post-body-bottom-subreddit"
+                     on:click="{() => dispatch('subreddit-pick', {subreddit: post.data.subreddit})}">
+                  /r/{post.data.subreddit}
+                </div>
+              </div>
               </div>
             </div>
           </div>
@@ -98,7 +105,7 @@
 }
 
 .post-item.is-stickied {
-  background: #cacaca;
+  background: #eee;
 }
 
 .post-item.is-stickied.is-dark {
@@ -144,6 +151,16 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   pointer-events: none;
+}
+
+.post-body-bottom-container {
+  display: flex;
+}
+
+.post-body-bottom-subreddit {
+  cursor: pointer;
+  margin-left: auto;
+  margin-right: 1rem;
 }
 
 .post-link-comments {

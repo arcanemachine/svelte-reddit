@@ -44,15 +44,15 @@
     isLoading = true;
     setTimeout(() => {
       currentContent = undefined;
-    }, 150)
+    }, 200)
     setTimeout(() => {
       currentContent = x;
       isLoading = false;
-    }, 150)
+    }, 200)
   }
 
   // Settings
-  let settingsShow = true;
+  let settingsShow = false;
   const settingsClose = () => {
     settingsShow = false;
     document.querySelector('html').style.overflowY = 'auto';
@@ -195,7 +195,8 @@
   <main class="content-container">
     {#if currentContent === 'subreddit'}
       <SubredditDetail subredditContent="{subredditContent}"
-                       on:post-pick="{postPick}"/>
+                       on:post-pick="{postPick}"
+                       on:subreddit-pick="{subredditPick}"/>
     {:else if currentContent === 'post'}
       <PostDetail postContent="{postContent}" postAuthor="{postAuthor}"/>
     {/if}

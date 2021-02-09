@@ -68,7 +68,7 @@
     {#if post.data.hasOwnProperty('replies') && Object.keys(post.data.replies).length}
       {#if depth < maxDepth}
         {#each post.data.replies.data.children as reply, index}
-          <svelte:self post="{reply}" index="{index}" depth="{depth + 1}"/>
+          <svelte:self post="{reply}" depth="{depth + 1}"/>
         {/each}
       {:else}
         <div class="get-more-posts" class:is-dark="{$darkModeActive}">Dive deeper...</div>

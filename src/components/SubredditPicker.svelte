@@ -22,7 +22,7 @@
     submitButton.classList.add('is-loading');
     setTimeout(() => {
       dispatch('subreddit-picker-close');
-      dispatch('subreddit-pick', ({subreddit}));
+      dispatch('subreddit-pick', {subreddit});
     }, 200)
   }
   const subredditPicked = (subredditName) => {
@@ -31,9 +31,9 @@
   }
 
   // events
-  function emitSubredditPick(event) {dispatch('subreddit-pick', event);}
-  function emitSubredditPickerClose(event) {dispatch('subreddit-picker-close', {});}
-  function emitSubredditPickerToggle(event) {dispatch('subreddit-picker-toggle', {});}
+  function emitSubredditPick(event) {dispatch('subreddit-pick', event)}
+  function emitSubredditPickerClose(event) {dispatch('subreddit-picker-close', {})}
+  function emitSubredditPickerToggle(event) {dispatch('subreddit-picker-toggle', {})}
 
 </script>
 

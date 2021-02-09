@@ -58,7 +58,7 @@
     </div>
   </div>
   {#each postContent[1].data.children as post, index}
-    <PostItem post="{post}" index="{index}"/>
+    <PostItem post="{post}"/>
   {/each}
 </div>
 
