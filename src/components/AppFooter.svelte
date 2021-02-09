@@ -25,7 +25,7 @@
 
 <style>
 .footer-container {
-  background-color: #ddd;
+  background: #ddd;
   width: 100%;
 }
 

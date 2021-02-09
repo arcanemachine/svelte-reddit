@@ -153,7 +153,7 @@
 
 .settings-item-container-parent {
   display: flex;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.75rem;
   flex-direction: row;
   align-items: center;
   justify-content: stretch;
@@ -223,7 +223,7 @@
 
 .toggle-widget-backplate {
   width: 4.5rem;
-  transition: background-color 0.5s;
+  transition: background 0.5s;
   border: 1px solid black;
 }
 
