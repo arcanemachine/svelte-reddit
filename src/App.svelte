@@ -29,21 +29,15 @@
     if (localStorage.getItem('darkModeActive') == true) {
       darkModeActive.set(true);
     }
-
-    // subredditPick(undefined, 'AskReddit');
   })
 
   // data
   let title = 'Reddit μReader';
+  let isLoading = false;
   let subredditContent = mockedSubredditData;
   let postContent = mockedPostData;
-  // let subredditContent;
-  // let postContent;
   let postAuthor = '';
   let currentContent = 'subreddit';
-
-  // data - modals
-  let isLoading = false;
 
   const titleClicked = () => {currentContentIs('subreddit')}
   const currentContentIs = (x) => {
@@ -76,9 +70,16 @@
     clearTimeout(statusMessageTimeout);
     statusMessageDisplay('', 0);
   }
+  const receiveStatusMessageDisplay = (event) => {
+    if (typeof(event.detail) === 'string') {
+      statusMessageDisplay(event.detail);
+    } else {
+      statusMessageDisplay(event.detail.message, event.detail.timeout);
+    }
+  }
 
   // Settings
-  let settingsShow = false;
+  let settingsShow = true;
   const settingsClose = () => {
     settingsShow = false;
     document.querySelector('html').style.overflowY = 'auto';
@@ -174,6 +175,7 @@
 
   {#if settingsShow}
     <Settings on:settings-close="{settingsClose}"
+              on:status-message-display="{receiveStatusMessageDisplay}"
               on:dark-mode-toggled="{darkModeToggled}"/>
   {/if}
 
