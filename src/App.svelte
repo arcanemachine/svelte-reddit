@@ -137,12 +137,10 @@
     // if a status message is already present, clear it
     if (statusMessage) {
       statusMessage = '';
+      clearTimeout(statusMessageTimeout);
       setTimeout(() => {
-        clearTimeout(statusMessageTimeout);
-        setTimeout(() => {
-          statusMessageDisplay(message, timeout);
-        }, 500);
-      })
+        statusMessageDisplay(message, timeout);
+      }, 500);
       return false;
     }
 
