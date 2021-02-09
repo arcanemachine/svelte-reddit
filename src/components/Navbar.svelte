@@ -6,7 +6,7 @@
   // data
   export let title = 'reddit';
   export let currentContent;
-  let navbarIsActive = false;
+  let navbarIsActive = true;
 
   // methods
   const navbarToggle = () => {navbarIsActive = !navbarIsActive;}
@@ -95,6 +95,8 @@
            on:click="{() => navbarItemClicked('settings')}">
         Settings
       </div>
+      <div class="is-hidden-desktop navbar-popup-bottom-border"
+           class:is-dark="{$darkModeActive}"></div>
     </div>
   </div>
 </nav>
@@ -103,7 +105,14 @@
 .navbar {
   height: 4rem;
   max-width: 100vw;
+}
+
+.navbar:not(.is-active) {
   border-bottom: 2px solid black;
+}
+
+.navbar.is-dark:not(.is-active) {
+  border-bottom: 2px solid white;
 }
 
 .is-dark {
@@ -132,6 +141,11 @@
   height: 2px;
 }
 
+.navbar-menu {
+  margin-top: -2px;
+  padding-bottom: 0;
+}
+
 .navbar-item {
   cursor: pointer;
   font-weight: bold;
@@ -140,6 +154,15 @@
 .navbar-menu.is-dark, .navbar-item.is-dark {
   background: black;
   color: whitesmoke;
+}
+
+.navbar-popup-bottom-border {
+  margin-top: 1rem;
+  border-bottom: 2px solid black;
+}
+
+.navbar-popup-bottom-border.is-dark {
+  border-bottom: 2px solid white;
 }
 
 </style>
