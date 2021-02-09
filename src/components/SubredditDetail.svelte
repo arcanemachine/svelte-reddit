@@ -34,7 +34,7 @@
 <div class="container">
   <div class="columns">
     {#if Object.keys(subredditContent).length}
-      <div class="column">
+      <div class="column post-item-container">
         {#each subredditContent.data.children as post}
           <div class="px-2 my-0 media post-item"
                class:is-stickied="{post.data.stickied}"
@@ -107,7 +107,7 @@
 }
 
 .post-item.is-stickied {
-  background: #eee;
+  background: #ddd;
 }
 
 .post-item.is-stickied.is-dark {
