@@ -3,7 +3,7 @@
   import { darkModeActive } from '../stores/';
 
   // props
-  export let post, index, depth=0;
+  export let post, depth=0;
 
   // data
   let maxDepth = 8;
@@ -54,7 +54,7 @@
 </script>
 
 <div>
-  <div class="card large post-item-card"
+  <div class="card post-item-card"
        class:is-dark="{$darkModeActive}"
        style="margin-left: {depth / 5}rem; background-color: {getBackgroundColor()};">
     <div class="post-child-author">
@@ -78,10 +78,6 @@
 </div>
 
 <style>
-strong {
-  color: unset;
-}
-
 .is-dark {
   background: inherit;
   color: whitesmoke;

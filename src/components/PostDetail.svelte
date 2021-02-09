@@ -48,7 +48,9 @@
               - /u/{postAuthor}/
             </div>
           </div>
-          <div class="card-content" class:hidden="{!postContent[0].data.children[0].data.selftext_html}">
+          <div class="card-content"
+               class:hidden="{!postContent[0].data.children[0].data.selftext_html}"
+               class:is-dark="{$darkModeActive}">
             {@html htmlUnescape(postContent[0].data.children[0].data.selftext_html)}
           </div>
         </div>
@@ -65,12 +67,12 @@
   color: whitesmoke;
 }
 
-.card-header {
-  border-radius: 0.2rem;
-}
-
 .card-header.is-dark {
   background: #333;
+}
+
+.card-content.is-dark {
+  background: #555;
 }
 
 .post-header {

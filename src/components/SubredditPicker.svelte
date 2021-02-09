@@ -98,9 +98,4 @@
 .delete {
   float: right;
 }
-
-.card-title {
-  margin-top: 1.5rem;
-}
-
 </style>
