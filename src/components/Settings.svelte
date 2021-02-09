@@ -87,7 +87,7 @@
         <div class="settings-item-container-name"
              class:is-dark="{$darkModeActive}">
           <div class="settings-item-name">Dark Mode</div>
-          <div class="settings-item-name-secondary">{$darkModeActive}</div>
+          <div class="settings-item-name-secondary"><!-- {$darkModeActive} --></div>
         </div>
         <div class="settings-item-container-widget">
           <div on:click="{darkModeToggle}"
