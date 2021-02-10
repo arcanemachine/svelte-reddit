@@ -6,30 +6,23 @@
   export let message;
 </script>
 
-<div class="status-message-container">
-  <div class="has-background-info has-text-white status-message"
-          on:click="{() => dispatch('status-message-clear')}"
-          transition:fade>{message}</div>
+<div class="has-background-info has-text-white status-message"
+        on:click="{() => dispatch('status-message-clear')}"
+        transition:fade>
+  {message}
 </div>
 
 <style>
-.status-message-container {
-  position: fixed;
-  display: flex;
-  width: 100vw;
-  top: 0;
-  left: 0;
-  justify-content: center;
-  z-index: 100;
-}
-
 .status-message {
-  max-width: 20rem;
-  margin-top: 5rem;
-  padding: 1rem;
+  position: fixed;
   font-size: 1.2rem;
-  cursor: pointer;
   text-align: center;
+  cursor: pointer;
+  top: 5rem;
+  margin-left: auto;
+  max-width: 20rem;
+  padding: 1rem;
   border-radius: 0.5rem;
+  z-index: 100;
 }
 </style>
