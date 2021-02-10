@@ -12,8 +12,12 @@
   const navbarToggle = () => {navbarIsActive = !navbarIsActive;}
   const navbarItemClicked = (itemName, showNavbar=undefined) => {
     navbarToggle();
-    if (itemName === 'go-to-subreddit') {
+    if (itemName === 'subreddit-picker') {
       emitSubredditPickerToggle();
+      navbarIsActive = false;
+    }
+    if (itemName === 'subreddit-search') {
+      emitSubredditSearchToggle();
       navbarIsActive = false;
     }
     if (itemName === 'settings') {
@@ -26,6 +30,7 @@
   const dispatch = createEventDispatcher();
   function titleClicked() {dispatch('title-clicked')}
   function emitSubredditPickerToggle() {dispatch('subreddit-picker-toggle')}
+  function emitSubredditSearchToggle() {dispatch('subreddit-search-toggle')}
   function emitSettingsToggle() {dispatch('settings-toggle')}
 
   // dark mode
@@ -47,7 +52,8 @@
      transition:fade>
   <div class="navbar-brand">
     <div class="ml-2 p-2 navbar-item brand-text has-text-weight-bold">
-      <span on:click="{titleClicked}">
+      <span on:click="{titleClicked}"
+            alt="{title}">
         {#if currentContent === 'post'}
         <span class="navbar-title">&larr; &nbsp;&nbsp;</span>
         {/if }
@@ -55,24 +61,28 @@
       </span>
       <span class="ml-2 navbar-title" on:click="{darkModeToggle}"><!-- ({$darkModeActive ? 'Dark' : 'Light'}) --></span>
     </div>
+    <!-- navbar icons, touch-size viewports only -->
     <div class="navbar-end-touch-icon-container is-hidden-desktop">
-      <svg class="navbar-end-touch-icon navbar-end-touch-icon-reddit" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" xml:space="preserve">
-        <g><g><g><circle cx="354.1" cy="564" r="66"/><path d="M990,510.6c0-81.6-64.2-148-143.2-148c-27.7,0-53.4,8.4-75.3,22.4c-67.9-39.4-153.6-64-247.1-67.3l53.9-154.8L690,189.7c-0.4,3.7-1.1,7.2-1.1,11c0,61.6,50.1,111.7,111.7,111.7c61.5,0,111.7-50.1,111.7-111.7S862.1,89,800.6,89c-40.2,0-75.1,21.4-94.7,53.3l-159.7-38.2L471.6,318c-93.1,4.8-177.9,30.7-244.5,71.3c1.3-0.9,2.5-2,3.8-2.9c-22.4-15-49-23.8-77.7-23.8c-79,0-143.2,66.3-143.2,148c0,54.6,29,101.9,71.8,127.5c17.5,152.6,199.4,273,420.8,273c222.9,0,405.7-122,421.1-276C963.5,608.8,990,562.9,990,510.6z M800.5,138.8c34.1,0,61.9,27.8,61.9,62c0,34.1-27.8,61.9-61.9,61.9c-34.3,0-62-27.8-62-61.9C738.5,166.5,766.3,138.8,800.5,138.8z M153.2,412.3c11.3,0,21.9,2.5,31.9,6.3c-54,43.3-90.4,97.7-101.3,157.7c-14.9-17.5-24.2-40.4-24.2-65.7C59.6,456.4,101.6,412.3,153.2,412.3z M502.6,861.4c-205.6,0-372.9-110.9-372.9-247.3c0-136.4,167.3-247.3,372.9-247.3c205.6,0,372.8,110.9,372.8,247.3C875.4,750.4,708.2,861.4,502.6,861.4z M920.2,570.9c-12.2-58.4-48.4-111.2-101.6-153.5c9-3,18.4-5.1,28.3-5.1c51.5,0,93.5,44.1,93.5,98.3C940.2,533.4,932.6,554.2,920.2,570.9z"/><circle cx="638" cy="564" r="66"/><path d="M627.4,710.8c-139.9,92.3-252.8,5.3-257.8,1.4c-10.7-8.6-26.3-6.9-34.9,3.8c-8.6,10.7-7,26.3,3.7,34.9c0.9,0.8,65.4,51.5,159.1,51.5c46.6,0,100.4-12.6,157.2-50.1c11.5-7.6,14.6-23,7.1-34.4C654.2,706.4,638.8,703.2,627.4,710.8z"/></g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></g>
+      <!-- reddit icon -->
+      <svg on:click="{() => navbarItemClicked('subreddit-picker', false)}" class="navbar-end-touch-icon navbar-end-touch-icon-reddit" title="Your Subreddits" alt="Your Subreddits" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" xml:space="preserve">
+        <circle cx="354.1" cy="564" r="66"/><path d="M990,510.6c0-81.6-64.2-148-143.2-148c-27.7,0-53.4,8.4-75.3,22.4c-67.9-39.4-153.6-64-247.1-67.3l53.9-154.8L690,189.7c-0.4,3.7-1.1,7.2-1.1,11c0,61.6,50.1,111.7,111.7,111.7c61.5,0,111.7-50.1,111.7-111.7S862.1,89,800.6,89c-40.2,0-75.1,21.4-94.7,53.3l-159.7-38.2L471.6,318c-93.1,4.8-177.9,30.7-244.5,71.3c1.3-0.9,2.5-2,3.8-2.9c-22.4-15-49-23.8-77.7-23.8c-79,0-143.2,66.3-143.2,148c0,54.6,29,101.9,71.8,127.5c17.5,152.6,199.4,273,420.8,273c222.9,0,405.7-122,421.1-276C963.5,608.8,990,562.9,990,510.6z M800.5,138.8c34.1,0,61.9,27.8,61.9,62c0,34.1-27.8,61.9-61.9,61.9c-34.3,0-62-27.8-62-61.9C738.5,166.5,766.3,138.8,800.5,138.8z M153.2,412.3c11.3,0,21.9,2.5,31.9,6.3c-54,43.3-90.4,97.7-101.3,157.7c-14.9-17.5-24.2-40.4-24.2-65.7C59.6,456.4,101.6,412.3,153.2,412.3z M502.6,861.4c-205.6,0-372.9-110.9-372.9-247.3c0-136.4,167.3-247.3,372.9-247.3c205.6,0,372.8,110.9,372.8,247.3C875.4,750.4,708.2,861.4,502.6,861.4z M920.2,570.9c-12.2-58.4-48.4-111.2-101.6-153.5c9-3,18.4-5.1,28.3-5.1c51.5,0,93.5,44.1,93.5,98.3C940.2,533.4,932.6,554.2,920.2,570.9z"/><circle cx="638" cy="564" r="66"/><path d="M627.4,710.8c-139.9,92.3-252.8,5.3-257.8,1.4c-10.7-8.6-26.3-6.9-34.9,3.8c-8.6,10.7-7,26.3,3.7,34.9c0.9,0.8,65.4,51.5,159.1,51.5c46.6,0,100.4-12.6,157.2-50.1c11.5-7.6,14.6-23,7.1-34.4C654.2,706.4,638.8,703.2,627.4,710.8z"/>
       </svg>
-      <svg on:click="{() => navbarItemClicked('go-to-subreddit', false)}"
+      <!-- search icon -->
+      <svg on:click="{() => navbarItemClicked('subreddit-search', false)}"
+           class="bi bi-search navbar-end-touch-icon navbar-end-touch-icon-search"
+           title="Search Subreddits" alt="Search Subreddits"
            xmlns="http://www.w3.org/2000/svg"
-           fill="currentColor" viewBox="0 0 16 16"
-           class="bi bi-search navbar-end-touch-icon navbar-end-touch-icon-search">
+           fill="currentColor" viewBox="0 0 16 16">
         <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
       </svg>
     </div>
-    <div role="button"
-       data-target="navMenu"
-       on:click="{navbarToggle}"
-       class="pl-2 navbar-burger"
-       class:is-active="{navbarIsActive}"
-       aria-label="menu"
-       aria-expanded="false">
+    <div on:click="{navbarToggle}"
+         class="pl-2 navbar-burger"
+         class:is-active="{navbarIsActive}"
+         title="Navbar Menu" alt="Navbar Menu"
+         role="button"
+         data-target="navMenu"
+         aria-label="menu" aria-expanded="false">
       <span class="burger-line" aria-hidden="true"></span>
       <span class="burger-line" aria-hidden="true"></span>
       <span class="burger-line" aria-hidden="true"></span>
@@ -83,11 +93,13 @@
        class:is-active="{navbarIsActive}"
        class:is-dark="{$darkModeActive}">
     <div class="navbar-end">
+      <!-- navbar items, desktop-size viewports only -->
       <div class="navbar-item has-text-centered is-hidden-touch"
            class:is-dark="{$darkModeActive}"
-           on:click="{() => navbarItemClicked('go-to-subreddit')}">
+           on:click="{() => navbarItemClicked('subreddit-search')}">
         Go to subreddit
       </div>
+      <!-- navbar items for all viewports  -->
       <div class="navbar-item has-text-centered"
            class:is-dark="{$darkModeActive}"
            on:click="{() => navbarItemClicked('settings')}">

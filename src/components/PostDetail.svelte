@@ -20,7 +20,7 @@
 
 <div class="container" class:is-dark="{$darkModeActive}">
   <style>
-  /* start: override bulma styling for dynamically generated html */
+  /* override bulma styling for dynamically generated html */
   ul {
     margin: 1rem 2rem;
     list-style: '- ';
@@ -29,7 +29,6 @@
   p {
     margin: 0.5rem auto;
   }
-  /* end: override bulma styling for dynamically generated html */
   </style>
   <div class="pt-5 section">
     <div class="columns">
@@ -58,7 +57,7 @@
     </div>
   </div>
   {#each postContent[1].data.children as post, index}
-    <PostItem post="{post}"/>
+    <PostItem post="{post}" index="{index}"/>
   {/each}
 </div>
 

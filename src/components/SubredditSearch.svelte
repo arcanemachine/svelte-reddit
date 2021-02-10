@@ -12,16 +12,16 @@
   let submitButton;
 
   // methods
-  const subredditPickerToggle = () => {
-    emitSubredditPickerToggle();
+  const subredditSearchToggle = () => {
+    emitSubredditSearchToggle();
   }
-  const subredditPickerClose = () => {
-    emitSubredditPickerClose();
+  const subredditSearchClose = () => {
+    emitSubredditSearchClose();
   }
   const submitButtonClicked = async () => {
     submitButton.classList.add('is-loading');
     setTimeout(() => {
-      dispatch('subreddit-picker-close');
+      dispatch('subreddit-search-close');
       dispatch('subreddit-pick', {subreddit});
     }, 200)
   }
@@ -32,32 +32,30 @@
 
   // events
   function emitSubredditPick(event) {dispatch('subreddit-pick', event)}
-  function emitSubredditPickerClose(event) {dispatch('subreddit-picker-close', {})}
-  function emitSubredditPickerToggle(event) {dispatch('subreddit-picker-toggle', {})}
+  function emitSubredditSearchClose(event) {dispatch('subreddit-search-close')}
+  function emitSubredditSearchToggle(event) {dispatch('subreddit-search-toggle')}
 
 </script>
 
 <div class="modal is-active" transition:fade>
-  <div class="modal-background" on:click="{subredditPickerClose}"></div>
+  <div class="modal-background" on:click="{subredditSearchClose}"></div>
   <div class="modal-content"></div>
   <div class="card"
        class:is-dark="{$darkModeActive}">
     <div class="card-content">
       <button class="p-3 delete"
-              on:click="{subredditPickerClose}"
+              on:click="{subredditSearchClose}"
               aria-label="close"></button>
       <div class="has-text-centered">
-        <!--div class="subreddit-input">
-          <h4 class="mt-5 is-size-4">Subreddit name:</h4>
-          <input class="mt-4 input" type="search"
-                 bind:value="{subreddit}"
-                 on:keyup="{e => e.key === 'Enter' && submitButtonClicked()}">
-          <button class="mt-5 button is-info is-large is-fullwidth"
-                  bind:this="{submitButton}"
-                  on:click="{submitButtonClicked}">
-            Search
-          </button>
-        </div-->
+        <h4 class="mt-5 is-size-4">Subreddit name:</h4>
+        <input class="mt-4 input" type="search"
+               bind:value="{subreddit}"
+               on:keyup="{e => e.key === 'Enter' && submitButtonClicked()}">
+        <button class="mt-5 button is-info is-large is-fullwidth"
+                bind:this="{submitButton}"
+                on:click="{submitButtonClicked}">
+          Search
+        </button>
       </div>
       <div class="mt-5 has-text-centered">
         <div class="is-size-4">Popular Subreddits</div>

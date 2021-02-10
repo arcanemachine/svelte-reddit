@@ -145,6 +145,7 @@
 
 .card.is-dark {
   background: #111;
+  border: 1px solid white !important;
 }
 
 .card-title {

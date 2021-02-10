@@ -9,6 +9,7 @@
   import Settings from './components/Settings.svelte';
   import LoadingScreen from './components/LoadingScreen.svelte';
   import SubredditPicker from './components/SubredditPicker.svelte';
+  import SubredditSearch from './components/SubredditSearch.svelte';
   import SubredditDetail from './components/SubredditDetail.svelte';
   import PostDetail from './components/PostDetail.svelte';
   import AppFooter from './components/AppFooter.svelte';
@@ -27,12 +28,15 @@
     if (localStorage.getItem('darkModeActive')) {
       darkModeActive.set(true);
     }
-
   })
 
   // data
   let title = 'Reddit μReader';
   let isLoading = false;
+  let settingsShow = false;
+  let subredditPickerShow = false;
+  let subredditSearchShow = false;
+
   let subredditContent = mockedSubredditData;
   let postContent = mockedPostData;
   let postAuthor = '';
@@ -52,7 +56,6 @@
   }
 
   // Settings
-  let settingsShow = false;
   const settingsClose = () => {
     settingsShow = false;
     document.querySelector('html').style.overflowY = 'auto';
@@ -63,14 +66,24 @@
   }
 
   // SubredditPicker
-  let subredditPickerShow = false;
   const subredditPickerClose = () => {
     subredditPickerShow = false;
     document.querySelector('html').style.overflowY = 'auto';
   }
   const subredditPickerToggle = () => {
+    console.log('subredditPickerToggle()');
     subredditPickerShow = !subredditPickerShow;
     document.querySelector('html').style.overflowY = subredditPickerShow ? 'hidden' : 'default';
+  }
+
+  // SubredditSearch
+  const subredditSearchClose = () => {
+    subredditSearchShow = false;
+    document.querySelector('html').style.overflowY = 'auto';
+  }
+  const subredditSearchToggle = () => {
+    subredditSearchShow = !subredditSearchShow;
+    document.querySelector('html').style.overflowY = subredditSearchShow ? 'hidden' : 'default';
   }
 
   // SubredditDetail
@@ -83,7 +96,7 @@
       await fetch(`https://i.reddit.com/r/${subreddit}/${sort}.json`)
       .then(res => res.json())
       .then(data => {
-        subredditPickerClose();
+        subredditSearchClose();
         subredditContent = data;
         title = subredditContent.data.children[0].data.subreddit_name_prefixed;
         window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
@@ -175,6 +188,7 @@
   <Navbar title="{title}"
           currentContent="{currentContent}"
           on:subreddit-picker-toggle="{subredditPickerToggle}"
+          on:subreddit-search-toggle="{subredditSearchToggle}"
           on:settings-toggle="{settingsToggle}"
           on:title-clicked="{titleClicked}"/>
 
@@ -184,11 +198,13 @@
     <Settings on:settings-close="{settingsClose}"
               on:status-message-display="{receiveStatusMessageDisplay}"
               on:dark-mode-toggled="{darkModeToggled}"/>
-  {/if}
-
-  {#if subredditPickerShow}
+  {:else if subredditPickerShow}
     <SubredditPicker on:subreddit-picker-close="{subredditPickerClose}"
                      on:subreddit-picker-toggle="{subredditPickerToggle}"
+                     on:subreddit-pick="{subredditPick}"/>
+  {:else if subredditSearchShow}
+    <SubredditSearch on:subreddit-search-close="{subredditSearchClose}"
+                     on:subreddit-search-toggle="{subredditSearchToggle}"
                      on:subreddit-pick="{subredditPick}"/>
   {/if}
 
