@@ -34,13 +34,13 @@
 <div class="container">
   <div class="columns">
     {#if Object.keys(subredditContent).length}
-      <div class="column post-item-container">
+      <div class="column">
         {#each subredditContent.data.children as post}
-          <div class="px-2 my-0 media post-item"
+          <div class="media post-item"
                class:is-stickied="{post.data.stickied}"
                class:is-dark="{$darkModeActive}">
             {#if thumbnailsDisabled && voteCountDisabled}
-            <div class="post-image-container">
+            <div class="ml-2 post-image-container">
               {#if post.data.thumbnail.match(/(http)/)}
                 <img on:click="{postTitleClicked(post)}"
                      src="{post.data.thumbnail}"
@@ -59,9 +59,9 @@
               <div class="has-text-centered">{getFormattedDate(post.data.created)}</div>
             </div>
             {/if}
-            <div class="ml-3 media-content">
+            <div class="ml-4 mr-2 media-content">
               <div class="post-body-container">
-                <div class="mb-4 p-2 post-link-name"
+                <div class="mb-2 p-1 post-link-name"
                      class:is-stickied="{post.data.stickied}"
                      on:click="{postTitleClicked(post)}">
                   {@html htmlUnescape(post.data.title)} <em>[{post.data.domain}]</em>
@@ -69,12 +69,12 @@
                 <div class="mx-1 post-description">
                   {@html htmlUnescape(post.data.selftext_html)}
                 </div>
-              <div class="mt-3 ml-5 mb-1 p-1 post-body-bottom-container">
-                <div class="has-text-weight-bold is-italic post-link-comments"
+              <div class="mt-3 mb-1 post-body-bottom-container">
+                <div class="p-2 post-link-comments"
                      on:click="{postCommentsClicked(post)}">
                   {post.data.num_comments} comments
                 </div>
-                <div class="has-text-weight-bold is-italic post-body-bottom-subreddit"
+                <div class="p-2 post-body-bottom-subreddit"
                      on:click="{() => dispatch('subreddit-pick', {subreddit: post.data.subreddit})}">
                   /r/{post.data.subreddit}
                 </div>
@@ -89,7 +89,12 @@
 </div>
 
 <style>
+.media:first-child {
+  margin-top: 0;
+}
+ 
 .media {
+  margin-top: -1px;
   max-width: 50rem;
   padding-top: 0;
   border-radius: 1rem;
@@ -133,6 +138,7 @@
 
 .post-body-container {
   margin: 0.5rem auto;
+  font-weight: bold;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -144,7 +150,7 @@
 }
 
 .post-link-name.is-stickied {
-  color: #070;
+  color: #090;
 }
 
 .post-description {
@@ -158,12 +164,13 @@
 
 .post-body-bottom-container {
   display: flex;
+  font-weight: bold;
+  font-style: italic;
 }
 
 .post-body-bottom-subreddit {
   cursor: pointer;
   margin-left: auto;
-  margin-right: 1.5rem;
 }
 
 .post-link-comments {
