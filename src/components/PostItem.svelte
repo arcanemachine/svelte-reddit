@@ -90,6 +90,11 @@
   margin-right: -1px;
 }
 
+.post-item-card {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
 .post-child-author {
   padding-top: 0.75rem;
   margin-left: 0.75rem;

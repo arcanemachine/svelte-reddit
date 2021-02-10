@@ -37,7 +37,7 @@
   const fontSizeResetMessage = () => {
     clearTimeout(fontSizeResetTimeout);
     fontSizeResetTimeout = setTimeout(() => {
-      dispatch('status-message-display', "Double tap/click this area to reset the font size.")
+      dispatch('status-message-display', "Double click the font number to reset the font size.")
     }, 1000)
   }
   const fontSizeReset = () => {
@@ -141,6 +141,7 @@
   margin: 2rem;
   width: 25rem;
   max-width: 90vw;
+  border-radius: 0.5rem;
 }
 
 .card.is-dark {

@@ -40,7 +40,7 @@
                class:is-stickied="{post.data.stickied}"
                class:is-dark="{$darkModeActive}">
             {#if thumbnailsDisabled && voteCountDisabled}
-            <div class="ml-2 post-image-container">
+            <div class="ml-3 post-image-container">
               {#if post.data.thumbnail.match(/(http)/)}
                 <img on:click="{postTitleClicked(post)}"
                      src="{post.data.thumbnail}"
@@ -74,7 +74,7 @@
                      on:click="{postCommentsClicked(post)}">
                   {post.data.num_comments} comments
                 </div>
-                <div class="p-2 post-body-bottom-subreddit"
+                <div class="mr-2 p-2 post-body-bottom-subreddit"
                      on:click="{() => dispatch('subreddit-pick', {subreddit: post.data.subreddit})}">
                   /r/{post.data.subreddit}
                 </div>

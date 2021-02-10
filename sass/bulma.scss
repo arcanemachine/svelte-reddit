@@ -1,5 +1,12 @@
 @charset "utf-8";
+
+$link: #cc44cc;
+
 @import "../node_modules/bulma/bulma.sass";
+
+a {
+  border-bottom: 3px double;
+}
 
 html {
   overflow-y: auto;

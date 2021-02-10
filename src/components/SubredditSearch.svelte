@@ -48,34 +48,16 @@
               aria-label="close"></button>
       <div class="has-text-centered">
         <h4 class="mt-5 is-size-4">Subreddit name:</h4>
+        <!-- svelte-ignore a11y-autofocus -->
         <input class="mt-4 input" type="search"
                bind:value="{subreddit}"
-               on:keyup="{e => e.key === 'Enter' && submitButtonClicked()}">
+               on:keyup="{e => e.key === 'Enter' && submitButtonClicked()}"
+               autofocus>
         <button class="mt-5 button is-info is-large is-fullwidth"
                 bind:this="{submitButton}"
                 on:click="{submitButtonClicked}">
           Search
         </button>
-      </div>
-      <div class="mt-5 has-text-centered">
-        <div class="is-size-4">Popular Subreddits</div>
-        <div class="mt-4 is-size-5 has-text-link cursor-url"
-             on:click="{() => subredditPicked('Pine64Official')}">
-          /r/PINE64Official/
-        </div>
-        <div class="is-size-5 has-text-link cursor-url"
-             on:click="{() => subredditPicked('AskReddit')}">
-          /r/AskReddit/
-        </div>
-        <div class="is-size-5 has-text-link cursor-url"
-             on:click="{() => subredditPicked('Android')}">
-          /r/Android/
-        </div>
-      </div>
-      <div class="mt-5 has-text-centered">
-        <div class="is-size-4">Recently Viewed</div>
-        <div class="is-size-4">Saved Subreddits</div>
-        <div class="is-size-4">Multireddits</div>
       </div>
     </div>
   </div>
@@ -87,6 +69,7 @@
   width: 20rem;
   margin: 2rem;
   overflow-y: auto;
+  border-radius: 0.5rem;
 }
 
 .card.is-dark {

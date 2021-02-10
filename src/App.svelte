@@ -1,7 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { readable } from 'svelte/store';
-  import { darkModeActive, fontSize } from './stores/';
+  import { darkModeActive, fontSize, subredditsRecent } from './stores/';
   import { mockedSubredditData } from './mockedSubredditData.js';
   import { mockedPostData } from './mockedPostData2.js';
 
@@ -18,23 +17,31 @@
 
   // onMount
   onMount(() => {
-    // if font size saved in localStorage, set the page font size to match it
-    if (localStorage.getItem('fontSize')) {
-      fontSize.set(Number(localStorage.getItem('fontSize')));
-      document.querySelector('html').style.fontSize = `${$fontSize}px`;
+    function initializeStore() {
+      // if font size saved in localStorage, set the page font size to match it
+      if (localStorage.getItem('fontSize')) {
+        fontSize.set(Number(localStorage.getItem('fontSize')));
+        document.querySelector('html').style.fontSize = `${get(fontSize)}px`;
+      }
+      // set dark mode
+      if (localStorage.getItem('darkModeActive')) {
+        darkModeActive.set(true);
+      }
+      // get recent subreddits
+      let localSubredditsRecent = localStorage.getItem('subredditsRecent');
+      if (localSubredditsRecent && JSON.parse(localSubredditsRecent).length) {
+        subredditsRecent.set(JSON.parse(localStorage.getItem('subredditsRecent')))
+      }
     }
-
-    // set dark mode
-    if (localStorage.getItem('darkModeActive')) {
-      darkModeActive.set(true);
-    }
+    initializeStore();
   })
+
 
   // data
   let title = 'Reddit μReader';
   let isLoading = false;
   let settingsShow = false;
-  let subredditPickerShow = false;
+  let subredditPickerShow = true;
   let subredditSearchShow = false;
 
   let subredditContent = mockedSubredditData;
@@ -96,12 +103,14 @@
       await fetch(`https://i.reddit.com/r/${subreddit}/${sort}.json`)
       .then(res => res.json())
       .then(data => {
-        subredditSearchClose();
-        subredditContent = data;
-        title = subredditContent.data.children[0].data.subreddit_name_prefixed;
-        window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
-        currentContent = 'subreddit';
-        isLoading = false;
+        subredditContent = data; // assign response json to subredditContent
+        subredditSearchClose(); // close the search modal
+        let subredditName = subredditContent.data.children[0].data.subreddit;
+        title = `/r/${subredditName}/`; // set the title
+        subredditsRecent.add(subredditName); // add the subreddit to recents
+        window.scrollTo({top: 0, left: 0, behavior: 'smooth'}); // scroll to top
+        currentContent = 'subreddit'; // update content view type
+        isLoading = false; // disable the loading screen
       })
     }
     catch(err) {

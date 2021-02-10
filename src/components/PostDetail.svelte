@@ -22,7 +22,7 @@
   <style>
   /* override bulma styling for dynamically generated html */
   ul {
-    margin: 1rem 2rem;
+    margin: 1rem;
     list-style: '- ';
   }
 
@@ -62,6 +62,10 @@
 </div>
 
 <style>
+.card {
+  border-radius: 0.5rem;
+}
+
 .is-dark {
   color: whitesmoke;
 }

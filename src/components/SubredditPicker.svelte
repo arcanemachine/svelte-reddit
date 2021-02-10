@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { fade } from 'svelte/transition';
-  import { darkModeActive } from '../stores/';
+  import { darkModeActive, subredditsRecent } from '../stores/';
 
   const dispatch = createEventDispatcher();
 
@@ -18,16 +18,12 @@
   const subredditPickerClose = () => {
     emitSubredditPickerClose();
   }
-  const submitButtonClicked = async () => {
-    submitButton.classList.add('is-loading');
+  const subredditPicked = (subredditName) => {
+    subreddit = subredditName;
     setTimeout(() => {
       dispatch('subreddit-picker-close');
       dispatch('subreddit-pick', {subreddit});
     }, 200)
-  }
-  const subredditPicked = (subredditName) => {
-    subreddit = subredditName;
-    submitButtonClicked();
   }
 
   // events
@@ -42,11 +38,21 @@
   <div class="modal-content"></div>
   <div class="card"
        class:is-dark="{$darkModeActive}">
+    <!-- close button -->
+    <button class="p-3 delete" on:click="{subredditPickerClose}" aria-label="close"></button>
     <div class="card-content">
-      <button class="p-3 delete"
-              on:click="{subredditPickerClose}"
-              aria-label="close"></button>
       <div class="has-text-centered">
+        <div class="mb-2 is-size-4">Recently Viewed</div>
+        <div><button on:click="{subredditsRecent.reset}">Reset</button></div>
+        {#if $subredditsRecent.length }
+          {#each $subredditsRecent as subredditName}
+          <div class="is-size-5 has-text-link">
+              <span class="p-2 cursor-url" on:click="{() => subredditPicked(subredditName)}">
+                /r/{subredditName}/
+              </span>
+            </div>
+          {/each}
+        {/if}
         <!--div class="subreddit-input">
           <h4 class="mt-5 is-size-4">Subreddit name:</h4>
           <input class="mt-4 input" type="search"
@@ -75,7 +81,6 @@
         </div>
       </div>
       <div class="mt-5 has-text-centered">
-        <div class="is-size-4">Recently Viewed</div>
         <div class="is-size-4">Saved Subreddits</div>
         <div class="is-size-4">Multireddits</div>
       </div>
@@ -89,6 +94,7 @@
   width: 20rem;
   margin: 2rem;
   overflow-y: auto;
+  border-radius: 0.5rem;
 }
 
 .card.is-dark {
@@ -98,6 +104,12 @@
 }
 
 .delete {
-  float: right;
+  position: absolute;
+  margin-top: 1rem;
+  margin-left: calc(100% - 2.5rem);
+}
+
+.delete:hover {
+  background: gray;
 }
 </style>
