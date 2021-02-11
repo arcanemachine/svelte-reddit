@@ -6,6 +6,7 @@
   // data
   export let title = 'reddit';
   export let currentContent;
+  let subredditsFavoriteRemoveTimeout = undefined;
   let navbarIsActive = false;
 
   // methods
@@ -29,7 +30,14 @@
     subredditsFavorite.add($subredditCurrent);
     dispatch('status-message-display', `/r/${$subredditCurrent}/ has been added to your favorites`);
   }
+  const subredditsFavoriteRemoveMessage = () => {
+    clearTimeout(subredditsFavoriteRemoveTimeout);
+    subredditsFavoriteRemoveTimeout = setTimeout(() => {
+      dispatch('status-message-display', "Double click the heart icon to remove this subreddit from your favorites.")
+    }, 1000)
+  }
   const subredditsFavoriteRemove = (subredditName) => {
+    clearTimeout(subredditsFavoriteRemoveTimeout);
     subredditsFavorite.remove($subredditCurrent);
     dispatch('status-message-display', `/r/${$subredditCurrent}/ has been removed from your favorites`);
   }
@@ -80,7 +88,8 @@
       </svg>
       {:else}
       <svg class="bi bi-heart-fill navbar-end-touch-icon navbar-end-touch-icon-heart"
-           on:click="{subredditsFavoriteRemove($subredditCurrent)}"
+           on:click="{subredditsFavoriteRemoveMessage}"
+           on:dblclick="{subredditsFavoriteRemove($subredditCurrent)}"
            xmlns="http://www.w3.org/2000/svg"
            width="40" height="40" fill="currentColor" viewBox="0 0 16 16">
         <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
