@@ -66,20 +66,20 @@
     </button>
     <div class="card-content">
       <div class="has-text-centered">
-        <h4 class="is-size-4">Go to Subreddit:</h4>
+        <div class="mb-3 is-size-3">Your Subreddits</div>
         <!-- svelte-ignore a11y-autofocus -->
-        <input class="mt-4 input" type="search"
+        <input class="input" type="search"
                bind:value="{subreddit}"
+               placeholder="Enter subreddit name..."
                on:keyup="{e => e.key === 'Enter' && submitButtonClicked()}"
                autofocus>
-        <button class="mt-5 button is-info is-large is-fullwidth"
+        <button class="mt-4 mb-3 button is-info is-large is-fullwidth"
                 bind:this="{submitButton}"
                 on:click="{submitButtonClicked}">
           Search
         </button>
       </div>
       <div class="has-text-centered">
-        <div class="mt-3 mb-5 is-size-3">Your Subreddits</div>
         <!--{#if subredditsRecentEdit}
           <div class="subreddits-action-icon-container">
             <svg class="ml-3 bi bi-pencil action-icon action-icon-pencil"
@@ -91,7 +91,7 @@
           </div>
         {/if}-->
 
-        <div class="is-size-4">Favorites</div>
+        <div class="mt-5 is-size-4">Favorites</div>
         {#if $subredditsRecent.length }
           {#each $subredditsRecent as subredditName}
             <div>

@@ -8,7 +8,6 @@
   import Settings from './components/Settings.svelte';
   import LoadingScreen from './components/LoadingScreen.svelte';
   import SubredditPicker from './components/SubredditPicker.svelte';
-  import SubredditSearch from './components/SubredditSearch.svelte';
   import SubredditDetail from './components/SubredditDetail.svelte';
   import PostDetail from './components/PostDetail.svelte';
   import AppFooter from './components/AppFooter.svelte';
@@ -43,7 +42,6 @@
   let isLoading = false;
   let settingsShow = false;
   let subredditPickerShow = true;
-  let subredditSearchShow = false;
 
   let previousSubreddits = [];
   let currentSubreddit = 'all';
@@ -97,16 +95,6 @@
     document.querySelector('html').style.overflowY = subredditPickerShow ? 'hidden' : 'default';
   }
 
-  // SubredditSearch
-  const subredditSearchClose = () => {
-    subredditSearchShow = false;
-    document.querySelector('html').style.overflowY = 'auto';
-  }
-  const subredditSearchToggle = () => {
-    subredditSearchShow = !subredditSearchShow;
-    document.querySelector('html').style.overflowY = subredditSearchShow ? 'hidden' : 'default';
-  }
-
   // SubredditDetail
   const subredditPick = async (event, subreddit=undefined, sort='hot') => {
     if (event && Object.keys(event).length) {
@@ -122,7 +110,7 @@
       .then(res => res.json())
       .then(data => {
         subredditContent = data; // assign response json to subredditContent
-        subredditSearchClose(); // close the search modal
+        subredditPickerClose(); // close the picker modal
         previousSubreddits.push(currentSubreddit);
         currentSubreddit = subreddit;
         title = `/r/${currentSubreddit}/`; // set the title
@@ -216,7 +204,6 @@
           currentContent="{currentContent}"
           previousSubreddit="{previousSubreddits.length ? previousSubreddits.last : undefined}"
           on:subreddit-picker-toggle="{subredditPickerToggle}"
-          on:subreddit-search-toggle="{subredditSearchToggle}"
           on:settings-toggle="{settingsToggle}"
           on:title-clicked="{titleClicked}"/>
 

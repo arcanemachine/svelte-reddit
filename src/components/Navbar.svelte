@@ -181,6 +181,7 @@
 }
 
 .navbar-end-touch-icon-search {
+  display: none;
   margin-right: 1.25rem;
   padding: 0.6rem;
 }
