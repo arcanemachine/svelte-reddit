@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';
-  import { darkModeActive, fontSize, subredditCurrent, subredditsPrevious, subredditsRecent } from './stores/';
+  import { darkModeActive, fontSize, subredditCurrent, subredditsFavorite,
+           subredditsPrevious, subredditsRecent } from './stores/';
   import { mockedSubredditData } from './mockedSubredditData.js';
   import { mockedPostData } from './mockedPostData2.js';
 
@@ -31,16 +32,21 @@
       if (localSubredditsRecent && JSON.parse(localSubredditsRecent).length) {
         subredditsRecent.set(JSON.parse(localStorage.getItem('subredditsRecent')))
       }
+      // get favorite subreddits
+      let localSubredditsFavorite = localStorage.getItem('subredditsFavorite');
+      if (localSubredditsFavorite && JSON.parse(localSubredditsFavorite).length) {
+        subredditsFavorite.set(JSON.parse(localStorage.getItem('subredditsFavorite')))
+      }
     }
     initializeStore();
-    subredditPick(undefined, $subredditCurrent);
+    // subredditPick(undefined, $subredditCurrent);
   })
 
   // data
   let title = 'Reddit μReader';
   let isLoading = false;
   let settingsShow = false;
-  let subredditPickerShow = false;
+  let subredditPickerShow = true;
 
   let subredditContent = {};
   let postContent = mockedPostData;
@@ -204,6 +210,7 @@
           currentContent="{currentContent}"
           on:subreddit-picker-toggle="{subredditPickerToggle}"
           on:settings-toggle="{settingsToggle}"
+          on:status-message-display="{receiveStatusMessageDisplay}"
           on:title-clicked="{titleClicked}"/>
 
   {#if isLoading}<LoadingScreen/>{/if}

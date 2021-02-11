@@ -1,14 +1,16 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { fade } from 'svelte/transition';
-  import { darkModeActive, subredditsRecent } from '../stores/';
+  import { darkModeActive, subredditsFavorite, subredditsRecent } from '../stores/';
 
   const dispatch = createEventDispatcher();
 
   // data
   let subreddit = '';
-  let subredditsRecentEdit = true;
-  let subredditsRecentItemDeleteTimeout = undefined
+  let subredditsEdit = false;
+  let subredditsFavoriteShowCount = 1;
+  let subredditsRecentShowCount = 1;
+  let subredditsItemDeleteTimeout = undefined
 
   // refs
   let submitButton;
@@ -17,17 +19,22 @@
   const subredditPickerToggle = () => emitSubredditPickerToggle();
   const subredditPickerClose = () => emitSubredditPickerClose();
   
-  const subredditsRecentEditToggle = () => subredditsRecentEdit = !subredditsRecentEdit;
-  const subredditsRecentItemDeleteMessage = () => {
-    clearTimeout(subredditsRecentItemDeleteTimeout);
-    subredditsRecentItemDeleteTimeout = setTimeout(() => {
+  const subredditsEditToggle = () => subredditsEdit = !subredditsEdit;
+  const subredditsItemDeleteMessage = () => {
+    clearTimeout(subredditsItemDeleteTimeout);
+    subredditsItemDeleteTimeout = setTimeout(() => {
       dispatch('status-message-display', "Double click to remove this item.")
     }, 1000)
   }
-  const subredditsRecentItemDelete = (subredditName) => {
-    clearTimeout(subredditsRecentItemDeleteTimeout);
-    subredditsRecent.remove(subredditName);
-    dispatch('status-message-display', `'/r/${subredditName}' has been removed from your recent subreddits.`)
+  const subredditsItemDelete = (subredditName, categoryName) => {
+    clearTimeout(subredditsItemDeleteTimeout);
+    if (categoryName === 'favorite') {
+      subredditsFavorite.remove(subredditName);
+    }
+    else if (categoryName === 'recent') {
+      subredditsRecent.remove(subredditName);
+    }
+    dispatch('status-message-display', `'/r/${subredditName}' has been removed from your ${categoryName} subreddits.`)
   }
 
   const subredditPicked = (subredditName) => {
@@ -64,112 +71,101 @@
     <button class="delete action-icon action-icon-close-button"
             on:click="{subredditPickerClose}" aria-label="close">
     </button>
-    <div class="card-content">
-      <div class="has-text-centered">
-        <div class="mb-3 is-size-3">Your Subreddits</div>
-        <!-- svelte-ignore a11y-autofocus -->
-        <input class="input" type="search"
+    <div class="card-content has-text-centered">
+
+      <div class="mb-3 is-size-3">
+        Your Subreddits
+      </div>
+      
+      <div class="subreddit-search">
+        <input class="input subreddit-search-input" type="search"
                bind:value="{subreddit}"
-               placeholder="Enter subreddit name..."
+               placeholder="Find subreddit by name..."
                on:keyup="{e => e.key === 'Enter' && submitButtonClicked()}"
-               autofocus>
-        <button class="mt-4 mb-3 button is-info is-large is-fullwidth"
+               autofocus> <!-- svelte-ignore a11y-autofocus -->
+        <button class="button is-info subreddit-search-button-submit"
                 bind:this="{submitButton}"
                 on:click="{submitButtonClicked}">
           Search
         </button>
       </div>
-      <div class="has-text-centered">
-        <!--{#if subredditsRecentEdit}
-          <div class="subreddits-action-icon-container">
-            <svg class="ml-3 bi bi-pencil action-icon action-icon-pencil"
-                 on:click="{subredditsRecentEditToggle}"
-                 xmlns="http://www.w3.org/2000/svg"
-                 width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-            </svg>
-          </div>
-        {/if}-->
 
-        <div class="mt-5 is-size-4">Favorites</div>
-        {#if $subredditsRecent.length }
-          {#each $subredditsRecent as subredditName}
-            <div>
-              {#if subredditsRecentEdit }
-              <div class="subreddit-action-icon-container">
-                <div class="subreddit-item-delete action-icon action-item-trash-can"
-                     on:click="{subredditsRecentItemDeleteMessage}"
-                     on:dblclick="{subredditsRecentItemDelete(subredditName)}"
-                     transition:fade>
-                  &#x1f5d1;
-                </div>
-              </div>
-              {/if}
-              <div class="subreddit-item-name-container is-size-5">
-                <div class="has-text-link subreddit-item-name">
-                  <span class="p-2 cursor-url" on:click="{() => subredditPicked(subredditName)}">
-                    /r/{subredditName}/
-                  </span>
-                </div>
-              </div>
-            </div>
-          {/each}
-        {/if}
-
-        <div class="mt-4 is-size-4">Recently Viewed</div>
-        <!--div><button on:click="{subredditsRecent.reset}">Reset</button></div-->
-        {#if $subredditsRecent.length }
-          {#each $subredditsRecent as subredditName}
-            <div>
-              {#if subredditsRecentEdit }
-              <div class="subreddit-action-icon-container">
-                <div class="subreddit-item-delete action-icon action-item-trash-can"
-                     on:click="{subredditsRecentItemDeleteMessage}"
-                     on:dblclick="{subredditsRecentItemDelete(subredditName)}"
-                     transition:fade>
-                  &#x1f5d1;
-                </div>
-              </div>
-              {/if}
-              <div class="subreddit-item-name-container is-size-5">
-                <div class="has-text-link subreddit-item-name">
-                  <span class="p-2 cursor-url" on:click="{() => subredditPicked(subredditName)}">
-                    /r/{subredditName}/
-                  </span>
-                </div>
-              </div>
-            </div>
-          {/each}
-        {/if}
-
-        <!--div class="subreddit-search">
-          <h4 class="mt-5 is-size-4">Subreddit name:</h4>
-          <input class="mt-4 input" type="search"
-                 bind:value="{subreddit}"
-                 on:keyup="{e => e.key === 'Enter' && submitButtonClicked()}">
-          <button class="mt-5 button is-info is-large is-fullwidth"
-                  bind:this="{submitButton}"
-                  on:click="{submitButtonClicked}">
-            Search
-          </button>
-        </div-->
-
+      <div class="mt-5 is-size-4">
+        Favorites
       </div>
-      <div class="mt-5 has-text-centered">
-        <!--div class="is-size-4">Popular Subreddits</div>
-        <div class="mt-4 is-size-5 has-text-link cursor-url"
-             on:click="{() => subredditPicked('Pine64Official')}">
-          /r/PINE64Official/
-        </div>
-        <div class="is-size-5 has-text-link cursor-url"
-             on:click="{() => subredditPicked('AskReddit')}">
-          /r/AskReddit/
-        </div>
-        <div class="is-size-5 has-text-link cursor-url"
-             on:click="{() => subredditPicked('Android')}">
-          /r/Android/
-        </div-->
-        <div class="is-size-4">Multireddits</div>
+
+      {#if $subredditsFavorite.length }
+        {#each $subredditsFavorite.slice(0, subredditsFavoriteShowCount) as subredditName}
+          <div>
+            {#if subredditsEdit }
+              <div class="subreddit-action-icon-container">
+                <div class="subreddit-item-delete action-icon action-item-trash-can"
+                     on:click="{subredditsItemDeleteMessage}"
+                     on:dblclick="{subredditsItemDelete(subredditName, 'favorite')}"
+                     transition:fade>
+                  &#x1f5d1;
+                </div>
+              </div>
+            {/if}
+            <div class="subreddit-item-name-container is-size-5">
+              <div class="has-text-link subreddit-item-name">
+                <span class="p-2 cursor-url" on:click="{() => subredditPicked(subredditName)}">
+                  /r/{subredditName}/
+                </span>
+              </div>
+            </div>
+          </div>
+        {/each}
+      {:else}
+        <div class="subject-empty-text">none</div>
+      {/if}
+
+      <div class="mt-4 is-size-4">Recently Viewed</div>
+      <!--div><button on:click="{subredditsRecent.reset}">Reset</button></div-->
+      {#if $subredditsRecent.length}
+        {#each $subredditsRecent.slice(0, subredditsFavoriteShowCount) as subredditName}
+          <div>
+            {#if subredditsEdit }
+            <div class="subreddit-action-icon-container">
+              <div class="subreddit-item-delete action-icon action-item-trash-can"
+                   on:click="{subredditsItemDeleteMessage}"
+                   on:dblclick="{subredditsItemDelete(subredditName, 'recent')}"
+                   transition:fade>
+                &#x1f5d1;
+              </div>
+            </div>
+            {/if}
+            <div class="subreddit-item-name-container is-size-5">
+              <div class="has-text-link subreddit-item-name">
+                <span class="p-2 cursor-url" on:click="{() => subredditPicked(subredditName)}">
+                  /r/{subredditName}/
+                </span>
+              </div>
+            </div>
+          </div>
+        {/each}
+      {:else}
+        <div class="subject-empty-text">none</div>
+      {/if}
+
+      <div class="mt-4 is-size-4">
+        Multireddits
+      </div>
+      {#if false}
+      {:else}
+        <div class="subject-empty-text">none</div>
+      {/if}
+
+      <div class="mt-6 mb-0 ml-2 cursor-url subreddits-action-icon-container"
+           on:click="{subredditsEditToggle}">
+        <span class="hover-background-gray" style="font-size: 1.1rem;">
+          Edit
+          <svg class="ml-1 bi bi-pencil action-icon-pencil"
+               xmlns="http://www.w3.org/2000/svg"
+               width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+          </svg>
+        </span>
       </div>
     </div>
   </div>
@@ -190,9 +186,29 @@
   border: 1px solid whitesmoke;
 }
 
+.subreddit-search {
+  display: flex;
+}
+
+::placeholder {
+  color: #444;
+}
+
+.subreddit-search-input {
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.subreddit-search-button-submit {
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
 .action-icon {
   cursor: pointer;
   user-select: none;
+}
+
+.hover-background-gray:hover {
+  background: gray;
 }
 
 .action-icon:hover {
@@ -234,5 +250,10 @@
 .subreddit-item-name {
   height: 2rem;
   margin-left: auto;
+}
+
+.subject-empty-text {
+  font-style: italic;
+  color: #ddd;
 }
 </style>

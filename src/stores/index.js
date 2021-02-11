@@ -69,46 +69,36 @@ function createSubredditsFavorite() {
     subscribe,
     set,
     update,
-    get: () => get(subredditsRecent),
+    get: () => get(subredditsFavorite),
     add: (subredditName) => {
-      // use lowercase values when checking to see if the subreddit is already in the recents list
+      // use lowercase values when checking to see if the subreddit is already in the favorites list
+      let favorites = get(subredditsFavorite);
+      let favoritesLower = favorites.map(x => x.toLowerCase());
       let subredditNameLower = subredditName.toLowerCase();
-      let recents = get(subredditsRecent);
-      let recentsLower = recents.map(x => x.toLowerCase());
-
-      // if lowercase subreddit in recents, remove it temporarily
-      if (recentsLower.find(x => x === subredditNameLower)) { 
-        let index = recents.indexOf(subredditName);
-        recents.splice(index, 1);
+      if (favorites.find(x => x === subredditNameLower)) { 
+        return false;
       }
 
-      // add subredditName to the beginning of the recents list
-      update(arr => [subredditName, ...recents]);
-
-      // TODO: increase this amount
-      // if recents array longer than 3 items, remove the last items
-      let recentsMaxLength = 3;
-      if (get(subredditsRecent).length > recentsMaxLength) {
-        update(arr => arr.slice(0, recentsMaxLength));
-      }
+      // add subredditName to the favorites list
+      update(arr => [...favorites, subredditName]);
 
       // update localStorage
-      localStorage.setItem('subredditsRecent', JSON.stringify(get(subredditsRecent)));
+      localStorage.setItem('subredditsFavorite', JSON.stringify(get(subredditsFavorite)));
     },
     remove: (subredditName) => {
-      let recents = get(subredditsRecent);
-      let index = recents.indexOf(subredditName);
+      let favorites = get(subredditsFavorite);
+      let index = favorites.indexOf(subredditName);
       if (index !== -1) {
         update(arr => {
-          recents.splice(index, 1);
-          return recents;
+          favorites.splice(index, 1);
+          return favorites;
         })
-        localStorage.setItem('subredditsRecent', JSON.stringify(recents));
+        localStorage.setItem('subredditsFavorite', JSON.stringify(favorites));
       }
     },
     reset: () => {
       set([]);
-      localStorage.removeItem('subredditsRecent');
+      localStorage.removeItem('subredditsFavorite');
     }
   }
 }
