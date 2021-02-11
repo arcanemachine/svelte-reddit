@@ -5,7 +5,8 @@ $link: #cc44cc;
 @import "../node_modules/bulma/bulma.sass";
 
 a {
-  border-bottom: 3px double;
+  // border-bottom: 3px double;
+  text-decoration: underline;
 }
 
 html {

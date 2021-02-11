@@ -6,7 +6,7 @@
         class:is-dark="{$darkModeActive}">
   <div class="has-text-centered">
     <div>
-      <a href="https://github.com/arcanemachine/svelte-reddit/">
+      <a class="github-link" href="https://github.com/arcanemachine/svelte-reddit/">
         <svg xmlns="http://www.w3.org/2000/svg"
              width="50" height="50">
           <path fill-rule="evenodd"
@@ -24,6 +24,10 @@
 </footer>
 
 <style>
+a.github-link {
+  border-bottom: none;
+}
+
 .footer-container {
   background: #ddd;
   width: 100%;

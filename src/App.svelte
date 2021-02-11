@@ -34,23 +34,32 @@
       }
     }
     initializeStore();
-    subredditPick(undefined, 'all');
+    currentContent = 'post';
+    // subredditPick(undefined, currentSubreddit);
   })
-
 
   // data
   let title = 'Reddit μReader';
   let isLoading = false;
   let settingsShow = false;
-  let subredditPickerShow = true;
+  let subredditPickerShow = false;
   let subredditSearchShow = false;
 
-  let subredditContent = {};
-  let postContent = {};
+  let previousSubreddits = [];
+  let currentSubreddit = 'all';
+  let subredditContent = mockedSubredditData;
+  let postContent = mockedPostData;
   let postAuthor = '';
-  let currentContent = 'subreddit';
+  let currentContent = undefined;
 
-  const titleClicked = () => {currentContentIs('subreddit')}
+  const titleClicked = (event) => {
+    if (previousSubreddits.length) {
+      let previousSubreddit = previousSubreddits.splice(previousSubreddits.length - 1, 1);
+      postPick(undefined, previousSubreddit);
+    } else {
+      currentContentIs('subreddit');
+    }
+  }
   const currentContentIs = (x) => {
     window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
     isLoading = true;
@@ -99,6 +108,10 @@
     if (event && Object.keys(event).length) {
       subreddit = event.detail.subreddit;
     }
+    if (currentContent === 'subreddit' && subreddit.toLowerCase() === currentSubreddit.toLowerCase()) {
+      currentContentIs('subreddit');
+      return false;
+    }
     try {
       isLoading = true;
       await fetch(`https://i.reddit.com/r/${subreddit}/${sort}.json`)
@@ -106,10 +119,10 @@
       .then(data => {
         subredditContent = data; // assign response json to subredditContent
         subredditSearchClose(); // close the search modal
-        // let subredditName = subredditContent.data.children[0].data.subreddit;
-        let subredditName = subreddit;
-        title = `/r/${subredditName}/`; // set the title
-        subredditsRecent.add(subredditName); // add the subreddit to recents
+        previousSubreddits.push(currentSubreddit);
+        currentSubreddit = subreddit;
+        title = `/r/${currentSubreddit}/`; // set the title
+        subredditsRecent.add(currentSubreddit); // add the subreddit to recents
         window.scrollTo({top: 0, left: 0, behavior: 'smooth'}); // scroll to top
         currentContent = 'subreddit'; // update content view type
         isLoading = false; // disable the loading screen
@@ -132,7 +145,7 @@
       .then(data => {
         postContent = data;
         postAuthor = post.data.author;
-        title = `/r/${post.data.subreddit}/`;
+        // title = `/r/${post.data.subreddit}/`;
         window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
         currentContent = 'post';
         isLoading = false;
@@ -226,7 +239,9 @@
                        on:post-pick="{postPick}"
                        on:subreddit-pick="{subredditPick}"/>
     {:else if currentContent === 'post'}
-      <PostDetail postContent="{postContent}" postAuthor="{postAuthor}"/>
+      <PostDetail postContent="{postContent}"
+                  postAuthor="{postAuthor}"
+                  on:subreddit-pick="{subredditPick}"/>
     {/if}
   </main>
   <AppFooter/>

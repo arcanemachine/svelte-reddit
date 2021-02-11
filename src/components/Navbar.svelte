@@ -52,12 +52,11 @@
      transition:fade>
   <div class="navbar-brand">
     <div class="ml-2 p-2 navbar-item brand-text has-text-weight-bold">
-      <span on:click="{titleClicked}"
-            alt="{title}">
+      <span on:click="{titleClicked}" alt="{title}">
         {#if currentContent === 'post'}
-        <span class="navbar-title">&larr; &nbsp;&nbsp;</span>
-        {/if }
-        <span class="navbar-title">{title}</span>
+          <span class="mr-1 navbar-title" title="hello!">&larr;</span>
+        {/if}
+      <span class="navbar-title">{title}</span>
       </span>
       <span class="ml-2 navbar-title" on:click="{darkModeToggle}"><!-- ({$darkModeActive ? 'Dark' : 'Light'}) --></span>
     </div>

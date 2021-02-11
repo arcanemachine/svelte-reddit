@@ -16,25 +16,28 @@ function createSubredditsRecent() {
     subscribe,
     set,
     update,
+    get: (subredditName) => get(subredditsRecent),
     add: (subredditName) => {
       // use lowercase values when checking to see if the subreddit is already in the recents list
       let subredditNameLower = subredditName.toLowerCase();
       let recents = get(subredditsRecent);
       let recentsLower = recents.map(x => x.toLowerCase());
 
-      // if lowercase subreddit in recents, pop it
+      // if lowercase subreddit in recents, remove it temporarily
       if (recentsLower.find(x => x === subredditNameLower)) { 
-        recents.pop(recentsLower.indexOf(subredditNameLower));
+        let index = recents.indexOf(subredditName);
+        recents.splice(index, 1);
       }
 
       // add subredditName to the beginning of the recents list
       update(arr => [subredditName, ...recents]);
 
       // TODO: increase this amount
-      // if recents array longer than 3 items, pop the last item
-      if (get(subredditsRecent).length > 3) {
-        update(arr => arr.slice(-3));
+      // if recents array longer than 5 items, pop the last item
+      if (get(subredditsRecent).length > 5) {
+        update(arr => arr.slice(-5));
       }
+
 
       // update localStorage
       localStorage.setItem('subredditsRecent', JSON.stringify(get(subredditsRecent)));

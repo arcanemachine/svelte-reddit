@@ -42,9 +42,15 @@
                  class:is-dark="{$darkModeActive}">
               {postContent[0].data.children[0].data.title}
             </div>
-            <div class="mt-0 mb-2 ml-5 is-italic post-author"
-                 class:is-dark="{$darkModeActive}">
-              - /u/{postAuthor}/
+            <div class="post-header-bottom-container">
+              <div class="mt-0 p-2 ml-5 is-italic post-author"
+                   class:is-dark="{$darkModeActive}">
+                - /u/{postAuthor}/
+              </div>
+              <div class="mr-5 p-2 is-italic has-text-decoration-underline cursor-url post-header-subreddit"
+                   on:click="{dispatch('subreddit-pick', {subreddit: postContent[0].data.children[0].data.subreddit})}">
+                /r/{postContent[0].data.children[0].data.subreddit}/
+              </div>
             </div>
           </div>
           <div class="card-content"
@@ -57,7 +63,7 @@
     </div>
   </div>
   {#each postContent[1].data.children as post, index}
-    <PostItem post="{post}" index="{index}"/>
+    <PostItem post="{post}"/>
   {/each}
 </div>
 
@@ -80,5 +86,10 @@
 
 .post-header {
   flex-direction: column;
+}
+
+.post-header-bottom-container {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

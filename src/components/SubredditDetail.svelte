@@ -69,7 +69,7 @@
                 <div class="mx-1 post-description">
                   {@html htmlUnescape(post.data.selftext_html)}
                 </div>
-              <div class="mt-3 mb-1 post-body-bottom-container">
+              <div class="mt-3 post-body-bottom-container">
                 <div class="p-2 post-link-comments"
                      on:click="{postCommentsClicked(post)}">
                   {post.data.num_comments} comments
