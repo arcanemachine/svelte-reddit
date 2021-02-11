@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { darkModeActive, fontSize, subredditsRecent } from './stores/';
+  import { darkModeActive, fontSize, subredditCurrent, subredditsPrevious, subredditsRecent } from './stores/';
   import { mockedSubredditData } from './mockedSubredditData.js';
   import { mockedPostData } from './mockedPostData2.js';
 
@@ -33,31 +33,24 @@
       }
     }
     initializeStore();
-    currentContent = 'post';
-    // subredditPick(undefined, currentSubreddit);
+    subredditPick(undefined, $subredditCurrent);
   })
 
   // data
   let title = 'Reddit μReader';
   let isLoading = false;
   let settingsShow = false;
-  let subredditPickerShow = true;
+  let subredditPickerShow = false;
 
-  let previousSubreddits = [];
-  let currentSubreddit = 'all';
-  let subredditContent = mockedSubredditData;
+  let subredditContent = {};
   let postContent = mockedPostData;
   let postAuthor = '';
   let currentContent = undefined;
 
   const titleClicked = (event) => {
-    if (previousSubreddits.length) {
-      debugger;
-      let previousSubreddit = previousSubreddits.splice(previousSubreddits.length - 1, 1);
-      if (previousSubreddit !== currentSubreddit) {
-        titleClicked(event);
-      }
-      subredditPick(undefined, previousSubreddit);
+    if (currentContent === 'subreddit' && $subredditsPrevious.length) {
+      let subredditPrevious = $subredditsPrevious.slice(-1)[0];
+      subredditPick(undefined, subredditPrevious);
     } else {
       currentContentIs('subreddit');
     }
@@ -97,13 +90,16 @@
 
   // SubredditDetail
   const subredditPick = async (event, subreddit=undefined, sort='hot') => {
+    // if called via dispatch, pass the dispatched event's subreddit name to the 'subreddit' variable
     if (event && Object.keys(event).length) {
       subreddit = event.detail.subreddit;
     }
-    if (currentContent === 'subreddit' && subreddit.toLowerCase() === currentSubreddit.toLowerCase()) {
+    // if the user is attempting to navigate to the current page, just do a quick loading animation
+    if (currentContent === 'subreddit' && subreddit.toLowerCase() === $subredditCurrent.toLowerCase()) {
       currentContentIs('subreddit');
       return false;
     }
+    // if the subreddit is the last-visited one, then remove it from the end of the subredditsPrevious array
     try {
       isLoading = true;
       await fetch(`https://i.reddit.com/r/${subreddit}/${sort}.json`)
@@ -111,10 +107,14 @@
       .then(data => {
         subredditContent = data; // assign response json to subredditContent
         subredditPickerClose(); // close the picker modal
-        previousSubreddits.push(currentSubreddit);
-        currentSubreddit = subreddit;
-        title = `/r/${currentSubreddit}/`; // set the title
-        subredditsRecent.add(currentSubreddit); // add the subreddit to recents
+        if ($subredditsPrevious.length && subreddit.toLowerCase() === $subredditsPrevious.slice(-1)[0].toLowerCase()) {
+          subredditsPrevious.pop();
+        } else {
+          subredditsPrevious.push($subredditCurrent);
+        }
+        subredditCurrent.set(subreddit);
+        title = `/r/${$subredditCurrent}/`; // set the title
+        subredditsRecent.add($subredditCurrent); // add the subreddit to recents
         window.scrollTo({top: 0, left: 0, behavior: 'smooth'}); // scroll to top
         currentContent = 'subreddit'; // update content view type
         isLoading = false; // disable the loading screen
@@ -202,7 +202,6 @@
      class:is-dark="{$darkModeActive}">
   <Navbar title="{title}"
           currentContent="{currentContent}"
-          previousSubreddit="{previousSubreddits.length ? previousSubreddits.last : undefined}"
           on:subreddit-picker-toggle="{subredditPickerToggle}"
           on:settings-toggle="{settingsToggle}"
           on:title-clicked="{titleClicked}"/>
