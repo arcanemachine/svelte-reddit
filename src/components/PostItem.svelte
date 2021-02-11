@@ -56,7 +56,7 @@
 <div>
   <div class="card post-item-card"
        class:is-dark="{$darkModeActive}"
-       style="margin-left: {depth / 5}rem; background: {getBackgroundColor()};">
+       style="margin-left: {depth === 0 ? '0' : '0.5rem'}; background: {getBackgroundColor()};">
     <div class="post-child-author">
       <!-- span class="cursor-url">[-]</span -->
       <span class="has-text-weight-bold is-italic" class:is-dark="{$darkModeActive}">/u/{post.data.author}/</span>

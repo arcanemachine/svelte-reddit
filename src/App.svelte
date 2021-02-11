@@ -34,6 +34,7 @@
       }
     }
     initializeStore();
+    subredditPick(undefined, 'all');
   })
 
 
@@ -44,8 +45,8 @@
   let subredditPickerShow = true;
   let subredditSearchShow = false;
 
-  let subredditContent = mockedSubredditData;
-  let postContent = mockedPostData;
+  let subredditContent = {};
+  let postContent = {};
   let postAuthor = '';
   let currentContent = 'subreddit';
 
@@ -105,7 +106,8 @@
       .then(data => {
         subredditContent = data; // assign response json to subredditContent
         subredditSearchClose(); // close the search modal
-        let subredditName = subredditContent.data.children[0].data.subreddit;
+        // let subredditName = subredditContent.data.children[0].data.subreddit;
+        let subredditName = subreddit;
         title = `/r/${subredditName}/`; // set the title
         subredditsRecent.add(subredditName); // add the subreddit to recents
         window.scrollTo({top: 0, left: 0, behavior: 'smooth'}); // scroll to top
@@ -143,7 +145,7 @@
       isLoading = false;
     }
   }
-  // this is a hack to refresh PostDetail comments if dark mode is turned off while in the PostDetail view
+  // this is a hack to refresh PostDetail comments if dark mode is toggled while in the PostDetail view
   const darkModeToggled = () => {
     if (currentContent === 'post') {
       currentContent = undefined;
@@ -155,7 +157,6 @@
   let statusMessage = '';
   let statusMessageTimeout;
   const statusMessageDisplay = (message, timeout=undefined) => {
-
     // if a status message is already present, clear it
     if (statusMessage) {
       statusMessage = '';
@@ -210,10 +211,12 @@
   {:else if subredditPickerShow}
     <SubredditPicker on:subreddit-picker-close="{subredditPickerClose}"
                      on:subreddit-picker-toggle="{subredditPickerToggle}"
+                     on:status-message-display="{receiveStatusMessageDisplay}"
                      on:subreddit-pick="{subredditPick}"/>
   {:else if subredditSearchShow}
     <SubredditSearch on:subreddit-search-close="{subredditSearchClose}"
                      on:subreddit-search-toggle="{subredditSearchToggle}"
+                     on:status-message-display="{receiveStatusMessageDisplay}"
                      on:subreddit-pick="{subredditPick}"/>
   {/if}
 
