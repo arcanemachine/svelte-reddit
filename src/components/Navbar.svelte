@@ -6,6 +6,7 @@
   // data
   export let title = 'reddit';
   export let currentContent;
+  export let previousSubreddit;
   let navbarIsActive = false;
 
   // methods
@@ -53,10 +54,10 @@
   <div class="navbar-brand">
     <div class="ml-2 p-2 navbar-item brand-text has-text-weight-bold">
       <span on:click="{titleClicked}" alt="{title}">
-        {#if currentContent === 'post'}
+        {#if currentContent === 'post' || previousSubreddit}
           <span class="mr-1 navbar-title" title="hello!">&larr;</span>
         {/if}
-      <span class="navbar-title">{title}</span>
+        <span class="navbar-title">{title}</span>
       </span>
       <span class="ml-2 navbar-title" on:click="{darkModeToggle}"><!-- ({$darkModeActive ? 'Dark' : 'Light'}) --></span>
     </div>

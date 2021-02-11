@@ -33,11 +33,11 @@ function createSubredditsRecent() {
       update(arr => [subredditName, ...recents]);
 
       // TODO: increase this amount
-      // if recents array longer than 5 items, pop the last item
-      if (get(subredditsRecent).length > 5) {
-        update(arr => arr.slice(-5));
+      // if recents array longer than 3 items, remove the last items
+      let recentsMaxLength = 3;
+      if (get(subredditsRecent).length > recentsMaxLength) {
+        update(arr => arr.slice(0, recentsMaxLength));
       }
-
 
       // update localStorage
       localStorage.setItem('subredditsRecent', JSON.stringify(get(subredditsRecent)));

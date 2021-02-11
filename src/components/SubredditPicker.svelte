@@ -43,6 +43,16 @@
   function emitSubredditPickerClose(event) {dispatch('subreddit-picker-close')}
   function emitSubredditPickerToggle(event) {dispatch('subreddit-picker-toggle')}
 
+
+  // methods
+  const submitButtonClicked = async () => {
+    submitButton.classList.add('is-loading');
+    setTimeout(() => {
+      dispatch('subreddit-picker-close');
+      dispatch('subreddit-pick', {subreddit});
+    }, 200)
+  }
+
 </script>
 
 <div class="modal is-active" transition:fade>
@@ -56,7 +66,20 @@
     </button>
     <div class="card-content">
       <div class="has-text-centered">
-        <div class="mb-5 is-size-3">Your Subreddits</div>
+        <h4 class="is-size-4">Go to Subreddit:</h4>
+        <!-- svelte-ignore a11y-autofocus -->
+        <input class="mt-4 input" type="search"
+               bind:value="{subreddit}"
+               on:keyup="{e => e.key === 'Enter' && submitButtonClicked()}"
+               autofocus>
+        <button class="mt-5 button is-info is-large is-fullwidth"
+                bind:this="{submitButton}"
+                on:click="{submitButtonClicked}">
+          Search
+        </button>
+      </div>
+      <div class="has-text-centered">
+        <div class="mt-3 mb-5 is-size-3">Your Subreddits</div>
         <!--{#if subredditsRecentEdit}
           <div class="subreddits-action-icon-container">
             <svg class="ml-3 bi bi-pencil action-icon action-icon-pencil"

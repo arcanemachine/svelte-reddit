@@ -42,7 +42,7 @@
   let title = 'Reddit μReader';
   let isLoading = false;
   let settingsShow = false;
-  let subredditPickerShow = false;
+  let subredditPickerShow = true;
   let subredditSearchShow = false;
 
   let previousSubreddits = [];
@@ -54,8 +54,12 @@
 
   const titleClicked = (event) => {
     if (previousSubreddits.length) {
+      debugger;
       let previousSubreddit = previousSubreddits.splice(previousSubreddits.length - 1, 1);
-      postPick(undefined, previousSubreddit);
+      if (previousSubreddit !== currentSubreddit) {
+        titleClicked(event);
+      }
+      subredditPick(undefined, previousSubreddit);
     } else {
       currentContentIs('subreddit');
     }
@@ -210,6 +214,7 @@
      class:is-dark="{$darkModeActive}">
   <Navbar title="{title}"
           currentContent="{currentContent}"
+          previousSubreddit="{previousSubreddits.length ? previousSubreddits.last : undefined}"
           on:subreddit-picker-toggle="{subredditPickerToggle}"
           on:subreddit-search-toggle="{subredditSearchToggle}"
           on:settings-toggle="{settingsToggle}"
@@ -224,11 +229,6 @@
   {:else if subredditPickerShow}
     <SubredditPicker on:subreddit-picker-close="{subredditPickerClose}"
                      on:subreddit-picker-toggle="{subredditPickerToggle}"
-                     on:status-message-display="{receiveStatusMessageDisplay}"
-                     on:subreddit-pick="{subredditPick}"/>
-  {:else if subredditSearchShow}
-    <SubredditSearch on:subreddit-search-close="{subredditSearchClose}"
-                     on:subreddit-search-toggle="{subredditSearchToggle}"
                      on:status-message-display="{receiveStatusMessageDisplay}"
                      on:subreddit-pick="{subredditPick}"/>
   {/if}
