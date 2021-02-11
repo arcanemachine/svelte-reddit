@@ -39,14 +39,14 @@
       }
     }
     initializeStore();
-    // subredditPick(undefined, $subredditCurrent);
+    subredditPick(undefined, $subredditCurrent);
   })
 
   // data
   let title = 'Reddit μReader';
   let isLoading = false;
   let settingsShow = false;
-  let subredditPickerShow = true;
+  let subredditPickerShow = false;
 
   let subredditContent = {};
   let postContent = mockedPostData;
@@ -115,7 +115,7 @@
         subredditPickerClose(); // close the picker modal
         if ($subredditsPrevious.length && subreddit.toLowerCase() === $subredditsPrevious.slice(-1)[0].toLowerCase()) {
           subredditsPrevious.pop();
-        } else {
+        } else if (currentContent !== undefined) {
           subredditsPrevious.push($subredditCurrent);
         }
         subredditCurrent.set(subreddit);

@@ -62,7 +62,7 @@
     <div class="ml-2 p-2 navbar-item brand-text has-text-weight-bold">
       <span on:click="{titleClicked}" alt="{title}">
         {#if currentContent === 'post' || $subredditsPrevious.length}
-          <span class="mr-1 navbar-title" title="hello!">&larr;</span>
+        <span class="mr-1 navbar-title" title="hello!">&larr;</span>
         {/if}
         <span class="navbar-title">{title}</span>
       </span>
@@ -156,11 +156,11 @@
 }
 
 .navbar:not(.is-active) {
-  /* border-bottom: 2px solid black; */
+  border-bottom: 2px solid black;
 }
 
 .navbar.is-dark:not(.is-active) {
-  /* border-bottom: 2px solid white; */
+  border-bottom: 2px solid white;
 }
 
 .is-dark {

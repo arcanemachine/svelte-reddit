@@ -7,7 +7,7 @@
 
   // data
   let subreddit = '';
-  let subredditsEdit = false;
+  let subredditsEdit = true;
   let subredditsFavoriteShowCount = 1;
   let subredditsRecentShowCount = 1;
   let subredditsItemDeleteTimeout = undefined
@@ -130,7 +130,7 @@
           </div>
         {/each}
       {:else}
-        <div class="subject-empty-text">none</div>
+        <div class="subject-empty-text" transition:fade>none</div>
       {/if}
 
       <div class="mt-4 is-size-4">Recently Viewed</div>
@@ -158,7 +158,7 @@
           </div>
         {/each}
       {:else}
-        <div class="subject-empty-text">none</div>
+        <div class="subject-empty-text" transition:fade>none</div>
       {/if}
 
       <div class="mt-4 is-size-4">
@@ -166,7 +166,7 @@
       </div>
       {#if false}
       {:else}
-        <div class="subject-empty-text">none</div>
+        <div class="subject-empty-text" transition:fade="{{delay: 500}}">none</div>
       {/if}
 
     </div>
@@ -257,5 +257,6 @@
 .subject-empty-text {
   font-style: italic;
   color: #aaa;
+  transition-delay: 0.5s;
 }
 </style>
