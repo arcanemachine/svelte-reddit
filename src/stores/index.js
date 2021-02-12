@@ -5,7 +5,8 @@ export const darkModeActive = writable(false);
 export const fontSize = writable(16);
 export const thumbnailsDisabled = writable(false);
 export const voteCountDisabled = writable(false);
-export const subredditCurrent = writable('all');
+export const subredditCurrent = writable(undefined);
+export const subredditDefault = writable(undefined);
 export const subredditsPrevious = createSubredditsPrevious();
 export const subredditsRecent = createSubredditsRecent();
 export const subredditsFavorite = createSubredditsFavorite();
@@ -36,7 +37,7 @@ function createSubredditsRecent() {
 
       // TODO: increase this amount
       // if recents array longer than 3 items, remove the last items
-      let recentsMaxLength = 3;
+      let recentsMaxLength = 50;
       if (get(subredditsRecent).length > recentsMaxLength) {
         update(arr => arr.slice(0, recentsMaxLength));
       }
@@ -80,7 +81,7 @@ function createSubredditsFavorite() {
       }
 
       // add subredditName to the favorites list
-      update(arr => [...favorites, subredditName]);
+      update(arr => [subredditName, ...favorites]);
 
       // update localStorage
       localStorage.setItem('subredditsFavorite', JSON.stringify(get(subredditsFavorite)));

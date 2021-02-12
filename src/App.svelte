@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { darkModeActive, fontSize, subredditCurrent, subredditsFavorite,
+  import { darkModeActive, fontSize, subredditCurrent, subredditDefault, subredditsFavorite,
            subredditsPrevious, subredditsRecent } from './stores/';
   import { mockedSubredditData } from './mockedSubredditData.js';
   import { mockedPostData } from './mockedPostData2.js';
@@ -18,20 +18,24 @@
   // onMount
   onMount(() => {
     function initializeStore() {
+
       // if font size saved in localStorage, set the page font size to match it
       if (localStorage.getItem('fontSize')) {
         fontSize.set(Number(localStorage.getItem('fontSize')));
         document.querySelector('html').style.fontSize = `${get(fontSize)}px`;
       }
+
       // set dark mode
       if (localStorage.getItem('darkModeActive')) {
         darkModeActive.set(true);
       }
+
       // get recent subreddits
       let localSubredditsRecent = localStorage.getItem('subredditsRecent');
       if (localSubredditsRecent && JSON.parse(localSubredditsRecent).length) {
         subredditsRecent.set(JSON.parse(localStorage.getItem('subredditsRecent')))
       }
+
       // get favorite subreddits
       let localSubredditsFavorite = localStorage.getItem('subredditsFavorite');
       if (localSubredditsFavorite && JSON.parse(localSubredditsFavorite).length) {
@@ -39,19 +43,27 @@
       }
     }
     initializeStore();
-    subredditPick(undefined, $subredditCurrent);
+    if (!$subredditDefault) {
+      subredditPickerShow = true;
+    };
+    // subredditPick(undefined, $subredditDefault);
   })
 
   // data
   let title = 'Reddit μReader';
   let isLoading = false;
   let settingsShow = false;
-  let subredditPickerShow = false;
+  let subredditPickerShow = true;
 
   let subredditContent = {};
   let postContent = mockedPostData;
   let postAuthor = '';
   let currentContent = undefined;
+
+  const modalsHideAll = () => {
+    settingsShow = false;
+    subredditPickerShow = false;
+  }
 
   const titleClicked = (event) => {
     if (currentContent === 'subreddit' && $subredditsPrevious.length) {
@@ -105,15 +117,16 @@
       currentContentIs('subreddit');
       return false;
     }
-    // if the subreddit is the last-visited one, then remove it from the end of the subredditsPrevious array
     try {
       isLoading = true;
       await fetch(`https://i.reddit.com/r/${subreddit}/${sort}.json`)
       .then(res => res.json())
       .then(data => {
+        modalsHideAll();
         subredditContent = data; // assign response json to subredditContent
         subredditPickerClose(); // close the picker modal
         if ($subredditsPrevious.length && subreddit.toLowerCase() === $subredditsPrevious.slice(-1)[0].toLowerCase()) {
+          // if the subreddit is the last-visited one, then remove it from the end of the subredditsPrevious array
           subredditsPrevious.pop();
         } else if (currentContent !== undefined) {
           subredditsPrevious.push($subredditCurrent);
@@ -141,9 +154,9 @@
       await fetch(`https://i.reddit.com${url}.json`)
       .then(res => res.json())
       .then(data => {
+        modalsHideAll();
         postContent = data;
         postAuthor = post.data.author;
-        // title = `/r/${post.data.subreddit}/`;
         window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
         currentContent = 'post';
         isLoading = false;
