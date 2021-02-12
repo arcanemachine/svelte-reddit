@@ -46,7 +46,9 @@
     if (!$subredditDefault) {
       subredditPickerShow = true;
     };
+
     // subredditPick(undefined, $subredditDefault);
+
   })
 
   // data
@@ -67,8 +69,8 @@
 
   const titleClicked = (event) => {
     if (currentContent === 'subreddit' && $subredditsPrevious.length) {
-      let subredditPrevious = $subredditsPrevious.slice(-1)[0];
-      subredditPick(undefined, subredditPrevious);
+      modalsHideAll();
+      subredditPick(undefined, $subredditsPrevious.slice(-1)[0]);
     } else {
       currentContentIs('subreddit');
     }

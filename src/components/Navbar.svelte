@@ -27,7 +27,14 @@
     }
   }
   const subredditsFavoriteAdd = (subredditName) => {
-    subredditsFavorite.add($subredditCurrent);
+    try {
+      if (subredditName === undefined) {
+        return false;
+      }
+      subredditsFavorite.add($subredditCurrent);
+    } catch (err) {
+      console.log('Error: subredditsFavoriteAdd() - ' + err.message);
+    }
     dispatch('status-message-display', `/r/${$subredditCurrent}/ has been added to your favorites`);
   }
   const subredditsFavoriteRemoveMessage = () => {
