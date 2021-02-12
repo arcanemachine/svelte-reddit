@@ -47,7 +47,7 @@ function createSubredditsRecent() {
     },
     remove: (subredditName) => {
       let recents = get(subredditsRecent);
-      let index = recents.indexOf(subredditName);
+      let index = recents.indexOf(OsubredditName);
       if (index !== -1) {
         update(arr => {
           recents.splice(index, 1);
@@ -71,7 +71,7 @@ function createSubredditsFavorite() {
     set,
     update,
     get: () => get(subredditsFavorite),
-    add: (subredditName) => {
+    add: (subredditName, label=undefined) => {
       // use lowercase values when checking to see if the subreddit is already in the favorites list
       let favorites = get(subredditsFavorite);
       let favoritesLower = favorites.map(x => x.toLowerCase());
@@ -80,15 +80,19 @@ function createSubredditsFavorite() {
         return false;
       }
 
+      if (label === undefined) {
+        label = subredditName;
+      }
+
       // add subredditName to the favorites list
-      update(arr => [subredditName, ...favorites]);
+      update(arr => [{[subredditName]: label}, ...favorites]);
 
       // update localStorage
       localStorage.setItem('subredditsFavorite', JSON.stringify(get(subredditsFavorite)));
     },
     remove: (subredditName) => {
       let favorites = get(subredditsFavorite);
-      let index = favorites.indexOf(subredditName);
+      let index = Object.values(favorites).indexOf(subredditName);
       if (index !== -1) {
         update(arr => {
           favorites.splice(index, 1);
