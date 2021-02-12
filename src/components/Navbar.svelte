@@ -68,20 +68,6 @@
     }
   }
 
-  const currentSubredditInFavorites = () => {
-    let result = [];
-    for (let i = 0; i < $subredditsFavorite.length; i++) {
-      if (Object.values($subredditsFavorite[i])[0] === $subredditCurrent) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  const deleteme = () => {
-    debugger;
-  }
-
 </script>
 
 
@@ -90,7 +76,6 @@
      transition:fade>
   <div class="navbar-brand">
     <div class="ml-2 p-2 navbar-item brand-text has-text-weight-bold">
-      <span on:click="{deleteme}" alt="{title}">DEBUG </span>
       <span on:click="{titleClicked}" alt="{title}">
         {#if currentContent === 'post' || $subredditsPrevious.length}
         <span class="mr-1 navbar-title">&larr;</span>
@@ -102,7 +87,7 @@
     <!-- navbar icons, touch-size viewports only -->
     <div class="navbar-end-touch-icon-container is-hidden-desktop">
       <!-- heart icon -->
-      {#if currentSubredditInFavorites}
+      {#if !$subredditsFavorite.map((z, i) => Object.values($subredditsFavorite[i]).includes($subredditCurrent))[0]}
       <svg class="bi bi-heart navbar-end-touch-icon navbar-end-touch-icon-heart"
            on:click="{subredditsFavoriteAdd($subredditCurrent)}"
            xmlns="http://www.w3.org/2000/svg"
