@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import { darkModeActive, fontSize, subredditCurrent, subredditDefault, subredditsFavorite,
-           subredditsPrevious, subredditsRecent } from './stores/';
+           subredditsMultiLabels, subredditsPrevious, subredditsRecent } from './stores/';
   import { mockedSubredditData } from './mockedSubredditData.js';
   import { mockedPostData } from './mockedPostData2.js';
 
@@ -16,7 +16,7 @@
 
 
   // onMount
-  onMount(() => {
+  onMount(async() => {
     function initializeStore() {
 
       // if font size saved in localStorage, set the page font size to match it
@@ -41,13 +41,17 @@
       if (localSubredditsFavorite && JSON.parse(localSubredditsFavorite).length) {
         subredditsFavorite.set(JSON.parse(localStorage.getItem('subredditsFavorite')))
       }
+
+      // get multireddit labels
+      let localSubredditsMultiLabels = localStorage.getItem('subredditsMultiLabels');
+      if (localSubredditsMultiLabels && JSON.parse(localSubredditsMultiLabels).length) {
+        subredditsMultiLabels.set(JSON.parse(localStorage.getItem('subredditsMultiLabels')))
+      }
     }
     initializeStore();
     if (!$subredditDefault) {
       subredditPickerShow = true;
     };
-
-    // subredditPick(undefined, $subredditDefault);
 
   })
 

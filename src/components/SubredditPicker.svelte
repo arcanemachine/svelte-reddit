@@ -1,16 +1,16 @@
 <script>
   import { createEventDispatcher, onMount, tick } from 'svelte';
   import { fade, scale } from 'svelte/transition';
-  import { darkModeActive, subredditsFavorite, subredditsRecent } from '../stores/';
+  import { darkModeActive, subredditsFavorite, subredditsMultiLabels, subredditsRecent } from '../stores/';
 
   const dispatch = createEventDispatcher();
 
   // data
   let subreddit = '';
-  let subredditsEdit = false;
+  let subredditsEdit = true;
   let subredditsItemDeleteTimeout = undefined;
 
-  let subredditsShowCountDefault = 3;
+  let subredditsShowCountDefault = 1;
   let subredditsFavoriteShowCount = subredditsShowCountDefault;
   let subredditsRecentShowCount = subredditsShowCountDefault;
   let subredditsMultiShowCount = subredditsShowCountDefault;
@@ -24,6 +24,7 @@
   // refs
   let submitButton;
 
+  // methods
   const getSubredditsFavorite = () => {
     let result = [];
     let subredditsFavoriteAll = $subredditsFavorite;
@@ -35,11 +36,6 @@
     }
     return result;
   }
-
-  const getSubredditsRecent = () => {
-    return $subredditsRecent;
-  }
-
   const getSubredditsMulti = () => {
     let result = [];
     let subredditsFavoriteAll = $subredditsFavorite;
@@ -51,11 +47,22 @@
     }
     return result;
   }
+  const getSubredditsRecent = () => $subredditsRecent;
+ 
+  const subredditsFavoriteShowMore = () => subredditsFavoriteShowCount += subredditsShowCountDefault;
+  const subredditsFavoriteShowLess = () => subredditsFavoriteShowCount -= subredditsShowCountDefault;
+  const subredditsMultiShowMore = () => subredditsMultiShowCount += subredditsShowCountDefault;
+  const subredditsMultiShowLess = () => subredditsMultiShowCount -= subredditsShowCountDefault;
+  const subredditsRecentShowMore = () => subredditsRecentShowCount += subredditsShowCountDefault;
+  const subredditsRecentShowLess = () => subredditsRecentShowCount -= subredditsShowCountDefault;
 
-  // methods
-  const subredditPickerToggle = () => emitSubredditPickerToggle();
-  const subredditPickerClose = () => emitSubredditPickerClose();
-  
+  const subredditsMultiLabelUpdate = (multiredditName) => {
+    let label = prompt('Enter a label for this multireddit', $subredditsMultiLabels[$subredditsMultiLabels.indexOf(multiredditName)] ? $subredditsMultiLabels.indexOf(multiredditName) : '');
+    if (label) {
+      subredditsMultiLabels.add(multiredditName, label);
+    }
+  }
+
   const subredditsEditToggle = () => subredditsEdit = !subredditsEdit;
   const subredditsItemDeleteMessage = () => {
     clearTimeout(subredditsItemDeleteTimeout);
@@ -80,27 +87,20 @@
     dispatch('status-message-display', `'/r/${subredditName}' has been removed from your ${categoryName} subreddits.`)
   }
 
-  const subredditsFavoriteShowMore = () => {
-    subredditsFavoriteShowCount += subredditsShowCountDefault;
-  }
-  const subredditsFavoriteShowLess = () => {
-    subredditsFavoriteShowCount -= subredditsShowCountDefault;
-  }
-  const subredditsRecentShowMore = () => {
-    subredditsRecentShowCount += subredditsShowCountDefault;
-  }
-  const subredditsRecentShowLess = () => {
-    subredditsRecentShowCount -= subredditsShowCountDefault;
-  }
-  const subredditsMultiShowMore = () => {
-    subredditsMultiShowCount += subredditsShowCountDefault;
-  }
-  const subredditsMultiShowLess = () => {
-    subredditsMultiShowCount -= subredditsShowCountDefault;
-  }
+
+  const subredditPickerToggle = () => emitSubredditPickerToggle();
+  const subredditPickerClose = () => emitSubredditPickerClose();
 
   const subredditPicked = (subredditName) => {
     subreddit = subredditName;
+    setTimeout(() => {
+      dispatch('subreddit-picker-close');
+      dispatch('subreddit-pick', {subreddit});
+    }, 200)
+  }
+
+  const submitButtonClicked = async () => {
+    submitButton.classList.add('is-loading');
     setTimeout(() => {
       dispatch('subreddit-picker-close');
       dispatch('subreddit-pick', {subreddit});
@@ -111,16 +111,6 @@
   function emitSubredditPick(event) {dispatch('subreddit-pick', event)}
   function emitSubredditPickerClose(event) {dispatch('subreddit-picker-close')}
   function emitSubredditPickerToggle(event) {dispatch('subreddit-picker-toggle')}
-
-
-  // methods
-  const submitButtonClicked = async () => {
-    submitButton.classList.add('is-loading');
-    setTimeout(() => {
-      dispatch('subreddit-picker-close');
-      dispatch('subreddit-pick', {subreddit});
-    }, 200)
-  }
 
   onMount(async () => {
     await tick();
@@ -166,7 +156,7 @@
 
       {#if localSubredditsFavorite.length}
         {#each localSubredditsFavorite.slice(0, subredditsFavoriteShowCount) as subredditName}
-          <div transition:fade>
+          <div class="mx-1" transition:fade>
             {#if subredditsEdit}
               <div class="subreddit-action-icon-container">
                 <div class="subreddit-item-delete action-icon action-item-trash-can"
@@ -206,11 +196,61 @@
         </button>
       {/if}
 
+      <div class="mt-5 is-size-4">
+        Favorite Multireddits
+      </div>
+      {#if localSubredditsMulti.length}
+        {#each localSubredditsMulti.slice(0, subredditsRecentShowCount) as multiredditName}
+          <div class="mx-1" transition:fade>
+            {#if subredditsEdit}
+            <div class="subreddit-action-icon-container">
+              <div class="subreddit-item-delete action-icon action-item-trash-can"
+                   on:click="{subredditsItemDeleteMessage}"
+                   on:dblclick="{subredditsItemDelete(multiredditName, 'multireddit')}"
+                   transition:fade>
+                &#x1f5d1;
+              </div>
+            </div>
+            {/if}
+            <div class="subreddit-item-name-container is-size-5">
+              <div class="has-text-link subreddit-item-name subreddit-list-item">
+                <span class="p-2 cursor-url" on:click="{() => subredditPicked(multiredditName)}">
+                  {#if subredditsMultiLabels.getLabel(multiredditName)}
+                    /m/{subredditsMultiLabels.getLabel(multiredditName)}/
+                  {:else}
+                    /m/{multiredditName}/
+                  {/if}
+                </span>
+                {#if subredditsEdit}
+                  <button class="button is-small is-primary"
+                          on:click="{subredditsMultiLabelUpdate(multiredditName)}"
+                          transition:fade>
+                    <svg class="bi bi-pencil action-icon-pencil"
+                         xmlns="http://www.w3.org/2000/svg"
+                         width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                    </svg>
+                  </button>
+                {/if}
+              </div>
+            </div>
+          </div>
+        {/each}
+      {:else}
+        <div class="subject-empty-text">none</div>
+      {/if}
+      {#if subredditsMultiShowCount < localSubredditsMulti.length}
+        <button class="mt-2 button is-small is-info subreddits-button-more"
+                on:click="{subredditsMultiShowMore}">
+          Show more
+        </button>
+      {/if}
+
       <div class="mt-5 mb-1 is-size-4">Recently Viewed</div>
       <!--div><button on:click="{subredditsRecent.reset}">Reset</button></div-->
       {#if localSubredditsRecent.length}
         {#each localSubredditsRecent.slice(0, subredditsRecentShowCount) as subredditName}
-          <div transition:fade>
+          <div class="mx-1" transition:fade>
             {#if subredditsEdit}
             <div class="subreddit-action-icon-container">
               <div class="subreddit-item-delete action-icon action-item-trash-can"
@@ -236,41 +276,6 @@
       {#if subredditsRecentShowCount < localSubredditsRecent.length}
         <button class="mt-2 button is-small is-info subreddits-button-more"
                 on:click="{subredditsRecentShowMore}">
-          Show more
-        </button>
-      {/if}
-
-      <div class="mt-5 is-size-4">
-        Favorite Multireddits
-      </div>
-      {#if localSubredditsMulti.length}
-        {#each localSubredditsMulti.slice(0, subredditsRecentShowCount) as subredditName}
-          <div transition:fade>
-            {#if subredditsEdit}
-            <div class="subreddit-action-icon-container">
-              <div class="subreddit-item-delete action-icon action-item-trash-can"
-                   on:click="{subredditsItemDeleteMessage}"
-                   on:dblclick="{subredditsItemDelete(subredditName, 'multireddit')}"
-                   transition:fade>
-                &#x1f5d1;
-              </div>
-            </div>
-            {/if}
-            <div class="subreddit-item-name-container is-size-5">
-              <div class="has-text-link subreddit-item-name subreddit-list-item">
-                <span class="p-2 cursor-url" on:click="{() => subredditPicked(subredditName)}">
-                  /r/{subredditName}/
-                </span>
-              </div>
-            </div>
-          </div>
-        {/each}
-      {:else}
-        <div class="subject-empty-text">none</div>
-      {/if}
-      {#if subredditsMultiShowCount < localSubredditsMulti.length}
-        <button class="mt-2 button is-small is-info subreddits-button-more"
-                on:click="{subredditsMultiShowMore}">
           Show more
         </button>
       {/if}

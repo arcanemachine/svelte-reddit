@@ -10,6 +10,7 @@ export const subredditDefault = writable(undefined);
 export const subredditsPrevious = createSubredditsPrevious();
 export const subredditsRecent = createSubredditsRecent();
 export const subredditsFavorite = createSubredditsFavorite();
+export const subredditsMultiLabels = createSubredditsMultiLabels();
 export const subredditsCustom = writable({});
 
 function createSubredditsRecent() {
@@ -53,12 +54,73 @@ function createSubredditsRecent() {
           recents.splice(index, 1);
           return recents;
         })
-        localStorage.setItem('subredditsRecent', JSON.stringify(recents));
+        localStorage.setItem('subredditsRecent', JSON.stringify(get(subredditsRecent)));
       }
     },
     reset: () => {
       set([]);
       localStorage.removeItem('subredditsRecent');
+    }
+  }
+}
+
+function createSubredditsMultiLabels() {
+  const { subscribe, set, update } = writable([]);
+
+  const getMe = () => get(subredditsMultiLabels);
+  function getSubredditsMultiSubreddits() {
+    return get(subredditsMultiLabels).map(x => Object.keys(x)[0]);
+  }
+  function getSubredditsMultiLabels() {
+    return get(subredditsMultiLabels).map(x => Object.values(x)[0]);
+  }
+
+  return {
+    subscribe,
+    set,
+    update,
+    get: () => get(subredditsMultiLabels),
+    getLabel: (multiredditName) => {
+      let index = getSubredditsMultiSubreddits().indexOf(multiredditName);
+      if (index !== -1) {
+        return getSubredditsMultiLabels()[index];
+      } else {
+        return false;
+      }
+    },
+    add: (multiredditName, label) => {
+
+      // if multiredditName does not represent a multireddit, return false
+      if (!multiredditName.match(/\+/)) {
+        console.log('Multireddits must contain a plus sign (+) in their name');
+        return false;
+      }
+
+      // if multireddit does not have a label, create one
+      if (!getSubredditsMultiSubreddits().includes(multiredditName)) {
+        update(arr => [...arr, {[multiredditName]: label}]);
+      }
+      // if multireddit has a label, rename it
+      else if (getSubredditsMultiSubreddits().includes(multiredditName)) {
+        let result = get(subredditsMultiLabels);
+        result.splice(get(subredditsMultiLabels).indexOf(multiredditName), 1, {[multiredditName]: label});
+        update(arr => result);
+      }
+      localStorage.setItem('subredditsMultiLabels', JSON.stringify(get(subredditsMultiLabels)));
+    },
+    remove: (multiredditName) => {
+      let result = get(subredditsMultiLabels);
+      result.splice(get(subredditsMultiLabels).indexOf(multiredditName), 1);
+      if (result.length) {
+        update(arr => result); 
+      }
+      else {
+        reset();
+      }
+    },
+    reset: () => {
+      set([]);
+      localStorage.removeItem('subredditsFavorite');
     }
   }
 }
@@ -94,7 +156,7 @@ function createSubredditsFavorite() {
           favorites.splice(index, 1);
           return favorites;
         })
-        localStorage.setItem('subredditsFavorite', JSON.stringify(favorites));
+        localStorage.setItem('subredditsFavorite', JSON.stringify(get(subredditsFavorite)));
       }
     },
     reset: () => {
