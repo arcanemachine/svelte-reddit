@@ -68,6 +68,10 @@
     }
   }
 
+  $: subredditCurrentInFavorites = () => {
+    return $subredditsFavorite.map((z, i) => Object.values($subredditsFavorite[i]).includes($subredditCurrent))[0];
+  }
+
 </script>
 
 
@@ -87,7 +91,7 @@
     <!-- navbar icons, touch-size viewports only -->
     <div class="navbar-end-touch-icon-container is-hidden-desktop">
       <!-- heart icon -->
-      {#if !$subredditsFavorite.map((z, i) => Object.values($subredditsFavorite[i]).includes($subredditCurrent))[0]}
+      {#if !subredditCurrentInFavorites()}
       <svg class="bi bi-heart navbar-end-touch-icon navbar-end-touch-icon-heart"
            on:click="{subredditsFavoriteAdd($subredditCurrent)}"
            xmlns="http://www.w3.org/2000/svg"

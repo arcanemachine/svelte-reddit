@@ -26,10 +26,10 @@
 
   const getSubredditsFavorite = () => {
     let result = [];
-    let subredditsFavoriteAll = $subredditsFavorite;
-    // let subredditsFavoriteAll = ['this', 'andThis', 'not+this'];
+    // let subredditsFavoriteAll = $subredditsFavorite.map((x, i) => Object.values($subredditsFavorite[i])[0]);
+    let subredditsFavoriteAll = subredditsFavorite.getNames();
     for (let i = 0; i < subredditsFavoriteAll.length; i++) {
-      if (!Object.values(subredditsFavoriteAll[i])[0].match(/\+/)) {
+      if (!subredditsFavoriteAll[i].match(/\+/)) {
         result.push(subredditsFavoriteAll[i]);
       }
     }
@@ -214,7 +214,7 @@
             <div class="subreddit-item-name-container is-size-5">
               <div class="has-text-link subreddit-item-name subreddit-list-item">
                 <span class="p-2 cursor-url" on:click="{() => subredditPicked(Object.values(subreddit)[0])}">
-                  /r/{Object.values(subreddit)[0]}/
+                  /r/{subreddit}/
                 </span>
               </div>
             </div>

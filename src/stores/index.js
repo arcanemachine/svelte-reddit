@@ -47,7 +47,7 @@ function createSubredditsRecent() {
     },
     remove: (subredditName) => {
       let recents = get(subredditsRecent);
-      let index = recents.indexOf(OsubredditName);
+      let index = recents.indexOf(subredditName);
       if (index !== -1) {
         update(arr => {
           recents.splice(index, 1);
@@ -66,17 +66,20 @@ function createSubredditsRecent() {
 function createSubredditsFavorite() {
   const { subscribe, set, update } = writable([]);
 
+  const getSubredditNames = () => get(subredditsFavorite).map((z, i) => Object.values(get(subredditsFavorite)[i])[0]);
+
   return {
     subscribe,
     set,
     update,
     get: () => get(subredditsFavorite),
+    getNames: () => get(subredditsFavorite).map((z, i) => Object.values(get(subredditsFavorite)[i])[0]),
     add: (subredditName, label=undefined) => {
+
       // use lowercase values when checking to see if the subreddit is already in the favorites list
-      let favorites = get(subredditsFavorite);
-      let favoritesLower = favorites.map(x => x.toLowerCase());
+      let favoritesLower = getSubredditNames().map(x => x.toLowerCase());
       let subredditNameLower = subredditName.toLowerCase();
-      if (favorites.find(x => x === subredditNameLower)) { 
+      if (getSubredditNames().find(x => x === subredditNameLower)) { 
         return false;
       }
 
@@ -85,20 +88,17 @@ function createSubredditsFavorite() {
       }
 
       // add subredditName to the favorites list
-      update(arr => [{[subredditName]: label}, ...favorites]);
+      update(arr => [{[subredditName]: label}, ...arr]);
 
       // update localStorage
       localStorage.setItem('subredditsFavorite', JSON.stringify(get(subredditsFavorite)));
     },
     remove: (subredditName) => {
-      let favorites = get(subredditsFavorite);
+      let favorites = getSubredditNames();
       let index = Object.values(favorites).indexOf(subredditName);
       if (index !== -1) {
-        update(arr => {
-          favorites.splice(index, 1);
-          return favorites;
-        })
-        localStorage.setItem('subredditsFavorite', JSON.stringify(favorites));
+        let result = update(arr => arr.splice(index, 1));
+        localStorage.setItem('subredditsFavorite', JSON.stringify(result));
       }
     },
     reset: () => {
