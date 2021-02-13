@@ -77,7 +77,7 @@ blockquote {
     </div>
   </div>
   {#if parentContent.url && parentContent.url.match(/(jpg|png)$/)}
-   <img class="mt-0" src="{parentContent.url}">
+   <img class="mt-0" src="{parentContent.url}" alt="Post Thumbnail">
   {/if}
   {#each postContent[1].data.children as post}
     <PostItem post="{post}"/>
