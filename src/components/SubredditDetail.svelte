@@ -20,7 +20,10 @@
       window.open(post.data.url, '_blank');
     }
   }
-
+  const postDescriptionClicked = (postId) => {
+    let qs = document.querySelector(`#post-description-${postId}`);
+    qs.classList.toggle('post-description-unclicked');
+  }
   const postCommentsClicked = (post) => {
     emitPostPick(post);
   }
@@ -61,12 +64,14 @@
             {/if}
             <div class="ml-4 mr-2 media-content">
               <div class="post-body-container">
-                <div class="mb-2 p-1 post-link-name"
+                <div class="mr-2 mb-2 p-1 post-link-name"
                      class:is-stickied="{post.data.stickied}"
                      on:click="{postTitleClicked(post)}">
                   {@html htmlUnescape(post.data.title)} <em>[{post.data.domain}]</em>
                 </div>
-                <div class="mx-1 post-description">
+                <div class="ml-1 mr-2 post-description post-description-unclicked"
+                     id="post-description-{post.data.name}"
+                     on:click="{() => postDescriptionClicked(post.data.name)}">
                   {@html htmlUnescape(post.data.selftext_html)}
                 </div>
               <div class="mt-3 post-body-bottom-container">
@@ -154,12 +159,15 @@
 }
 
 .post-description {
+  cursor: pointer;
   display: -webkit-box;
   min-height: 3rem;
+}
+
+.post-description-unclicked {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  pointer-events: none;
 }
 
 .post-body-bottom-container {

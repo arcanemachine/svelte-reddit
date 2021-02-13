@@ -17,7 +17,7 @@
 
   // onMount
   onMount(async() => {
-    function initializeStore() {
+    function initializeState() {
 
       // if font size saved in localStorage, set the page font size to match it
       if (localStorage.getItem('fontSize')) {
@@ -47,10 +47,12 @@
       if (localSubredditsMultiLabels && JSON.parse(localSubredditsMultiLabels).length) {
         subredditsMultiLabels.set(JSON.parse(localStorage.getItem('subredditsMultiLabels')))
       }
+
+      // localStorage.getItem('subredditCurrent', $subredditCurrent);
     }
-    initializeStore();
+    initializeState();
     if (!$subredditDefault) {
-      subredditPick(undefined, 'all');
+      subredditPick(undefined, 'PINE64Official');
       // subredditPickerShow = true;
       ;
     };
@@ -141,6 +143,7 @@
           subredditsPrevious.push($subredditCurrent);
         }
         subredditCurrent.set(subreddit);
+        // localStorage.setItem('subredditCurrent', $subredditCurrent);
         title = `/r/${$subredditCurrent}/`; // set the title
         subredditsRecent.add($subredditCurrent); // add the subreddit to recents
         window.scrollTo({top: 0, left: 0, behavior: 'smooth'}); // scroll to top
