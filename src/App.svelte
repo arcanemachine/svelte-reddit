@@ -50,6 +50,7 @@
     }
     initializeStore();
     if (!$subredditDefault) {
+      subredditPick(undefined, 'all');
       // subredditPickerShow = true;
       ;
     };
@@ -60,12 +61,12 @@
   let title = 'Reddit μReader';
   let isLoading = false;
   let settingsShow = false;
-  let subredditPickerShow = true;
+  let subredditPickerShow = false;
 
   let subredditContent = {};
   let postContent = mockedPostData;
   let postAuthor = '';
-  let currentContent = 'post';
+  let currentContent = 'subreddit';
 
   const modalsHideAll = () => {
     settingsShow = false;
@@ -251,7 +252,6 @@
   {/if}
 
   <main class="content-container">
-    <span on:click="{deleteme}">DEBUG</span>
     {#if currentContent === 'subreddit'}
       <SubredditDetail subredditContent="{subredditContent}"
                        on:post-pick="{postPick}"

@@ -90,11 +90,11 @@
 
 <style>
 .media:first-child {
-  margin-top: 0;
+  margin-top: 0.25rem;
 }
- 
+
 .media {
-  margin-top: -1px;
+  margin: -1px -1px 0;
   max-width: 50rem;
   padding-top: 0;
   border-radius: 1rem;
@@ -102,7 +102,7 @@
 
 .post-item {
   border: 1px solid black;
-  border-width: 1px 0;
+  border-width: 1px;
 }
 
 .post-item.is-dark {

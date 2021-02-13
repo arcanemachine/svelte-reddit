@@ -74,12 +74,12 @@
      class:is-dark="{$darkModeActive}"
      transition:fade>
   <div class="navbar-brand">
-    <div class="ml-2 p-2 navbar-item brand-text has-text-weight-bold">
-      <span class="navbar-title-text" on:click="{titleClicked}" alt="{title}">
+    <div class="ml-2 p-2 navbar-item brand-text has-text-weight-bold navbar-title-text">
+      <span on:click="{titleClicked}" alt="{title}">
         {#if currentContent === 'post' || $subredditsPrevious.length}
         <span class="mr-1 navbar-title" title="hello!">&larr;</span>
         {/if}
-        <span class="navbar-title">{title}</span>
+        <span class="navbar-title navbar-title-text">{title}</span>
       </span>
       <span class="ml-2 navbar-title" on:click="{darkModeToggle}"><!-- ({$darkModeActive ? 'Dark' : 'Light'}) --></span>
     </div>
@@ -190,14 +190,11 @@
 }
 
 .navbar-title {
+  display: inline-block;
+  max-width: 50vw;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.navbar-title-text {
-  display: inline-block;
-  max-width: 50vw;
 }
 
 .navbar-end-touch-icon-container {
@@ -258,6 +255,7 @@
   margin-right: 1rem; /* push the nav items to the end if hamburger icon isn't present */
   padding-bottom: 0;
   justify-content: flex-end; /* push the nav items to the end if hamburger icon isn't present */
+  border-bottom: 2px solid white;
 }
 
 .navbar-item {
