@@ -2,8 +2,8 @@
   import { onMount } from 'svelte';
   import { darkModeActive, fontSize, subredditCurrent, subredditDefault, subredditsFavorite,
            subredditsMultiLabels, subredditsPrevious, subredditsRecent } from './stores/';
-  import { mockedSubredditData } from './mockedSubredditData.js';
-  import { mockedPostData } from './mockedPostData4.js';
+  // import { mockedSubredditData } from './mockedSubredditData.js';
+  // import { mockedPostData } from './mockedPostData4.js';
 
   import Navbar from './components/Navbar.svelte';
   import Settings from './components/Settings.svelte';
@@ -65,7 +65,7 @@
   let subredditPickerShow = false;
 
   let subredditContent = {};
-  let postContent = mockedPostData;
+  let postContent = {};
   let postAuthor = '';
   let currentContent = undefined;
 
