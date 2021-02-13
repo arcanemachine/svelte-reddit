@@ -37,7 +37,7 @@ blockquote {
 }
   </style>
   <div class="pt-2">
-    <div class="mb-2 card large"
+    <div class="mb-3 card large"
          class:is-dark="{$darkModeActive}">
       <div class="card-header post-header"
            class:has-background-grey-lighter="{!$darkModeActive}"
@@ -67,7 +67,7 @@ blockquote {
   {#if postContent[0].data.children[0].data.url && postContent[0].data.children[0].data.url.match(/(jpg|png)$/)}
    <img class="mt-0" src="{postContent[0].data.children[0].data.url}">
   {/if}
-  {#each postContent[1].data.children as post, index}
+  {#each postContent[1].data.children as post}
     <PostItem post="{post}"/>
   {/each}
 </div>

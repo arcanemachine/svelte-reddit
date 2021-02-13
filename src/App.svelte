@@ -3,7 +3,7 @@
   import { darkModeActive, fontSize, subredditCurrent, subredditDefault, subredditsFavorite,
            subredditsMultiLabels, subredditsPrevious, subredditsRecent } from './stores/';
   import { mockedSubredditData } from './mockedSubredditData.js';
-  import { mockedPostData } from './mockedPostData3.js';
+  import { mockedPostData } from './mockedPostData4.js';
 
   import Navbar from './components/Navbar.svelte';
   import Settings from './components/Settings.svelte';
@@ -52,7 +52,7 @@
     }
     initializeState();
     if (!$subredditDefault) {
-      subredditPick(undefined, 'Pine64Official');
+      // subredditPick(undefined, 'Pine64Official');
       // subredditPickerShow = true;
       ;
     };

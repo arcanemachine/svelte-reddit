@@ -1,12 +1,11 @@
-<script>
-  import { htmlUnescape } from '../utils.js';
+<script> import { htmlUnescape } from '../utils.js';
   import { darkModeActive } from '../stores/';
 
   // props
-  export let post, depth=0;
+  export let post, permalink, depth=0;
 
   // data
-  let maxDepth = 8;
+  // let maxDepth = 8;
 
   // methods
   const getBackgroundColor = () => {
@@ -57,22 +56,27 @@
   <div class="card post-item-card"
        class:is-dark="{$darkModeActive}"
        style="margin-left: {depth === 0 ? '0' : '0.5rem'}; background: {getBackgroundColor()};">
-    <div class="post-child-author">
-      <!-- span class="cursor-url">[-]</span -->
-      <span class="has-text-weight-bold is-italic" class:is-dark="{$darkModeActive}">/u/{post.data.author}/</span>
-    </div>
-    <div class="py-2 card-content">
-      <div class:is-dark="{$darkModeActive}">{@html htmlUnescape(post.data.body_html)}</div>
-    </div>
-    <div class="post-child-time is-italic" class:is-dark="{$darkModeActive}">{getFormattedTimeSince(post.data.created)}</div>
-    {#if post.data.hasOwnProperty('replies') && Object.keys(post.data.replies).length}
-      {#if depth < maxDepth}
-        {#each post.data.replies.data.children as reply, index}
-          <svelte:self post="{reply}" depth="{depth + 1}"/>
-        {/each}
-      {:else}
+    {#if post.kind === 't1'}
+      <div class="post-child-author">
+        <!-- span class="cursor-url">[-]</span -->
+        <span class="has-text-weight-bold is-italic" class:is-dark="{$darkModeActive}">/u/{post.data.author}/</span>
+      </div>
+      <div class="py-2 card-content">
+        <div class:is-dark="{$darkModeActive}">{@html htmlUnescape(post.data.body_html)}</div>
+      </div>
+      <div class="post-child-time is-italic" class:is-dark="{$darkModeActive}">{getFormattedTimeSince(post.data.created)}</div>
+      {#if post.data.hasOwnProperty('replies') && Object.keys(post.data.replies).length}
+          {#each post.data.replies.data.children as reply, index}
+            <svelte:self post="{reply}" depth="{depth + 1}" permalink="{post.data.permalink}"/>
+          {/each}
+        <!-- {:else}
         <div class="get-more-posts" class:is-dark="{$darkModeActive}">Dive deeper...</div>
+        {/if} -->
       {/if}
+    {:else if post.kind === 'more'}
+      <div class="py-2 card-content">
+        <a href="https://reddit.com{permalink}.compact" target="_blank">Read more replies...</a>
+      </div>
     {/if}
   </div>
 </div>
