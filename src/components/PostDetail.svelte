@@ -30,35 +30,31 @@
     margin: 0.5rem auto;
   }
   </style>
-  <div class="pt-5 section">
-    <div class="columns">
-      <div class="column">
-        <div class="card large"
+  <div class="pt-5">
+    <div class="mb-2 card large"
+         class:is-dark="{$darkModeActive}">
+      <div class="card-header post-header"
+           class:has-background-grey-lighter="{!$darkModeActive}"
+           class:is-dark="{$darkModeActive}">
+        <div class="pb-0 card-header-title post-title"
              class:is-dark="{$darkModeActive}">
-          <div class="card-header post-header"
-               class:has-background-grey-lighter="{!$darkModeActive}"
+          {postContent[0].data.children[0].data.title}
+        </div>
+        <div class="post-header-bottom-container">
+          <div class="mt-0 p-2 ml-5 is-italic post-author"
                class:is-dark="{$darkModeActive}">
-            <div class="pb-0 card-header-title post-title"
-                 class:is-dark="{$darkModeActive}">
-              {postContent[0].data.children[0].data.title}
-            </div>
-            <div class="post-header-bottom-container">
-              <div class="mt-0 p-2 ml-5 is-italic post-author"
-                   class:is-dark="{$darkModeActive}">
-                - /u/{postAuthor}/
-              </div>
-              <div class="mr-5 p-2 is-italic has-text-decoration-underline cursor-url post-header-subreddit"
-                   on:click="{dispatch('subreddit-pick', {subreddit: postContent[0].data.children[0].data.subreddit})}">
-                /r/{postContent[0].data.children[0].data.subreddit}/
-              </div>
-            </div>
+            - /u/{postAuthor}/
           </div>
-          <div class="card-content"
-               class:hidden="{!postContent[0].data.children[0].data.selftext_html}"
-               class:is-dark="{$darkModeActive}">
-            {@html htmlUnescape(postContent[0].data.children[0].data.selftext_html)}
+          <div class="mr-5 p-2 is-italic has-text-decoration-underline cursor-url post-header-subreddit"
+               on:click="{dispatch('subreddit-pick', {subreddit: postContent[0].data.children[0].data.subreddit})}">
+            /r/{postContent[0].data.children[0].data.subreddit}/
           </div>
         </div>
+      </div>
+      <div class="card-content"
+           class:hidden="{!postContent[0].data.children[0].data.selftext_html}"
+           class:is-dark="{$darkModeActive}">
+        {@html htmlUnescape(postContent[0].data.children[0].data.selftext_html)}
       </div>
     </div>
   </div>
@@ -77,11 +73,12 @@
 }
 
 .card-header.is-dark {
-  background: #333;
+  background: #111;
 }
 
 .card-content.is-dark {
-  background: #555;
+  margin-top: -1px;
+  background: #222;
 }
 
 .post-header {

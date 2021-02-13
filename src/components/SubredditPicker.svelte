@@ -363,7 +363,7 @@
   display: flex;
   position: absolute;
   height: 2rem;
-  margin-left: calc(100% - 4.75rem);
+  margin-left: calc(100% - 5rem);
   justify-content: flex-end;
   align-items: center;
 }

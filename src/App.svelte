@@ -50,7 +50,8 @@
     }
     initializeStore();
     if (!$subredditDefault) {
-      subredditPickerShow = true;
+      // subredditPickerShow = true;
+      ;
     };
 
   })
@@ -64,7 +65,7 @@
   let subredditContent = {};
   let postContent = mockedPostData;
   let postAuthor = '';
-  let currentContent = undefined;
+  let currentContent = 'post';
 
   const modalsHideAll = () => {
     settingsShow = false;
@@ -119,7 +120,7 @@
       subreddit = event.detail.subreddit;
     }
     // if the user is attempting to navigate to the current page, just do a quick loading animation
-    if (currentContent === 'subreddit' && subreddit.toLowerCase() === $subredditCurrent.toLowerCase()) {
+    if (currentContent === 'subreddit' && $subredditCurrent && subreddit.toLowerCase() === $subredditCurrent.toLowerCase()) {
       currentContentIs('subreddit');
       return false;
     }
