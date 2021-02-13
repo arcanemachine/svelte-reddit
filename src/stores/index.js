@@ -54,12 +54,71 @@ function createSubredditsRecent() {
           recents.splice(index, 1);
           return recents;
         })
-        localStorage.setItem('subredditsRecent', JSON.stringify(get(subredditsRecent)));
+        if (!get(subredditsRecent).length) {
+          // if subredditsRecent is empty after removal, clear the localStorage item
+          localStorage.removeItem('subredditsRecent');
+        }
+        else {
+          // otherwise, just update the localStorage item
+          localStorage.setItem('subredditsRecent', JSON.stringify(get(subredditsRecent)));
+        }
       }
     },
     reset: () => {
       set([]);
       localStorage.removeItem('subredditsRecent');
+    }
+  }
+}
+
+function createSubredditsFavorite() {
+  const { subscribe, set, update } = writable([]);
+
+  return {
+    subscribe,
+    set,
+    update,
+    get: () => get(subredditsFavorite),
+    add: (subredditName) => {
+      // use lowercase values when checking to see if the subreddit is already in the favorites list
+      let favorites = get(subredditsFavorite);
+      let favoritesLower = favorites.map(x => x.toLowerCase());
+      let subredditNameLower = subredditName.toLowerCase();
+      if (favorites.find(x => x === subredditNameLower)) { 
+        return false;
+      }
+
+      // add subredditName to the favorites list
+      update(arr => [subredditName, ...favorites]);
+
+      // update localStorage
+      localStorage.setItem('subredditsFavorite', JSON.stringify(get(subredditsFavorite)));
+    },
+    remove: (subredditName) => {
+      let favorites = get(subredditsFavorite);
+      let index = favorites.indexOf(subredditName);
+      if (index !== -1) {
+        update(arr => {
+          favorites.splice(index, 1);
+          return favorites;
+        })
+        if (!get(subredditsFavorite).length) {
+          // if subredditsFavorite is empty after removal, clear the localStorage item
+          localStorage.removeItem('subredditsFavorite');
+        }
+        else {
+          // otherwise, just update the localStorage item
+          localStorage.setItem('subredditsFavorite', JSON.stringify(get(subredditsFavorite)));
+        }
+      }
+      // if subredditName in multiRedditLabels, remove the subreddit/label pair
+      if (subredditsMultiLabels.getLabel(subredditName)) {
+        subredditsMultiLabels.remove(subredditName);
+      }
+    },
+    reset: () => {
+      set([]);
+      localStorage.removeItem('subredditsFavorite');
     }
   }
 }
@@ -114,52 +173,6 @@ function createSubredditsMultiLabels() {
       set(result); 
       if (!get(subredditsMultiLabels).length) {
         localStorage.removeItem('subredditsMultiLabels');
-      }
-    },
-    reset: () => {
-      set([]);
-      localStorage.removeItem('subredditsFavorite');
-    }
-  }
-}
-
-function createSubredditsFavorite() {
-  const { subscribe, set, update } = writable([]);
-
-  return {
-    subscribe,
-    set,
-    update,
-    get: () => get(subredditsFavorite),
-    add: (subredditName) => {
-      // use lowercase values when checking to see if the subreddit is already in the favorites list
-      let favorites = get(subredditsFavorite);
-      let favoritesLower = favorites.map(x => x.toLowerCase());
-      let subredditNameLower = subredditName.toLowerCase();
-      if (favorites.find(x => x === subredditNameLower)) { 
-        return false;
-      }
-
-      // add subredditName to the favorites list
-      update(arr => [subredditName, ...favorites]);
-
-      // update localStorage
-      localStorage.setItem('subredditsFavorite', JSON.stringify(get(subredditsFavorite)));
-    },
-    remove: (subredditName) => {
-      let favorites = get(subredditsFavorite);
-      let index = favorites.indexOf(subredditName);
-      if (index !== -1) {
-        update(arr => {
-          favorites.splice(index, 1);
-          return favorites;
-        })
-        localStorage.setItem('subredditsFavorite', JSON.stringify(get(subredditsFavorite)));
-      }
-      // if subredditName in multiRedditLabels, remove the subreddit/label pair
-      debugger;
-      if (subredditsMultiLabels.getLabel(subredditName)) {
-        subredditsMultiLabels.remove(subredditName);
       }
     },
     reset: () => {
