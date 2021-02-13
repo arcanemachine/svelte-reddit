@@ -1,5 +1,5 @@
 <script> import { htmlUnescape } from '../utils.js';
-  import { darkModeActive } from '../stores/';
+  import { darkModeActive, externalRedditStyle } from '../stores/';
 
   // props
   export let post, permalink, depth=0;
@@ -59,7 +59,16 @@
     {#if post.kind === 't1'}
       <div class="post-child-author">
         <!-- span class="cursor-url">[-]</span -->
-        <span class="has-text-weight-bold is-italic" class:is-dark="{$darkModeActive}">/u/{post.data.author}/</span>
+        <div class="has-text-weight-bold is-italic" class:is-dark="{$darkModeActive}">/u/{post.data.author}/</div>
+        <div class="mr-4">
+          <a class="reply-link" href="https://reddit.com{post.data.permalink}{$externalRedditStyle}" target="_blank">
+            <!-- reply arrow -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reply-fill" viewBox="0 0 16 16">
+              <path d="M5.921 11.9L1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"/>
+            </svg>
+            Reply
+          </a>
+        </div>
       </div>
       <div class="py-2 card-content">
         <div class:is-dark="{$darkModeActive}">{@html htmlUnescape(post.data.body_html)}</div>
@@ -95,8 +104,15 @@
 }
 
 .post-child-author {
+  display: flex;
+  justify-content: space-between;
   padding-top: 0.75rem;
   margin-left: 0.75rem;
+}
+
+.reply-link {
+  color: unset;
+  text-decoration: unset;
 }
 
 .post-child-time {

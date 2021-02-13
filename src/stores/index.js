@@ -2,6 +2,7 @@ import { get, writable } from 'svelte/store';
 
 // settings
 export const darkModeActive = writable(false);
+export const externalRedditStyle = writable('.compact');
 export const fontSize = writable(16);
 export const thumbnailsDisabled = writable(false);
 export const voteCountDisabled = writable(false);
