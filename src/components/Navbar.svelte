@@ -237,6 +237,7 @@
   padding: 0.5rem;
 }
 
+/*
 .navbar-burger {
   height: 4rem;
   width: 4rem;
@@ -245,6 +246,7 @@
 .burger-line {
   height: 2px;
 }
+*/
 
 .navbar-menu {
   margin-top: -2px;
