@@ -135,7 +135,8 @@
         if ($subredditsPrevious.length && subreddit.toLowerCase() === $subredditsPrevious.slice(-1)[0].toLowerCase()) {
           // if the subreddit is the last-visited one, then remove it from the end of the subredditsPrevious array
           subredditsPrevious.pop();
-        } else if (currentContent !== undefined) {
+        }
+        if (currentContent !== undefined && $subredditCurrent !== undefined) {
           subredditsPrevious.push($subredditCurrent);
         }
         subredditCurrent.set(subreddit);
@@ -221,6 +222,9 @@
     }
   }
 
+  const deleteme = () => {
+    debugger;
+  }
 
 </script>
 
@@ -247,6 +251,7 @@
   {/if}
 
   <main class="content-container">
+    <span on:click="{deleteme}">DEBUG</span>
     {#if currentContent === 'subreddit'}
       <SubredditDetail subredditContent="{subredditContent}"
                        on:post-pick="{postPick}"
