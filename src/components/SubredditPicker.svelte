@@ -203,14 +203,21 @@
         {#each localSubredditsMulti.slice(0, subredditsRecentShowCount) as multiredditName}
           <div class="mx-1" transition:fade>
             {#if subredditsEdit}
-            <div class="subreddit-action-icon-container">
-              <div class="subreddit-item-delete action-icon action-item-trash-can"
-                   on:click="{subredditsItemDeleteMessage}"
-                   on:dblclick="{subredditsItemDelete(multiredditName, 'multireddit')}"
-                   transition:fade>
-                &#x1f5d1;
+              <div class="subreddit-action-icon-container multireddit-action-icon-container">
+                <div class="subreddit-item-delete action-icon action-item-trash-can"
+                     on:click="{subredditsItemDeleteMessage}"
+                     on:dblclick="{subredditsItemDelete(multiredditName, 'multireddit')}"
+                     transition:fade>
+                  &#x1f5d1;
+                </div>
+                <svg class="mr-1 bi bi-pencil action-icon-pencil cursor-url"
+                     xmlns="http://www.w3.org/2000/svg"
+                     width="16" height="16" fill="currentColor" viewBox="0 0 16 16"
+                     on:click="{subredditsMultiLabelUpdate(multiredditName)}"
+                     transition:fade>
+                  <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                </svg>
               </div>
-            </div>
             {/if}
             <div class="subreddit-item-name-container is-size-5">
               <div class="has-text-link subreddit-item-name subreddit-list-item">
@@ -221,17 +228,6 @@
                     /m/{multiredditName}/
                   {/if}
                 </span>
-                {#if subredditsEdit}
-                  <button class="button is-small is-primary"
-                          on:click="{subredditsMultiLabelUpdate(multiredditName)}"
-                          transition:fade>
-                    <svg class="bi bi-pencil action-icon-pencil"
-                         xmlns="http://www.w3.org/2000/svg"
-                         width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-                    </svg>
-                  </button>
-                {/if}
               </div>
             </div>
           </div>
@@ -302,6 +298,7 @@
 .card {
   max-height: 95vh;
   min-width: 25rem;
+  max-width: 95vw;
   margin: 2rem;
   overflow-y: auto;
   border-radius: 0.5rem;
@@ -358,11 +355,16 @@
 
 .subreddit-action-icon-container {
   display: flex;
+  flex-direction: row-reverse;
   position: absolute;
   height: 2rem;
   margin-left: calc(100% - 5rem);
   justify-content: flex-end;
   align-items: center;
+}
+
+.multireddit-action-icon-container {
+  margin-left: calc(100% - 6.25rem);
 }
 
 .action-item-trash-can {
@@ -384,9 +386,14 @@
 }
 */
 
+.subreddit-item-name-container {
+}
+
 .subreddit-item-name {
   height: 2rem;
+  max-width: 75%;
   margin-left: auto;
+  margin-right: auto;
 }
 
 .subject-empty-text {
