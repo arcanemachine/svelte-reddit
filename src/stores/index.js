@@ -156,6 +156,11 @@ function createSubredditsFavorite() {
         })
         localStorage.setItem('subredditsFavorite', JSON.stringify(get(subredditsFavorite)));
       }
+      // if subredditName in multiRedditLabels, remove the subreddit/label pair
+      debugger;
+      if (subredditsMultiLabels.getLabel(subredditName)) {
+        subredditsMultiLabels.remove(subredditName);
+      }
     },
     reset: () => {
       set([]);

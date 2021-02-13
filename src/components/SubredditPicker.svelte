@@ -10,7 +10,7 @@
   let subredditsEdit = true;
   let subredditsItemDeleteTimeout = undefined;
 
-  let subredditsShowCountDefault = 1;
+  let subredditsShowCountDefault = 3;
   let subredditsFavoriteShowCount = subredditsShowCountDefault;
   let subredditsRecentShowCount = subredditsShowCountDefault;
   let subredditsMultiShowCount = subredditsShowCountDefault;
@@ -74,20 +74,24 @@
     }, 1000)
   }
   const subredditsItemDelete = (subredditName, categoryName) => {
+    let categoryDescription;
     clearTimeout(subredditsItemDeleteTimeout);
     if (categoryName === 'favorite') {
       subredditsFavorite.remove(subredditName);
       localSubredditsFavorite = getSubredditsFavorite();
+      categoryDescription = 'favorite subreddits';
     }
     else if (categoryName === 'recent') {
       subredditsRecent.remove(subredditName);
       localSubredditsRecent = getSubredditsRecent();
+      categoryDescription = 'recent subreddits';
     }
     else if (categoryName === 'multireddit') {
       subredditsFavorite.remove(subredditName);
       localSubredditsMulti = getSubredditsMulti();
+      categoryDescription = 'multireddits';
     }
-    dispatch('status-message-display', `'/r/${subredditName}' has been removed from your ${categoryName} subreddits.`)
+    dispatch('status-message-display', `'/r/${subredditName}' has been removed from your ${categoryDescription}.`)
   }
 
   const subredditPickerToggle = () => emitSubredditPickerToggle();
@@ -139,12 +143,10 @@
       </div>
       
       <div class="subreddit-search">
-        <!-- svelte-ignore a11y-autofocus -->
         <input class="input subreddit-search-input" type="search"
                bind:value="{subreddit}"
                placeholder="Go to subreddit by name..."
-               on:keyup="{e => e.key === 'Enter' && submitButtonClicked()}"
-               autofocus>
+               on:keyup="{e => e.key === 'Enter' && submitButtonClicked()}">
         <button class="button is-info subreddit-search-button-submit"
                 bind:this="{submitButton}"
                 on:click="{submitButtonClicked}">
