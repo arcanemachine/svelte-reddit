@@ -47,20 +47,19 @@
       if (localSubredditsMultiLabels && JSON.parse(localSubredditsMultiLabels).length) {
         subredditsMultiLabels.set(JSON.parse(localStorage.getItem('subredditsMultiLabels')))
       }
-
       // localStorage.getItem('subredditCurrent', $subredditCurrent);
     }
     initializeState();
     if (!$subredditDefault) {
       // subredditPick(undefined, 'Pine64Official');
-      // subredditPickerShow = true;
+      subredditPickerShow = true;
       ;
     };
 
   })
 
   // data
-  let title = 'Reddit μReader';
+  let title = 'Reddit Micro';
   let isLoading = false;
   let settingsShow = false;
   let subredditPickerShow = false;
@@ -68,7 +67,7 @@
   let subredditContent = {};
   let postContent = mockedPostData;
   let postAuthor = '';
-  let currentContent = 'post';
+  let currentContent = undefined;
 
   const modalsHideAll = () => {
     settingsShow = false;

@@ -7,7 +7,7 @@
 
   // data
   let subreddit = '';
-  let subredditsEdit = true;
+  let subredditsEdit = false;
   let subredditsItemDeleteTimeout = undefined;
 
   let subredditsShowCountDefault = 3;
