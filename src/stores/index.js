@@ -111,11 +111,9 @@ function createSubredditsMultiLabels() {
     remove: (multiredditName) => {
       let result = get(subredditsMultiLabels);
       result.splice(get(subredditsMultiLabels).indexOf(multiredditName), 1);
-      if (result.length) {
-        update(arr => result); 
-      }
-      else {
-        reset();
+      set(result); 
+      if (!get(subredditsMultiLabels).length) {
+        localStorage.removeItem('subredditsMultiLabels');
       }
     },
     reset: () => {

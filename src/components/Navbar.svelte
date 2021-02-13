@@ -79,7 +79,7 @@
         {#if currentContent === 'post' || $subredditsPrevious.length}
         <span class="mr-1 navbar-title" title="hello!">&larr;</span>
         {/if}
-        <span class="navbar-title">{title}</span>
+        <span class="navbar-title navbar-title-text">{title}</span>
       </span>
       <span class="ml-2 navbar-title" on:click="{darkModeToggle}"><!-- ({$darkModeActive ? 'Dark' : 'Light'}) --></span>
     </div>
@@ -190,9 +190,14 @@
 }
 
 .navbar-title {
+  display: inline-block;
+  max-width: 50vw;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.navbar-title-text {
 }
 
 .navbar-end-touch-icon-container {
@@ -215,12 +220,12 @@
 }
 
 .navbar-end-touch-icon-heart {
-  margin-right: 1.25rem;
+  margin-right: 1rem;
   padding: 0.5rem;
 }
 
 .navbar-end-touch-icon-reddit {
-  margin-right: 1.25rem;
+  margin-right: 1rem;
   padding: 0.4rem;
 }
 
@@ -233,7 +238,7 @@
 */
 
 .navbar-end-touch-icon-settings {
-  margin-right: 1rem;
+  margin-right: 0.75rem;
   padding: 0.5rem;
 }
 

@@ -57,11 +57,13 @@
   const subredditsRecentShowLess = () => subredditsRecentShowCount -= subredditsShowCountDefault;
 
   const subredditsMultiLabelUpdate = (multiredditName) => {
-    let label = prompt('Enter a label for this multireddit', $subredditsMultiLabels[$subredditsMultiLabels.indexOf(multiredditName)] ? $subredditsMultiLabels.indexOf(multiredditName) : '');
+    let label = prompt(`Enter a label for this multireddit.\n\nA blank entry will clear the label.\n\nSubreddits in this multireddit:\n\n${multiredditName.split('+').join('\n')}\n `, $subredditsMultiLabels[$subredditsMultiLabels.indexOf(multiredditName)] ? $subredditsMultiLabels.indexOf(multiredditName) : '');
     if (label) {
       subredditsMultiLabels.add(multiredditName, label);
-      localSubredditsMulti = getSubredditsMulti();
+    } else {
+      subredditsMultiLabels.remove(multiredditName);
     }
+    localSubredditsMulti = getSubredditsMulti();
   }
 
   const subredditsEditToggle = () => subredditsEdit = !subredditsEdit;
