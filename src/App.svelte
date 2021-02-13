@@ -3,7 +3,7 @@
   import { darkModeActive, fontSize, subredditCurrent, subredditDefault, subredditsFavorite,
            subredditsMultiLabels, subredditsPrevious, subredditsRecent } from './stores/';
   import { mockedSubredditData } from './mockedSubredditData.js';
-  import { mockedPostData } from './mockedPostData2.js';
+  import { mockedPostData } from './mockedPostData3.js';
 
   import Navbar from './components/Navbar.svelte';
   import Settings from './components/Settings.svelte';
@@ -52,7 +52,7 @@
     }
     initializeState();
     if (!$subredditDefault) {
-      subredditPick(undefined, 'PINE64Official');
+      // subredditPick(undefined, 'pics');
       // subredditPickerShow = true;
       ;
     };
@@ -68,7 +68,7 @@
   let subredditContent = {};
   let postContent = mockedPostData;
   let postAuthor = '';
-  let currentContent = 'subreddit';
+  let currentContent = 'post';
 
   const modalsHideAll = () => {
     settingsShow = false;

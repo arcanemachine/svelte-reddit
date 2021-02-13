@@ -1,5 +1,5 @@
 <script>
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
   import { darkModeActive } from '../stores/';
   import { htmlUnescape } from '../utils.js';
 
@@ -30,7 +30,7 @@
     margin: 0.5rem auto;
   }
   </style>
-  <div class="pt-5">
+  <div class="pt-2">
     <div class="mb-2 card large"
          class:is-dark="{$darkModeActive}">
       <div class="card-header post-header"
@@ -58,6 +58,9 @@
       </div>
     </div>
   </div>
+  {#if postContent[0].data.children[0].data.url && postContent[0].data.children[0].data.url.match(/(jpg|png)$/)}
+   <img class="mt-0" src="{postContent[0].data.children[0].data.url}">
+  {/if}
   {#each postContent[1].data.children as post, index}
     <PostItem post="{post}"/>
   {/each}
