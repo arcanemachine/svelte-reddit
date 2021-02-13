@@ -202,7 +202,7 @@
 
     clearTimeout(statusMessageTimeout);
     if (timeout === undefined) {
-      timeout = 4000;
+      timeout = 5000;
     } else if (timeout === -1) {
       timeout = 1000000;
     }
