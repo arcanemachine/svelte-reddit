@@ -21,14 +21,20 @@
 <div class="container" class:is-dark="{$darkModeActive}">
   <style>
   /* override bulma styling for dynamically generated html */
-  ul {
-    margin: 1rem;
-    list-style: '- ';
-  }
-
-  p {
-    margin: 0.5rem auto;
-  }
+ul {
+  margin: 1rem;
+  list-style: '- ';
+}
+p {
+  margin: 0.5rem auto;
+}
+blockquote {
+  color: black;
+  margin-left: 0.75rem;
+  background-color: gray;
+  padding-left: 0.5rem;
+  border-left: 2px solid black;
+}
   </style>
   <div class="pt-2">
     <div class="mb-2 card large"
