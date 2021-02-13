@@ -52,7 +52,7 @@
     }
     initializeState();
     if (!$subredditDefault) {
-      // subredditPick(undefined, 'pics');
+      subredditPick(undefined, 'Pine64Official');
       // subredditPickerShow = true;
       ;
     };
@@ -130,9 +130,18 @@
     try {
       isLoading = true;
       await fetch(`https://i.reddit.com/r/${subreddit}/${sort}.json`)
-      .then(res => res.json())
+      .then(response => {
+        if (!response.ok) {
+          statusMessageDisplay('We could not find the subreddit you requested.');
+          isLoading = false;
+          return false;
+        }
+        return response.json()
+        }
+      )
       .then(data => {
         modalsHideAll();
+        window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
         subredditContent = data; // assign response json to subredditContent
         subredditPickerClose(); // close the picker modal
         if ($subredditsPrevious.length && subreddit.toLowerCase() === $subredditsPrevious.slice(-1)[0].toLowerCase()) {
@@ -149,6 +158,11 @@
         window.scrollTo({top: 0, left: 0, behavior: 'smooth'}); // scroll to top
         currentContent = 'subreddit'; // update content view type
         isLoading = false; // disable the loading screen
+      })
+      .catch(err => {
+        console.log('subredditPick(): Error - ' + err);
+        isLoading = false
+        return false;
       })
     }
     catch(err) {
