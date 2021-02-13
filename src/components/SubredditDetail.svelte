@@ -143,7 +143,6 @@
 
 .post-body-container {
   margin: 0.5rem auto;
-  font-weight: bold;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -172,8 +171,8 @@
 
 .post-body-bottom-container {
   display: flex;
-  font-weight: bold;
   font-style: italic;
+  font-weight: bold;
 }
 
 .post-body-bottom-subreddit {
