@@ -60,6 +60,7 @@
     let label = prompt('Enter a label for this multireddit', $subredditsMultiLabels[$subredditsMultiLabels.indexOf(multiredditName)] ? $subredditsMultiLabels.indexOf(multiredditName) : '');
     if (label) {
       subredditsMultiLabels.add(multiredditName, label);
+      localSubredditsMulti = getSubredditsMulti();
     }
   }
 
@@ -86,7 +87,6 @@
     }
     dispatch('status-message-display', `'/r/${subredditName}' has been removed from your ${categoryName} subreddits.`)
   }
-
 
   const subredditPickerToggle = () => emitSubredditPickerToggle();
   const subredditPickerClose = () => emitSubredditPickerClose();
@@ -347,9 +347,6 @@
 .action-icon:hover {
   background: gray;
   border-radius: 50%;
-}
-
-.action-icon-pencil {
 }
 
 .action-icon-close-button {
