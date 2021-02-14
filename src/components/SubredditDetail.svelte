@@ -1,5 +1,5 @@
 <script> import { createEventDispatcher } from 'svelte';
-  import { darkModeActive, thumbnailsDisabled, voteCountDisabled } from '../stores/';
+  import { darkModeActive, subredditCurrent, thumbnailsDisabled, voteCountDisabled } from '../stores/';
   import { htmlUnescape } from '../utils.js';
 
   const dispatch = createEventDispatcher();
@@ -89,7 +89,7 @@
       {#if subredditContent.data.children.length === index + 1}
         <div class="has-text-centered is-size-5 has-text-weight-bold cursor-url load-more-text"
              on:click="{() => dispatch('subreddit-pick', {
-               subreddit: post.data.subreddit,
+               subreddit: $subredditCurrent,
                count: 25,
                after: subredditContent.data.after
              })}">
