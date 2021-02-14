@@ -150,7 +150,7 @@
     try {
       window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
       isLoading = true;
-      await fetch(`https://i.reddit.com/r/${subreddit}/${sort}.json${params}`)
+      await fetch(`https://www.reddit.com/r/${subreddit}/${sort}.json${params}`)
       .then(response => {
         if (!response.ok) {
           statusMessageDisplay('We could not find the subreddit you requested.');
@@ -197,7 +197,7 @@
     let url = post.data.permalink;
     isLoading = true;
     try {
-      await fetch(`https://i.reddit.com${url}.json`)
+      await fetch(`https://www.reddit.com${url}.json`)
       .then(res => res.json())
       .then(data => {
         modalsHideAll();
