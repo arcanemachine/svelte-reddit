@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import { darkModeActive, fontSize, subredditCurrent, subredditDefault, subredditsFavorite,
            subredditsMultiLabels, subredditsPrevious, subredditsRecent } from './stores/';
   // import { mockedSubredditData } from './mockedSubredditData.js';
@@ -125,19 +125,32 @@
   }
 
   // SubredditDetail
-  const subredditPick = async (event, subreddit=undefined, sort='hot') => {
+  const subredditPick = async (event, subreddit=undefined, count=undefined, after=undefined, sort='hot') => {
+
     // if called via dispatch, pass the dispatched event's subreddit name to the 'subreddit' variable
     if (event && Object.keys(event).length) {
       subreddit = event.detail.subreddit;
+      count = event.detail.count;
+      after = event.detail.after;
     }
-    // if the user is attempting to navigate to the current page, just do a quick loading animation
-    if (currentContent === 'subreddit' && $subredditCurrent && subreddit.toLowerCase() === $subredditCurrent.toLowerCase()) {
+
+    let params = '';
+    if (!!count && !!after) {
+      params = `?count=${count}&after=${after}`;
+    }
+
+    // if the user is attempting to navigate to the current page*, just do a quick loading animation
+    // *only works if no query params are present
+    if (!params && currentContent === 'subreddit' && $subredditCurrent && subreddit.toLowerCase() === $subredditCurrent.toLowerCase()) {
       currentContentIs('subreddit');
       return false;
     }
+
+
     try {
+      window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
       isLoading = true;
-      await fetch(`https://i.reddit.com/r/${subreddit}/${sort}.json`)
+      await fetch(`https://i.reddit.com/r/${subreddit}/${sort}.json${params}`)
       .then(response => {
         if (!response.ok) {
           statusMessageDisplay('We could not find the subreddit you requested.');
@@ -149,7 +162,6 @@
       )
       .then(data => {
         modalsHideAll();
-        window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
         subredditContent = data; // assign response json to subredditContent
         subredditPickerClose(); // close the picker modal
         if ($subredditsPrevious.length && subreddit.toLowerCase() === $subredditsPrevious.slice(-1)[0].toLowerCase()) {
@@ -163,7 +175,6 @@
         // localStorage.setItem('subredditCurrent', $subredditCurrent);
         title = `/r/${$subredditCurrent}/`; // set the title
         subredditsRecent.add($subredditCurrent); // add the subreddit to recents
-        window.scrollTo({top: 0, left: 0, behavior: 'smooth'}); // scroll to top
         currentContent = 'subreddit'; // update content view type
         isLoading = false; // disable the loading screen
       })
@@ -172,6 +183,7 @@
         isLoading = false
         return false;
       })
+        
     }
     catch(err) {
       console.log("Error: " + err.message)

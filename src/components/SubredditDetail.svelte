@@ -36,7 +36,7 @@
 
 <div class="container">
   {#if Object.keys(subredditContent).length}
-    {#each subredditContent.data.children as post}
+    {#each subredditContent.data.children as post, index}
       <div class="media post-item"
            class:is-stickied="{post.data.stickied}"
            class:is-dark="{$darkModeActive}">
@@ -86,18 +86,25 @@
           </div>
         </div>
       </div>
+      {#if subredditContent.data.children.length === index + 1}
+        <div class="has-text-centered is-size-5 has-text-weight-bold cursor-url load-more-text"
+             on:click="{() => dispatch('subreddit-pick', {
+               subreddit: post.data.subreddit,
+               count: 25,
+               after: subredditContent.data.after
+             })}">
+          Load more posts...
+        </div>
+      {/if}
     {/each}
   {/if}
 </div>
 
 <style>
-.media:first-child {
-}
-
 .media {
   margin: -1px -1px 0;
   max-width: 50rem;
-  padding-top: 0;
+  padding: 0 0.25rem;
   border-radius: 0.5rem;
 }
 
@@ -171,5 +178,9 @@
 .post-link-comments {
   cursor: pointer;
   max-width: 10rem;
+}
+
+.load-more-text {
+  margin: 1rem;
 }
 </style>

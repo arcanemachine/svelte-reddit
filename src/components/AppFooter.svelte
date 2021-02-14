@@ -2,7 +2,7 @@
   import { darkModeActive } from '../stores/';
 </script>
 
-<footer class="mt-1 py-4 footer-container"
+<footer class="py-4 footer-container"
         class:is-dark="{$darkModeActive}">
   <div class="has-text-centered">
     <div>
