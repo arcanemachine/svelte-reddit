@@ -125,7 +125,7 @@
   }
 
   // SubredditDetail
-  const subredditPick = async (event, subreddit=undefined, count=undefined, after=undefined, sort='hot') => {
+  const subredditPick = async (event, subreddit=undefined, count=undefined, after=undefined, sort=undefined, t=undefined) => {
 
     // if called via dispatch, pass the dispatched event's subreddit name to the 'subreddit' variable
     if (event && Object.keys(event).length) {
