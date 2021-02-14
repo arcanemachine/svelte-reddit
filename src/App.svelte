@@ -17,6 +17,14 @@
 
   // onMount
   onMount(async() => {
+
+    // if page is not https or dev url, redirect to https + url
+    let currentUrl = window.location.href;
+    if (!currentUrl.match('https') && !currentUrl.match('192.168')) {
+      let splitUrl = currentUrl.split('://');
+      window.location = `https://${splitUrl[1]}`
+    }
+
     function initializeState() {
 
       // if font size saved in localStorage, set the page font size to match it
