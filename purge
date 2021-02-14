@@ -1,1 +1,1 @@
-purgecss --css public/bulma.css --content src/*.svelte src/components/*.svelte --output extra/
+purgecss --css public/bulma.css --content public/index.html src/App.svelte src/components/*.svelte --output public/
