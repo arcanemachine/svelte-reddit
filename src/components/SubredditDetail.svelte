@@ -102,7 +102,7 @@
 
 <style>
 .media {
-  margin: -1px -1px 0;
+  margin: 0;
   max-width: 50rem;
   padding: 0 0.25rem;
   border-radius: 0.5rem;
