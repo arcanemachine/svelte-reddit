@@ -30,7 +30,7 @@
       // if font size saved in localStorage, set the page font size to match it
       if (localStorage.getItem('fontSize')) {
         fontSize.set(Number(localStorage.getItem('fontSize')));
-        document.querySelector('html').style.fontSize = `${get(fontSize)}px`;
+        document.querySelector('html').style.fontSize = `${$fontSize}px`;
       }
 
       // set dark mode
