@@ -59,8 +59,8 @@
     }
     initializeState();
     if (!$subredditDefault) {
-      // subredditPick(undefined, 'Pine64Official');
-      subredditPickerShow = true;
+      subredditPick(undefined, 'Pine64Official');
+      // subredditPickerShow = false;
       ;
     };
 
@@ -90,6 +90,7 @@
       currentContentIs('subreddit');
     }
   }
+
   const currentContentIs = (x) => {
     window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
     isLoading = true;
