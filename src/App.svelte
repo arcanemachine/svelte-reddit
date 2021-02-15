@@ -125,7 +125,7 @@
   }
 
   // SubredditDetail
-  const subredditPick = async (event, subreddit=undefined, count=undefined, after=undefined, sort=undefined, t=undefined) => {
+  const subredditPick = async (event, subreddit=undefined, count='', after='', sort='', t='') => {
 
     // if called via dispatch, pass the dispatched event's subreddit name to the 'subreddit' variable
     if (event && Object.keys(event).length) {
@@ -135,8 +135,22 @@
     }
 
     let params = '';
-    if (!!count && !!after) {
-      params = `?count=${count}&after=${after}`;
+    const paramConcat = () => params === '' ? p = '?' : p += '&';
+    if (count) {
+      paramConcat();
+      params += `count=${count}`;
+    }
+    else if (after) {
+      paramConcat();
+      params += `after=${after}`;
+    }
+    else if (sort) {
+      paramConcat();
+      params += `sort=${sort}`;
+    }
+    else if (t) {
+      paramConcat();
+      params += `t=${t}`;
     }
 
     // if the user is attempting to navigate to the current page*, just do a quick loading animation
