@@ -171,7 +171,7 @@
           isLoading = false;
           return false;
         }
-        return response.json()
+        else return response.json()
         }
       )
       .then(data => {
@@ -194,6 +194,7 @@
       })
       .catch(err => {
         console.log('subredditPick(): Error - ' + err);
+        statusMessageDisplay('We could not find the subreddit you requested.');
         isLoading = false
         return false;
       })
