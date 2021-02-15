@@ -255,7 +255,7 @@
   margin-right: 1rem; /* push the nav items to the end if hamburger icon isn't present */
   padding-bottom: 0;
   justify-content: flex-end; /* push the nav items to the end if hamburger icon isn't present */
-  border-bottom: 2px solid white;
+  border-bottom: 2px solid black;
 }
 
 .navbar-item {
@@ -263,7 +263,13 @@
   font-weight: bold;
 }
 
-.navbar-menu.is-dark, .navbar-item.is-dark {
+.navbar-menu.is-dark {
+  background: black;
+  color: whitesmoke;
+  border-bottom: 2px solid white;
+}
+
+.navbar-item.is-dark {
   background: black;
   color: whitesmoke;
 }

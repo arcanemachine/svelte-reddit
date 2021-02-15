@@ -56,14 +56,12 @@
       alert('There are no saved settings on this device.\n\n');
     }
     else {
-
       let message = 'The following settings are saved on this device:\n\n';
       let entries = Object.entries(localStorage);
 
       for (let i = 0; i < entries.length; i++) {
         message += `${entries[i][0]}: ${entries[i][1]}\n\n`;
       }
-
       alert(message);
     }
   }
