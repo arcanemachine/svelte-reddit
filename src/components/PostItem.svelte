@@ -2,10 +2,9 @@
   import { darkModeActive, externalRedditStyle } from '../stores/';
 
   // props
-  export let post, permalink, depth=0;
-
-  // data
-  // let maxDepth = 8;
+  export let post;
+  export let permalink = undefined;
+  export let depth = 0;
 
   // methods
   const getBackgroundColor = () => {
