@@ -110,6 +110,40 @@
     return result;
   }
 
+  const copySettingsToClipboard = () => {
+    let text = JSON.stringify(localStorageBackup(), null, 2);
+    var textArea = document.createElement("textarea");
+
+    textArea.style.position = 'fixed';
+    textArea.style.top = 0;
+    textArea.style.left = 0;
+    textArea.style.width = '2em';
+    textArea.style.height = '2em';
+    textArea.style.padding = 0;
+    textArea.style.border = 'none';
+    textArea.style.outline = 'none';
+    textArea.style.boxShadow = 'none';
+    textArea.style.background = 'transparent';
+
+    textArea.value = text;
+
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      var successful = document.execCommand('copy');
+      if (successful) {
+        dispatch('status-message-display', 'Your settings have been copied to the system clipboard.')
+      } else {
+        dispatch('status-message-display', 'Your settings were not copied to the system clipboard.')
+      }
+    } catch (err) {
+      console.log('We were unable to copy your settings to the clipboard.');
+    }
+    document.body.removeChild(textArea);
+  }
+
   const saveTemplateAsFile = (filename, jsonToWrite) => {
       const blob = new Blob([jsonToWrite], { type: "text/json" });
       const link = document.createElement("a");
@@ -277,9 +311,20 @@
                   <div class="settings-item-name">Raw JSON</div>
                 </div>
                 <div class="settings-item-container-widget">
-                  <button class="button is-info"
+                  <button class="button is-info button-icon"
+                          on:click="{copySettingsToClipboard}">
+                    <!-- copy icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                      <path d="M0 0h24v24H0z" fill="none"/>
+                      <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                    </svg>
+                  </button>
+                  <button class="button is-info button-icon"
                           on:click="{() => saveTemplateAsFile('settings.json', JSON.stringify(localStorageBackup(), null, 2))}">
-                    Download
+                    <!-- download icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                      <path d="M5,20h14v-2H5V20z M19,9h-4V3H9v6H5l7,7L19,9z"/>
+                    </svg>
                   </button>
                 </div>
               </div>
