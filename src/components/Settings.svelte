@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher, onDestroy } from 'svelte';
-  import { fade } from 'svelte/transition';
+  import { fade, fly } from 'svelte/transition';
   import { darkModeActive, fontSize } from '../stores/';
 
   const dispatch = createEventDispatcher();
@@ -15,7 +15,8 @@
   $: fontSizeDisplay = ($fontSize - fontSizeDefault) * 2;
 
   // modals
-  let settingsExport = true;
+  let exportModalShow = true;
+  let jsonSaverModalShow = false;
 
   const fontSizeUpdate = (crement) => {
     let fontSizeCurrent = $fontSize;
@@ -55,7 +56,7 @@
   }
 
   // export settings
-  const settingsExportToggle = () => settingsExport = !settingsExport;
+  const exportModalToggle = () => exportModalShow = !exportModalShow;
 
   // reset settings
   const settingsAllShow = () => {
@@ -134,9 +135,9 @@
     try {
       var successful = document.execCommand('copy');
       if (successful) {
-        dispatch('status-message-display', 'Your settings have been copied to the system clipboard.')
+        dispatch('status-message-display', "Your settings have been copied to the system clipboard.")
       } else {
-        dispatch('status-message-display', 'Your settings were not copied to the system clipboard.')
+        dispatch('status-message-display', "Your settings were not copied to the system clipboard.")
       }
     } catch (err) {
       console.log('We were unable to copy your settings to the clipboard.');
@@ -160,6 +161,15 @@
 
       link.dispatchEvent(evt);
   };
+  
+  // JsonSaver
+  const jsonSaverStatusMessageDescription = () => {
+    dispatch('status-message-display', "JSONSaver is a free service that allows you to easily (and securely) backup JSON snippets, such as your Reddit Micro settings.", 15000);
+  }
+
+  const jsonSaverModalToggle = () => {
+    return false;    
+  }
 
 </script>
 
@@ -247,11 +257,10 @@
             <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
             </svg>
           </div>
-          <div class="settings-item-name-secondary">{settingsExport}</div>
         </div>
         <div class="settings-item-container-widget">
           <button class="button is-info border-none"
-                  on:click="{settingsExportToggle}">
+                  on:click="{exportModalToggle}">
             Export
           </button>
         </div>
@@ -262,6 +271,7 @@
              class:is-dark="{$darkModeActive}">
           <div class="settings-item-name">
             Reset Settings
+            <!-- icon question circle -->
             <svg class="ml-1 bi bi-question-circle cursor-url"
               on:click="{settingsAllShow}"
               xmlns="http://www.w3.org/2000/svg"
@@ -282,60 +292,110 @@
 
       <button on:click="{() => dispatch('settings-close')}" class="button is-info is-large is-fullwidth close-button-bottom">Close</button>
 
-      {#if settingsExport}
-        <div class="modal is-active" transition:fade>
-          <div class="modal-background" on:click="{() => settingsExport = false}"></div>
-          <div class="modal-content"></div>
-          <div class="card"
-               class:is-dark="{$darkModeActive}">
-            <div class="has-text-centered card-content">
-              <div class="close-button-top-container" on:click="{() => settingsExport = false}">
-                <button class="delete close-button-top" aria-label="close"></button>
-              </div>
-
-              <div class="card-title"
-                     class:is-dark="{$darkModeActive}">
-                <h3 class="card-text">
-                  Export Settings
-                </h3>
-              </div>
-
-              <div class="card-text is-size-5"
-                   class:is-dark="{$darkModeActive}">
-                Please choose your desired means of exporting your settings.
-              </div>
-
-              <div class="has-text-centered settings-item-container-parent">
-                <div class="settings-item-container-name"
-                     class:is-dark="{$darkModeActive}">
-                  <div class="settings-item-name">Raw JSON</div>
+      {#if exportModalShow}
+          <div class="modal is-active" transition:fade>
+            <div class="modal-background" on:click="{() => exportModalShow = false}"></div>
+            <div class="modal-content"></div>
+            <div class="card"
+                 class:is-dark="{$darkModeActive}"
+                 in:fly>
+              <div class="has-text-centered card-content">
+                <div class="close-button-top-container" on:click="{() => exportModalShow = false}">
+                  <button class="delete close-button-top" aria-label="close"></button>
                 </div>
-                <div class="settings-item-container-widget">
-                  <button class="button is-info button-icon"
-                          on:click="{copySettingsToClipboard}">
-                    <!-- copy icon -->
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="16" height="16">
-                      <path d="M0 0h24v24H0z" fill="none"/>
-                      <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-                    </svg>
-                  </button>
-                  <button class="button is-info button-icon"
-                          on:click="{() => saveTemplateAsFile('settings.json', JSON.stringify(localStorageBackup(), null, 2))}">
-                    <!-- download icon -->
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-                      <path d="M5,20h14v-2H5V20z M19,9h-4V3H9v6H5l7,7L19,9z"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
 
-              <button on:click="{() => settingsExport = false}"
-                      class="button is-info is-large is-fullwidth close-button-bottom">
-                Close
-              </button>
+                <div class="card-title"
+                       class:is-dark="{$darkModeActive}">
+                  <h3 class="card-text">
+                    Export Settings
+                  </h3>
+                </div>
+
+                <div class="card-text card-description"
+                     class:is-dark="{$darkModeActive}">
+                  Please choose your desired method of exporting your settings.
+                </div>
+
+                <div class="has-text-centered settings-item-container-parent">
+                  <div class="settings-item-container-name"
+                       class:is-dark="{$darkModeActive}">
+                    <div class="settings-item-name">Raw JSON</div>
+                  </div>
+                  <div class="settings-item-container-widget">
+                    <button class="button is-info button-icon"
+                            on:click="{copySettingsToClipboard}">
+                      <!-- copy icon -->
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                      </svg>
+                    </button>
+                    <button class="ml-1 button is-info button-icon"
+                            on:click="{() => saveTemplateAsFile('settings.json', JSON.stringify(localStorageBackup(), null, 2))}">
+                      <!-- download icon -->
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                        <path d="M5,20h14v-2H5V20z M19,9h-4V3H9v6H5l7,7L19,9z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="has-text-centered settings-item-container-parent">
+                  <div class="settings-item-container-name"
+                       class:is-dark="{$darkModeActive}">
+                    <div class="settings-item-name">
+                      Save to jsonSaver
+                      <!-- icon question circle -->
+                      <svg class="ml-1 bi bi-question-circle cursor-url"
+                           on:click="{jsonSaverStatusMessageDescription}"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                      <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="settings-item-container-widget">
+                    <button class="button is-info button-icon"
+                            on:click="{() => jsonSaverModalShow = true}">
+                      Save
+                    </button>
+                  </div>
+                </div>
+
+                <button class="button is-info is-large is-fullwidth close-button-bottom"
+                        on:click="{() => exportModalShow = false}">
+                  Close
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        {#if jsonSaverModalShow}
+          <div class="modal is-active" transition:fade>
+            <div class="modal-background" on:click="{() => jsonSaverModalShow = false}"></div>
+            <div class="modal-content"></div>
+            <div class="card"
+                 class:is-dark="{$darkModeActive}">
+              <div class="has-text-centered card-content">
+                <div class="close-button-top-container" on:click="{() => jsonSaverModalShow = false}">
+                  <button class="delete close-button-top" aria-label="close"></button>
+                </div>
+
+                <div class="card-title"
+                     class:is-dark="{$darkModeActive}">
+                  <h3 class="card-text">
+                    Save to jsonSaver
+                  </h3>
+                </div>
+
+                <button class="button is-info is-large is-fullwidth close-button-bottom"
+                        on:click="{() => jsonSaverModalShow = false}">
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        {/if}
       {/if}
     </div>
   </div>
@@ -350,8 +410,8 @@
 
 .card {
   margin: 2rem;
-  width: 25rem;
-  max-width: 90vw;
+  width: 30rem;
+  max-width: 95vw;
   border-radius: 0.5rem;
 }
 
@@ -374,6 +434,11 @@
   font-size: 2rem;
   margin: 0.5rem auto 1rem;
   padding-left: 1rem;
+}
+
+.card-description {
+  margin: 0.5rem auto 2rem;
+  font-size: 1.1rem;
 }
 
 .card-title.is-dark {
@@ -404,7 +469,7 @@
 
 .settings-item-container-name {
   display: flex;
-  width: 50%;
+  width: 66%;
   align-self: flex-start;
   flex-direction: column;
   align-items: center;
@@ -426,7 +491,7 @@
 
 .settings-item-name {
   padding-top: 0.2rem;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
 }
 
 .settings-item-name-secondary {
