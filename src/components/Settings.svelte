@@ -14,6 +14,9 @@
   let settingsResetTimeout = undefined;
   $: fontSizeDisplay = ($fontSize - fontSizeDefault) * 2;
 
+  // modals
+  let settingsExport = true;
+
   const fontSizeUpdate = (crement) => {
     let fontSizeCurrent = $fontSize;
     if (crement === 0) {
@@ -51,6 +54,10 @@
     }
   }
 
+  // export settings
+  const settingsExportToggle = () => settingsExport = !settingsExport;
+
+  // reset settings
   const settingsAllShow = () => {
     if (!Object.entries(localStorage).length) {
       alert('There are no saved settings on this device.\n\n');
@@ -79,7 +86,7 @@
     }
   }
 
-  // dark mode
+  // toggles
   const darkModeToggle = () => {
     if (!localStorage.getItem('darkModeActive')) {
       localStorage.setItem('darkModeActive', true);
@@ -93,6 +100,33 @@
     dispatch('dark-mode-toggled');
   }
 
+  // export settings
+  const localStorageBackup = () => {
+    let result = {}
+    let entries = Object.entries(localStorage);
+    for (let i = 0; i < entries.length; i++) {
+      result[entries[i][0]] = JSON.parse(entries[i][1]);
+    }
+    return result;
+  }
+
+  const saveTemplateAsFile = (filename, jsonToWrite) => {
+      const blob = new Blob([jsonToWrite], { type: "text/json" });
+      const link = document.createElement("a");
+
+      link.download = filename;
+      link.href = window.URL.createObjectURL(blob);
+      link.dataset.downloadurl = ["text/json", link.download, link.href].join(":");
+
+      const evt = new MouseEvent("click", {
+        view: window,
+        bubbles: true,
+        cancelable: true,
+      });
+
+      link.dispatchEvent(evt);
+  };
+
 </script>
 
 <div class="modal is-active" transition:fade>
@@ -100,14 +134,18 @@
   <div class="modal-content"></div>
   <div class="card"
        class:is-dark="{$darkModeActive}">
-    <div class="card-content">
+    <div class="has-text-centered card-content">
       <div class="close-button-top-container" on:click="{() => dispatch('settings-close')}">
         <button class="delete close-button-top" aria-label="close"></button>
       </div>
 
-      <div class="has-text-centered card-title"
+      <div class="card-title"
              class:is-dark="{$darkModeActive}">
         <h3 class="card-text">Settings</h3>
+      </div>
+
+      <div class="settings-category-name">
+        Appearance
       </div>
 
       <div class="has-text-centered settings-item-container-parent">
@@ -158,6 +196,33 @@
         </div>
       </div>
 
+      <div class="settings-category-name">
+        Manage Your Data
+      </div>
+
+      <div class="settings-item-container-parent">
+        <div class="settings-item-container-name"
+             class:is-dark="{$darkModeActive}">
+          <div class="settings-item-name">
+            Export settings
+            <svg class="ml-1 bi bi-question-circle cursor-url"
+               on:click="{() => {dispatch('status-message-display', `Backup your data for safe keeping, or for viewing on another device.`)}}"
+              xmlns="http://www.w3.org/2000/svg"
+              width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+            </svg>
+          </div>
+          <div class="settings-item-name-secondary">{settingsExport}</div>
+        </div>
+        <div class="settings-item-container-widget">
+          <button class="button is-info border-none"
+                  on:click="{settingsExportToggle}">
+            Export
+          </button>
+        </div>
+      </div>
+
       <div class="settings-item-container-parent">
         <div class="settings-item-container-name"
              class:is-dark="{$darkModeActive}">
@@ -171,7 +236,6 @@
             <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
             </svg>
           </div>
-          <div class="settings-item-name-secondary"><!-- {$darkModeActive} --></div>
         </div>
         <div class="settings-item-container-widget">
           <button class="button is-info border-none"
@@ -184,6 +248,50 @@
 
       <button on:click="{() => dispatch('settings-close')}" class="button is-info is-large is-fullwidth close-button-bottom">Close</button>
 
+      {#if settingsExport}
+        <div class="modal is-active" transition:fade>
+          <div class="modal-background" on:click="{() => settingsExport = false}"></div>
+          <div class="modal-content"></div>
+          <div class="card"
+               class:is-dark="{$darkModeActive}">
+            <div class="has-text-centered card-content">
+              <div class="close-button-top-container" on:click="{() => settingsExport = false}">
+                <button class="delete close-button-top" aria-label="close"></button>
+              </div>
+
+              <div class="card-title"
+                     class:is-dark="{$darkModeActive}">
+                <h3 class="card-text">
+                  Export Settings
+                </h3>
+              </div>
+
+              <div class="card-text is-size-5"
+                   class:is-dark="{$darkModeActive}">
+                Please choose your desired means of exporting your settings.
+              </div>
+
+              <div class="has-text-centered settings-item-container-parent">
+                <div class="settings-item-container-name"
+                     class:is-dark="{$darkModeActive}">
+                  <div class="settings-item-name">Raw JSON</div>
+                </div>
+                <div class="settings-item-container-widget">
+                  <button class="button is-info"
+                          on:click="{() => saveTemplateAsFile('settings.json', JSON.stringify(localStorageBackup(), null, 2))}">
+                    Download
+                  </button>
+                </div>
+              </div>
+
+              <button on:click="{() => settingsExport = false}"
+                      class="button is-info is-large is-fullwidth close-button-bottom">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      {/if}
     </div>
   </div>
 </div>
@@ -207,16 +315,6 @@
   border: 1px solid white !important;
 }
 
-.card-title {
-  font-size: 2rem;
-  margin: 0.5rem auto 2rem;
-  padding-left: 1rem;
-}
-
-.card-title.is-dark {
-  color: whitesmoke;
-}
-
 .close-button-top-container {
   display: flex;
   margin: -1.25rem;
@@ -227,13 +325,33 @@
   cursor: pointer;
 }
 
+.card-title {
+  font-size: 2rem;
+  margin: 0.5rem auto 1rem;
+  padding-left: 1rem;
+}
+
+.card-title.is-dark {
+  color: whitesmoke;
+}
+
+.card-text.is-dark {
+  color: whitesmoke;
+}
+
 .close-button-top {
   padding: 0.75rem;
 }
 
+.settings-category-name {
+  font-style: italic;
+  margin: 0.5rem auto;
+}
+
 .settings-item-container-parent {
   display: flex;
-  margin-bottom: 1.75rem;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
   flex-direction: row;
   align-items: center;
   justify-content: stretch;
