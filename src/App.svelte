@@ -59,7 +59,7 @@
     }
     initializeState();
     if (!$subredditDefault) {
-      // subredditPick(undefined, 'Pine64Official');
+      subredditPick(undefined, 'all');
       // subredditPickerShow = true;
       ;
     };
