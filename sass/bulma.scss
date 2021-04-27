@@ -4,13 +4,13 @@ $link: #dd44dd;
 
 @import "../node_modules/bulma/bulma.sass";
 
+html {
+  overflow-y: auto;
+}
+
 a {
   // border-bottom: 3px double;
   text-decoration: underline;
-}
-
-html {
-  overflow-y: auto;
 }
 
 strong {
@@ -20,3 +20,4 @@ strong {
 .container.is-dark {
   background: black;
 }
+

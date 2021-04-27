@@ -1,6 +1,6 @@
 /*! bulma.io v0.9.2 | MIT License | github.com/jgthms/bulma */
 /* Bulma Utilities */
-.button, .input {
+.button, .input, .textarea, .select select {
   -moz-appearance: none;
   -webkit-appearance: none;
   align-items: center;
@@ -18,9 +18,9 @@
   padding-top: calc(0.5em - 1px);
   position: relative;
   vertical-align: top; }
-  .button:focus, .input:focus, .button:active, .input:active, .is-active.button, .is-active.input {
+  .button:focus, .input:focus, .textarea:focus, .select select:focus, .button:active, .input:active, .textarea:active, .select select:active, .is-active.button, .is-active.input, .is-active.textarea, .select select.is-active {
     outline: none; }
-  .button[disabled], .input[disabled] {
+  .button[disabled], .input[disabled], .textarea[disabled], .select select[disabled] {
     cursor: not-allowed; }
 
 .button {
@@ -29,6 +29,22 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none; }
+
+.select:not(.is-multiple):not(.is-loading)::after {
+  border: 3px solid transparent;
+  border-radius: 2px;
+  border-right: 0;
+  border-top: 0;
+  content: " ";
+  display: block;
+  height: 0.625em;
+  margin-top: -0.4375em;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: rotate(-45deg);
+  transform-origin: center;
+  width: 0.625em; }
 
  .content:not(:last-child), .title:not(:last-child), .message:not(:last-child) {
   margin-bottom: 1.5rem; }
@@ -93,7 +109,7 @@
     min-width: 32px;
     width: 32px; }
 
-.button.is-loading::after {
+.button.is-loading::after, .select.is-loading::after, .control.is-loading::after {
   animation: spinAround 500ms infinite linear;
   border: 2px solid #dbdbdb;
   border-radius: 290486px;
@@ -119,6 +135,7 @@ body,
 p,
 ul,
 blockquote,
+textarea,
 h3,
 h4 {
   margin: 0;
@@ -134,7 +151,9 @@ ul {
   list-style: none; }
 
 button,
-input {
+input,
+select,
+textarea {
   margin: 0; }
 
 html {
@@ -165,7 +184,9 @@ section {
 
 body,
 button,
-input {
+input,
+select,
+textarea {
   font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif; }
 
 body {
@@ -484,66 +505,158 @@ span {
   vertical-align: top; }
 
 /* Bulma Form */
-.input {
+.input, .textarea, .select select {
   background-color: white;
   border-color: #dbdbdb;
   border-radius: 4px;
   color: #363636; }
-  .input::-moz-placeholder {
+  .input::-moz-placeholder, .textarea::-moz-placeholder, .select select::-moz-placeholder {
     color: rgba(54, 54, 54, 0.3); }
-  .input::-webkit-input-placeholder {
+  .input::-webkit-input-placeholder, .textarea::-webkit-input-placeholder, .select select::-webkit-input-placeholder {
     color: rgba(54, 54, 54, 0.3); }
-  .input:-moz-placeholder {
+  .input:-moz-placeholder, .textarea:-moz-placeholder, .select select:-moz-placeholder {
     color: rgba(54, 54, 54, 0.3); }
-  .input:-ms-input-placeholder {
+  .input:-ms-input-placeholder, .textarea:-ms-input-placeholder, .select select:-ms-input-placeholder {
     color: rgba(54, 54, 54, 0.3); }
-  .input:hover {
+  .input:hover, .textarea:hover, .select select:hover {
     border-color: #b5b5b5; }
-  .input:focus, .input:active, .is-active.input {
+  .input:focus, .textarea:focus, .select select:focus, .input:active, .textarea:active, .select select:active, .is-active.input, .is-active.textarea, .select select.is-active {
     border-color: #dd44dd;
     box-shadow: 0 0 0 0.125em rgba(221, 68, 221, 0.25); }
-  .input[disabled] {
+  .input[disabled], .textarea[disabled], .select select[disabled] {
     background-color: whitesmoke;
     border-color: whitesmoke;
     box-shadow: none;
     color: #7a7a7a; }
-    .input[disabled]::-moz-placeholder {
+    .input[disabled]::-moz-placeholder, .textarea[disabled]::-moz-placeholder, .select select[disabled]::-moz-placeholder {
       color: rgba(122, 122, 122, 0.3); }
-    .input[disabled]::-webkit-input-placeholder {
+    .input[disabled]::-webkit-input-placeholder, .textarea[disabled]::-webkit-input-placeholder, .select select[disabled]::-webkit-input-placeholder {
       color: rgba(122, 122, 122, 0.3); }
-    .input[disabled]:-moz-placeholder {
+    .input[disabled]:-moz-placeholder, .textarea[disabled]:-moz-placeholder, .select select[disabled]:-moz-placeholder {
       color: rgba(122, 122, 122, 0.3); }
-    .input[disabled]:-ms-input-placeholder {
+    .input[disabled]:-ms-input-placeholder, .textarea[disabled]:-ms-input-placeholder, .select select[disabled]:-ms-input-placeholder {
       color: rgba(122, 122, 122, 0.3); }
 
-.input {
+.input, .textarea {
   box-shadow: inset 0 0.0625em 0.125em rgba(10, 10, 10, 0.05);
   max-width: 100%;
   width: 100%; }
-  .is-light.input {
+  .is-light.input, .is-light.textarea {
     border-color: whitesmoke; }
-    .is-light.input:focus, .is-light.input:active, .is-light.is-active.input {
+    .is-light.input:focus, .is-light.textarea:focus, .is-light.input:active, .is-light.textarea:active, .is-light.is-active.input, .is-light.is-active.textarea {
       box-shadow: 0 0 0 0.125em rgba(245, 245, 245, 0.25); }
-  .is-dark.input {
+  .is-dark.input, .is-dark.textarea {
     border-color: #363636; }
-    .is-dark.input:focus, .is-dark.input:active, .is-dark.is-active.input {
+    .is-dark.input:focus, .is-dark.textarea:focus, .is-dark.input:active, .is-dark.textarea:active, .is-dark.is-active.input, .is-dark.is-active.textarea {
       box-shadow: 0 0 0 0.125em rgba(54, 54, 54, 0.25); }
-  .is-info.input {
+  .is-info.input, .is-info.textarea {
     border-color: #3298dc; }
-    .is-info.input:focus, .is-info.input:active, .is-info.is-active.input {
+    .is-info.input:focus, .is-info.textarea:focus, .is-info.input:active, .is-info.textarea:active, .is-info.is-active.input, .is-info.is-active.textarea {
       box-shadow: 0 0 0 0.125em rgba(50, 152, 220, 0.25); }
-  .is-warning.input {
+  .is-warning.input, .is-warning.textarea {
     border-color: #ffdd57; }
-    .is-warning.input:focus, .is-warning.input:active, .is-warning.is-active.input {
+    .is-warning.input:focus, .is-warning.textarea:focus, .is-warning.input:active, .is-warning.textarea:active, .is-warning.is-active.input, .is-warning.is-active.textarea {
       box-shadow: 0 0 0 0.125em rgba(255, 221, 87, 0.25); }
-  .is-small.input {
+  .is-small.input, .is-small.textarea {
     border-radius: 2px;
     font-size: 0.75rem; }
-  .is-large.input {
+  .is-large.input, .is-large.textarea {
     font-size: 1.5rem; }
-  .is-fullwidth.input {
+  .is-fullwidth.input, .is-fullwidth.textarea {
     display: block;
     width: 100%; }
+
+.textarea {
+  display: block;
+  max-width: 100%;
+  min-width: 100%;
+  padding: calc(0.75em - 1px);
+  resize: vertical; }
+  .textarea:not([rows]) {
+    max-height: 40em;
+    min-height: 8em; }
+
+.select {
+  display: inline-block;
+  max-width: 100%;
+  position: relative;
+  vertical-align: top; }
+  .select:not(.is-multiple) {
+    height: 2.5em; }
+  .select:not(.is-multiple):not(.is-loading)::after {
+    border-color: #dd44dd;
+    right: 1.125em;
+    z-index: 4; }
+  .select select {
+    cursor: pointer;
+    display: block;
+    font-size: 1em;
+    max-width: 100%;
+    outline: none; }
+    .select select::-ms-expand {
+      display: none; }
+    .select select[disabled]:hover {
+      border-color: whitesmoke; }
+    .select select:not([multiple]) {
+      padding-right: 2.5em; }
+    .select select[multiple] {
+      height: auto;
+      padding: 0; }
+  .select:not(.is-multiple):not(.is-loading):hover::after {
+    border-color: #363636; }
+  .select.is-light:not(:hover)::after {
+    border-color: whitesmoke; }
+  .select.is-light select {
+    border-color: whitesmoke; }
+    .select.is-light select:hover {
+      border-color: #e8e8e8; }
+    .select.is-light select:focus, .select.is-light select:active, .select.is-light select.is-active {
+      box-shadow: 0 0 0 0.125em rgba(245, 245, 245, 0.25); }
+  .select.is-dark:not(:hover)::after {
+    border-color: #363636; }
+  .select.is-dark select {
+    border-color: #363636; }
+    .select.is-dark select:hover {
+      border-color: #292929; }
+    .select.is-dark select:focus, .select.is-dark select:active, .select.is-dark select.is-active {
+      box-shadow: 0 0 0 0.125em rgba(54, 54, 54, 0.25); }
+  .select.is-info:not(:hover)::after {
+    border-color: #3298dc; }
+  .select.is-info select {
+    border-color: #3298dc; }
+    .select.is-info select:hover {
+      border-color: #238cd1; }
+    .select.is-info select:focus, .select.is-info select:active, .select.is-info select.is-active {
+      box-shadow: 0 0 0 0.125em rgba(50, 152, 220, 0.25); }
+  .select.is-warning:not(:hover)::after {
+    border-color: #ffdd57; }
+  .select.is-warning select {
+    border-color: #ffdd57; }
+    .select.is-warning select:hover {
+      border-color: #ffd83d; }
+    .select.is-warning select:focus, .select.is-warning select:active, .select.is-warning select.is-active {
+      box-shadow: 0 0 0 0.125em rgba(255, 221, 87, 0.25); }
+  .select.is-small {
+    border-radius: 2px;
+    font-size: 0.75rem; }
+  .select.is-large {
+    font-size: 1.5rem; }
+  .select.is-disabled::after {
+    border-color: #7a7a7a; }
+  .select.is-fullwidth {
+    width: 100%; }
+    .select.is-fullwidth select {
+      width: 100%; }
+  .select.is-loading::after {
+    margin-top: 0;
+    position: absolute;
+    right: 0.625em;
+    top: 0.625em;
+    transform: none; }
+  .select.is-loading.is-small:after {
+    font-size: 0.75rem; }
+  .select.is-loading.is-large:after {
+    font-size: 1.5rem; }
 
 .label {
   color: #363636;
@@ -555,6 +668,25 @@ span {
   .label.is-small {
     font-size: 0.75rem; }
   .label.is-large {
+    font-size: 1.5rem; }
+
+.field:not(:last-child) {
+  margin-bottom: 0.75rem; }
+
+.control {
+  box-sizing: border-box;
+  clear: both;
+  font-size: 1rem;
+  position: relative;
+  text-align: inherit; }
+  .control.is-loading::after {
+    position: absolute !important;
+    right: 0.625em;
+    top: 0.625em;
+    z-index: 4; }
+  .control.is-loading.is-small:after {
+    font-size: 0.75rem; }
+  .control.is-loading.is-large:after {
     font-size: 1.5rem; }
 
 /* Bulma Components */
@@ -606,7 +738,8 @@ span {
     border-top: 1px solid rgba(219, 219, 219, 0.5);
     display: flex;
     padding-top: 0.75rem; }
-    .media .media .content:not(:last-child) {
+    .media .media .content:not(:last-child),
+    .media .media .control:not(:last-child) {
       margin-bottom: 0.5rem; }
     .media .media .media {
       padding-top: 0.5rem; }
@@ -1070,11 +1203,11 @@ a.has-text-link:hover, a.has-text-link:focus {
   background-color: #fafafa;
   padding: 3rem 1.5rem 6rem; }
 
-a {
-  text-decoration: underline; }
-
 html {
   overflow-y: auto; }
+
+a {
+  text-decoration: underline; }
 
 .container.is-dark {
   background: black; }

@@ -15,7 +15,7 @@
   $: fontSizeDisplay = ($fontSize - fontSizeDefault) * 2;
 
   // modals
-  let exportModalShow = true;
+  let exportModalShow = false;
   let jsonSaverModalShow = false;
 
   const fontSizeUpdate = (crement) => {
@@ -170,6 +170,50 @@
   const jsonSaverModalToggle = () => {
     return false;    
   }
+
+  let jsonSaverForm = {
+    email: 'a@b.com',
+    password1: 'password',
+    password2: 'password'
+  }
+  let jsonSaverResult = undefined;
+
+  const jsonSaverFormSubmit = async() => {
+    let form = jsonSaverForm;
+    let loginButton = document.querySelector('#jsonsaver-button-submit');
+    loginButton.classList.add('is-loading');
+
+    // if passwords don't match, display error message
+    if (form.password1 !== form.password2) {
+      dispatch('status-message-display', "The passwords do not match.", 15000);
+    }
+    else if (form.password1.length < 8) {
+      dispatch('status-message-display', "Passwords must be 8 characters or more.", 15000);
+    }
+    // send info to jsonSaver
+    let url = 'http://jsonsaver.com/api/v1/save/';
+    try {
+      loginButton.classList.add('is-loading');
+      jsonSaverResponse = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(form)
+      })
+      .then(response => {
+        if (!response.ok) {
+          console.log(`Error  - jsonSaverFormSubmit(): (${response.status})`);
+        }
+        return response.json()
+      })
+    }
+    catch(err) {
+      console.log(`Error - jsonSaverFormSubmit(): ${err.message}`);
+    }
+    loginButton.classList.remove('is-loading');
+  }
+
 
 </script>
 
@@ -388,10 +432,42 @@
                   </h3>
                 </div>
 
-                <button class="button is-info is-large is-fullwidth close-button-bottom"
-                        on:click="{() => jsonSaverModalShow = false}">
-                  Close
-                </button>
+                <form method="post">
+                  <div class="field">
+                    <div class="control">
+                      <input type="email" disabled
+                             id="login-input-email"
+                             class="input is-large form-element"
+                             on:click="{e => e.key === 'Enter' && jsonSaverFormSubmit()}"
+                             bind:value="{jsonSaverForm.email}"
+                             placeholder="Email"
+                             required>
+                    </div>
+                    <div class="control">
+                      <input type="password" disabled
+                             id="login-input-password"
+                             class="input is-large form-element"
+                             on:click="{e => e.key === 'Enter' && jsonSaverFormSubmit()}"
+                             bind:value="{jsonSaverForm.password1}"
+                             placeholder="Password"
+                             required>
+                    </div>
+                    <div class="control">
+                      <input type="password" disabled
+                             on:click="{e => e.key === 'Enter' && jsonSaverFormSubmit()}"
+                             bind:value="{jsonSaverForm.password2}"
+                             id="login-input-password"
+                             class="input is-large form-element"
+                             placeholder="Confirm password"
+                             required>
+                    </div>
+                  </div>
+                  <button type="submit"
+                          id="jsonsaver-button-submit"
+                          on:click|preventDefault="{jsonSaverFormSubmit}"
+                          class="button is-secondary is-large is-disabled form-element">Coming Soon</button>
+                </form>
+
               </div>
             </div>
           </div>
@@ -565,4 +641,16 @@
   border: none !important;
   border-radius: 0.25rem;
 }
+
+/* jsonSaver */
+.form-element {
+	width: 80%;
+	max-width: 40rem;
+	margin: 0.5rem 2rem;
+}
+
+::placeholder {
+  color: #444;
+}
+
 </style>
